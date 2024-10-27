@@ -22,8 +22,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/filter"
+	"github.com/JemZee04/pdfcpu/pkg/log"
 
 	"github.com/pkg/errors"
 )
@@ -49,7 +49,9 @@ type StreamDict struct {
 }
 
 // NewStreamDict creates a new PDFStreamDict for given PDFDict, stream offset and length.
-func NewStreamDict(d Dict, streamOffset int64, streamLength *int64, streamLengthObjNr *int, filterPipeline []PDFFilter) StreamDict {
+func NewStreamDict(
+	d Dict, streamOffset int64, streamLength *int64, streamLengthObjNr *int, filterPipeline []PDFFilter,
+) StreamDict {
 	return StreamDict{
 		d,
 		streamOffset,
@@ -115,7 +117,9 @@ type LazyObjectStreamObject struct {
 	decodedError  error
 }
 
-func NewLazyObjectStreamObject(osd *ObjectStreamDict, startOffset, endOffset int, decodeFunc DecodeLazyObjectStreamObjectFunc) Object {
+func NewLazyObjectStreamObject(
+	osd *ObjectStreamDict, startOffset, endOffset int, decodeFunc DecodeLazyObjectStreamObjectFunc,
+) Object {
 	return LazyObjectStreamObject{
 		osd:         osd,
 		startOffset: startOffset,
@@ -446,7 +450,9 @@ func (osd *ObjectStreamDict) AddObject(objNumber int, pdfString string) error {
 	osd.Content = append(osd.Content, []byte(pdfString)...)
 	osd.ObjCount++
 	if log.TraceEnabled() {
-		log.Trace.Printf("AddObject end : ObjCount:%d prolog = <%s> Content = <%s>\n", osd.ObjCount, osd.Prolog, osd.Content)
+		log.Trace.Printf(
+			"AddObject end : ObjCount:%d prolog = <%s> Content = <%s>\n", osd.ObjCount, osd.Prolog, osd.Content,
+		)
 	}
 	return nil
 }

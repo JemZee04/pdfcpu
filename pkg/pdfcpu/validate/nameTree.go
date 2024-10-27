@@ -17,8 +17,8 @@ limitations under the License.
 package validate
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -83,7 +83,9 @@ func validatePagesNameTreeValue(xRefTable *model.XRefTable, o types.Object, sinc
 		return errors.New("pdfcpu: validatePagesNameTreeValue: value is nil")
 	}
 
-	_, err = validateNameEntry(xRefTable, d, "pageDict", "Type", REQUIRED, model.V10, func(s string) bool { return s == "Page" })
+	_, err = validateNameEntry(
+		xRefTable, d, "pageDict", "Type", REQUIRED, model.V10, func(s string) bool { return s == "Page" },
+	)
 
 	return err
 }
@@ -108,7 +110,9 @@ func validateTemplatesNameTreeValue(xRefTable *model.XRefTable, o types.Object, 
 		return errors.New("pdfcpu: validatePagesNameTreeValue: value is nil")
 	}
 
-	_, err = validateNameEntry(xRefTable, d, "templateDict", "Type", REQUIRED, model.V10, func(s string) bool { return s == "Template" })
+	_, err = validateNameEntry(
+		xRefTable, d, "templateDict", "Type", REQUIRED, model.V10, func(s string) bool { return s == "Template" },
+	)
 
 	return err
 }
@@ -199,7 +203,9 @@ func validateCaptureCommandDict(xRefTable *model.XRefTable, d types.Dict) error 
 	return err
 }
 
-func validateSourceInfoDictEntryAU(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateSourceInfoDictEntryAU(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -242,7 +248,9 @@ func validateSourceInfoDict(xRefTable *model.XRefTable, d types.Dict) error {
 	}
 
 	// S, optional, integer
-	_, err = validateIntegerEntry(xRefTable, d, dictName, "S", OPTIONAL, model.V10, func(i int) bool { return 0 <= i && i <= 2 })
+	_, err = validateIntegerEntry(
+		xRefTable, d, dictName, "S", OPTIONAL, model.V10, func(i int) bool { return 0 <= i && i <= 2 },
+	)
 	if err != nil {
 		return err
 	}
@@ -267,7 +275,9 @@ func validateSourceInfoDict(xRefTable *model.XRefTable, d types.Dict) error {
 	return nil
 }
 
-func validateEntrySI(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateEntrySI(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 
 	// see 14.10.5, table 355, source information dictionary
 
@@ -316,13 +326,17 @@ func validateWebCaptureContentSetDict(XRefTable *model.XRefTable, d types.Dict) 
 	dictName := "webCaptureContentSetDict"
 
 	// Type, optional, name
-	_, err := validateNameEntry(XRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "SpiderContentSet" })
+	_, err := validateNameEntry(
+		XRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "SpiderContentSet" },
+	)
 	if err != nil {
 		return err
 	}
 
 	// S, required, name
-	s, err := validateNameEntry(XRefTable, d, dictName, "S", REQUIRED, model.V10, func(s string) bool { return s == "SPS" || s == "SIS" })
+	s, err := validateNameEntry(
+		XRefTable, d, dictName, "S", REQUIRED, model.V10, func(s string) bool { return s == "SPS" || s == "SIS" },
+	)
 	if err != nil {
 		return err
 	}
@@ -453,13 +467,17 @@ func validateSlideShowDict(XRefTable *model.XRefTable, d types.Dict) error {
 	dictName := "slideShowDict"
 
 	// Type, required, name, since V1.4
-	_, err := validateNameEntry(XRefTable, d, dictName, "Type", REQUIRED, model.V14, func(s string) bool { return s == "SlideShow" })
+	_, err := validateNameEntry(
+		XRefTable, d, dictName, "Type", REQUIRED, model.V14, func(s string) bool { return s == "SlideShow" },
+	)
 	if err != nil {
 		return err
 	}
 
 	// Subtype, required, name, since V1.4
-	_, err = validateNameEntry(XRefTable, d, dictName, "Subtype", REQUIRED, model.V14, func(s string) bool { return s == "Embedded" })
+	_, err = validateNameEntry(
+		XRefTable, d, dictName, "Subtype", REQUIRED, model.V14, func(s string) bool { return s == "Embedded" },
+	)
 	if err != nil {
 		return err
 	}
@@ -477,7 +495,9 @@ func validateSlideShowDict(XRefTable *model.XRefTable, d types.Dict) error {
 	return err
 }
 
-func validateAlternatePresentationsNameTreeValue(xRefTable *model.XRefTable, o types.Object, sinceVersion model.Version) error {
+func validateAlternatePresentationsNameTreeValue(
+	xRefTable *model.XRefTable, o types.Object, sinceVersion model.Version,
+) error {
 
 	// see 13.5
 
@@ -582,7 +602,9 @@ func validateNameTreeValue(name string, xRefTable *model.XRefTable, o types.Obje
 	return errors.Errorf("pdfcpu: validateNameTreeDictNamesEntry: unknown dict name: %s", name)
 }
 
-func validateNameTreeDictNamesEntry(xRefTable *model.XRefTable, d types.Dict, name string, node *model.Node) (string, string, error) {
+func validateNameTreeDictNamesEntry(xRefTable *model.XRefTable, d types.Dict, name string, node *model.Node) (
+	string, string, error,
+) {
 
 	//fmt.Printf("validateNameTreeDictNamesEntry begin %s\n", d)
 
@@ -602,7 +624,9 @@ func validateNameTreeDictNamesEntry(xRefTable *model.XRefTable, d types.Dict, na
 
 	// arr length needs to be even because of contained key value pairs.
 	if len(a)%2 == 1 {
-		return "", "", errors.Errorf("pdfcpu: validateNameTreeDictNamesEntry: Names array entry length needs to be even, length=%d\n", len(a))
+		return "", "", errors.Errorf(
+			"pdfcpu: validateNameTreeDictNamesEntry: Names array entry length needs to be even, length=%d\n", len(a),
+		)
 	}
 
 	var key, firstKey, lastKey string
@@ -648,7 +672,9 @@ func validateNameTreeDictNamesEntry(xRefTable *model.XRefTable, d types.Dict, na
 
 func validateNameTreeDictLimitsEntry(xRefTable *model.XRefTable, d types.Dict, firstKey, lastKey string) error {
 
-	a, err := validateStringArrayEntry(xRefTable, d, "nameTreeDict", "Limits", REQUIRED, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	a, err := validateStringArrayEntry(
+		xRefTable, d, "nameTreeDict", "Limits", REQUIRED, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 	if err != nil {
 		return err
 	}
@@ -688,13 +714,18 @@ func validateNameTreeDictLimitsEntry(xRefTable *model.XRefTable, d types.Dict, f
 	}
 
 	if firstKey != fkv || lastKey != lkv {
-		return errors.Errorf("pdfcpu: validateNameTreeDictLimitsEntry: leaf node corrupted (firstKey: %s vs %s) (lastKey: %s vs %s)\n", firstKey, fkv, lastKey, lkv)
+		return errors.Errorf(
+			"pdfcpu: validateNameTreeDictLimitsEntry: leaf node corrupted (firstKey: %s vs %s) (lastKey: %s vs %s)\n",
+			firstKey, fkv, lastKey, lkv,
+		)
 	}
 
 	return nil
 }
 
-func validateNameTree(xRefTable *model.XRefTable, name string, d types.Dict, root bool) (string, string, *model.Node, error) {
+func validateNameTree(xRefTable *model.XRefTable, name string, d types.Dict, root bool) (
+	string, string, *model.Node, error,
+) {
 
 	//fmt.Printf("validateNameTree begin %s\n", d)
 

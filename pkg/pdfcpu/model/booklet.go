@@ -21,9 +21,9 @@ import (
 
 	"io"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 type BookletType int
@@ -177,7 +177,9 @@ func getCutFolds(nup *NUp) (horizontal cutOrFold, vertical cutOrFold) {
 	return horizontal, vertical
 }
 
-func drawGuideHorizontal(w io.Writer, y, width float64, cutOrFold cutOrFold, nup *NUp, mb *types.Rectangle, fm FontMap) {
+func drawGuideHorizontal(
+	w io.Writer, y, width float64, cutOrFold cutOrFold, nup *NUp, mb *types.Rectangle, fm FontMap,
+) {
 	fmt.Fprint(w, "[3] 0 d ")
 	draw.SetLineWidth(w, 0)
 	draw.SetStrokeColor(w, color.Gray)

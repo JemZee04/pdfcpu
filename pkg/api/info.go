@@ -19,13 +19,15 @@ package api
 import (
 	"io"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
 	"github.com/pkg/errors"
 )
 
 // PDFInfo returns information about rs.
-func PDFInfo(rs io.ReadSeeker, fileName string, selectedPages []string, conf *model.Configuration) (*pdfcpu.PDFInfo, error) {
+func PDFInfo(rs io.ReadSeeker, fileName string, selectedPages []string, conf *model.Configuration) (
+	*pdfcpu.PDFInfo, error,
+) {
 	if rs == nil {
 		return nil, errors.New("pdfcpu: PDFInfo: missing rs")
 	}

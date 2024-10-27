@@ -21,9 +21,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -373,7 +373,8 @@ func labelPos(
 	relPos types.RelPosition,
 	horAlign types.HAlignment,
 	boundingBox *types.Rectangle,
-	labelHeight, w, g float64, multiline bool) (float64, float64) {
+	labelHeight, w, g float64, multiline bool,
+) (float64, float64) {
 
 	var x, y float64
 
@@ -767,7 +768,8 @@ func (rbg *RadioButtonGroup) irNYes(asWidth float64, flip bool, bgCol *color.Sim
 }
 
 func (rbg *RadioButtonGroup) appearanceIndRefs(flip bool, bgCol *color.SimpleColor) (
-	*types.IndirectRef, *types.IndirectRef, *types.IndirectRef, *types.IndirectRef, error) {
+	*types.IndirectRef, *types.IndirectRef, *types.IndirectRef, *types.IndirectRef, error,
+) {
 
 	w := rbg.Width
 
@@ -794,7 +796,9 @@ func (rbg *RadioButtonGroup) appearanceIndRefs(flip bool, bgCol *color.SimpleCol
 	return irDOff, irDYes, irNOff, irNYes, nil
 }
 
-func (rbg *RadioButtonGroup) prepareButtonDict(r *types.Rectangle, v string, parent types.IndirectRef, irDOff, irDYes, irNOff, irNYes *types.IndirectRef) (*types.IndirectRef, types.Dict, error) {
+func (rbg *RadioButtonGroup) prepareButtonDict(
+	r *types.Rectangle, v string, parent types.IndirectRef, irDOff, irDYes, irNOff, irNYes *types.IndirectRef,
+) (*types.IndirectRef, types.Dict, error) {
 
 	/*	Note: Mac Preview seems to have a problem saving radio buttons.
 		1) Once saved in Mac Preview selected radio buttons don't get rendered in Mac Preview whereas Adobe Reader renders them w/o problem.
@@ -813,36 +817,38 @@ func (rbg *RadioButtonGroup) prepareButtonDict(r *types.Rectangle, v string, par
 		as = types.Name(s)
 	}
 
-	d := types.Dict(map[string]types.Object{
-		"Type":    types.Name("Annot"),
-		"Subtype": types.Name("Widget"),
-		"F":       types.Integer(model.AnnPrint),
-		"Parent":  parent,
-		"AS":      as,
-		"Rect":    r.Array(),
-		"AP": types.Dict(
-			map[string]types.Object{
-				"D": types.Dict(
-					map[string]types.Object{
-						"Off": *irDOff,
-						s:     *irDYes,
-					},
-				),
-				"N": types.Dict(
-					map[string]types.Object{
-						"Off": *irNOff,
-						s:     *irNYes,
-					},
-				),
-			},
-		),
-		"BS": types.Dict(
-			map[string]types.Object{
-				"S": types.Name("I"),
-				"W": types.Integer(1),
-			},
-		),
-	})
+	d := types.Dict(
+		map[string]types.Object{
+			"Type":    types.Name("Annot"),
+			"Subtype": types.Name("Widget"),
+			"F":       types.Integer(model.AnnPrint),
+			"Parent":  parent,
+			"AS":      as,
+			"Rect":    r.Array(),
+			"AP": types.Dict(
+				map[string]types.Object{
+					"D": types.Dict(
+						map[string]types.Object{
+							"Off": *irDOff,
+							s:     *irDYes,
+						},
+					),
+					"N": types.Dict(
+						map[string]types.Object{
+							"Off": *irNOff,
+							s:     *irNYes,
+						},
+					),
+				},
+			),
+			"BS": types.Dict(
+				map[string]types.Object{
+					"S": types.Name("I"),
+					"W": types.Integer(1),
+				},
+			),
+		},
+	)
 
 	ir, err := rbg.pdf.XRefTable.IndRefForNewObject(d)
 
@@ -991,7 +997,9 @@ func (rbg *RadioButtonGroup) prepForRender(p *model.Page, pageNr int, fonts mode
 	return rbg.prepLabel(p, pageNr, fonts)
 }
 
-func (rbg *RadioButtonGroup) prepareDict(p *model.Page, pageNr int, fonts model.FontMap) (*types.IndirectRef, types.Array, error) {
+func (rbg *RadioButtonGroup) prepareDict(p *model.Page, pageNr int, fonts model.FontMap) (
+	*types.IndirectRef, types.Array, error,
+) {
 
 	rbg.renderButtonLabels(p, pageNr, fonts)
 

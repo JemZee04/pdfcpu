@@ -20,8 +20,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
 	"github.com/pkg/errors"
 )
 
@@ -50,7 +50,9 @@ func Annotations(rs io.ReadSeeker, selectedPages []string, conf *model.Configura
 }
 
 // AddAnnotations adds annotations for selected pages in rs and writes the result to w.
-func AddAnnotations(rs io.ReadSeeker, w io.Writer, selectedPages []string, ann model.AnnotationRenderer, conf *model.Configuration) error {
+func AddAnnotations(
+	rs io.ReadSeeker, w io.Writer, selectedPages []string, ann model.AnnotationRenderer, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: AddAnnotations: missing rs")
 	}
@@ -82,7 +84,9 @@ func AddAnnotations(rs io.ReadSeeker, w io.Writer, selectedPages []string, ann m
 }
 
 // AddAnnotationsAsIncrement adds annotations for selected pages in rws and writes out a PDF increment.
-func AddAnnotationsAsIncrement(rws io.ReadWriteSeeker, selectedPages []string, ar model.AnnotationRenderer, conf *model.Configuration) error {
+func AddAnnotationsAsIncrement(
+	rws io.ReadWriteSeeker, selectedPages []string, ar model.AnnotationRenderer, conf *model.Configuration,
+) error {
 	if rws == nil {
 		return errors.New("pdfcpu: AddAnnotationsAsIncrement: missing rws")
 	}
@@ -118,7 +122,9 @@ func AddAnnotationsAsIncrement(rws io.ReadWriteSeeker, selectedPages []string, a
 }
 
 // AddAnnotationsFile adds annotations for selected pages to a PDF context read from inFile and writes the result to outFile.
-func AddAnnotationsFile(inFile, outFile string, selectedPages []string, ar model.AnnotationRenderer, conf *model.Configuration, incr bool) (err error) {
+func AddAnnotationsFile(
+	inFile, outFile string, selectedPages []string, ar model.AnnotationRenderer, conf *model.Configuration, incr bool,
+) (err error) {
 	tmpFile := inFile + ".tmp"
 	if outFile != "" && inFile != outFile {
 		tmpFile = outFile
@@ -168,7 +174,9 @@ func AddAnnotationsFile(inFile, outFile string, selectedPages []string, ar model
 }
 
 // AddAnnotationsMap adds annotations in m to corresponding pages of rs and writes the result to w.
-func AddAnnotationsMap(rs io.ReadSeeker, w io.Writer, m map[int][]model.AnnotationRenderer, conf *model.Configuration) error {
+func AddAnnotationsMap(
+	rs io.ReadSeeker, w io.Writer, m map[int][]model.AnnotationRenderer, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: AddAnnotationsMap: missing rs")
 	}
@@ -195,7 +203,9 @@ func AddAnnotationsMap(rs io.ReadSeeker, w io.Writer, m map[int][]model.Annotati
 }
 
 // AddAnnotationsMapAsIncrement adds annotations in m to corresponding pages of rws and writes out a PDF increment.
-func AddAnnotationsMapAsIncrement(rws io.ReadWriteSeeker, m map[int][]model.AnnotationRenderer, conf *model.Configuration) error {
+func AddAnnotationsMapAsIncrement(
+	rws io.ReadWriteSeeker, m map[int][]model.AnnotationRenderer, conf *model.Configuration,
+) error {
 	if rws == nil {
 		return errors.New("pdfcpu: AddAnnotationsMapAsIncrement: missing rws")
 	}
@@ -226,7 +236,9 @@ func AddAnnotationsMapAsIncrement(rws io.ReadWriteSeeker, m map[int][]model.Anno
 }
 
 // AddAnnotationsMapFile adds annotations in m to corresponding pages of inFile and writes the result to outFile.
-func AddAnnotationsMapFile(inFile, outFile string, m map[int][]model.AnnotationRenderer, conf *model.Configuration, incr bool) (err error) {
+func AddAnnotationsMapFile(
+	inFile, outFile string, m map[int][]model.AnnotationRenderer, conf *model.Configuration, incr bool,
+) (err error) {
 	tmpFile := inFile + ".tmp"
 
 	if outFile != "" && inFile != outFile {
@@ -278,7 +290,9 @@ func AddAnnotationsMapFile(inFile, outFile string, m map[int][]model.AnnotationR
 
 // RemoveAnnotations removes annotations for selected pages by id and object number
 // from a PDF context read from rs and writes the result to w.
-func RemoveAnnotations(rs io.ReadSeeker, w io.Writer, selectedPages, idsAndTypes []string, objNrs []int, conf *model.Configuration) error {
+func RemoveAnnotations(
+	rs io.ReadSeeker, w io.Writer, selectedPages, idsAndTypes []string, objNrs []int, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: RemoveAnnotations: missing rs")
 	}
@@ -311,7 +325,9 @@ func RemoveAnnotations(rs io.ReadSeeker, w io.Writer, selectedPages, idsAndTypes
 
 // RemoveAnnotationsAsIncrement removes annotations for selected pages by ids and object number
 // from a PDF context read from rs and writes out a PDF increment.
-func RemoveAnnotationsAsIncrement(rws io.ReadWriteSeeker, selectedPages, idsAndTypes []string, objNrs []int, conf *model.Configuration) error {
+func RemoveAnnotationsAsIncrement(
+	rws io.ReadWriteSeeker, selectedPages, idsAndTypes []string, objNrs []int, conf *model.Configuration,
+) error {
 	if rws == nil {
 		return errors.New("pdfcpu: RemoveAnnotationsAsIncrement: missing rws")
 	}
@@ -348,7 +364,9 @@ func RemoveAnnotationsAsIncrement(rws io.ReadWriteSeeker, selectedPages, idsAndT
 
 // RemoveAnnotationsFile removes annotations for selected pages by id and object number
 // from a PDF context read from inFile and writes the result to outFile.
-func RemoveAnnotationsFile(inFile, outFile string, selectedPages, idsAndTypes []string, objNrs []int, conf *model.Configuration, incr bool) (err error) {
+func RemoveAnnotationsFile(
+	inFile, outFile string, selectedPages, idsAndTypes []string, objNrs []int, conf *model.Configuration, incr bool,
+) (err error) {
 	var f1, f2 *os.File
 
 	tmpFile := inFile + ".tmp"

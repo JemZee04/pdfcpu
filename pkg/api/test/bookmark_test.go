@@ -21,10 +21,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/api"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
 )
 
 // Acrobat Reader "Bookmarks" = Mac Preview "Table of Contents".
@@ -121,20 +121,26 @@ func TestAddBookmarkTree2Levels(t *testing.T) {
 	outFile := filepath.Join("..", "..", "samples", "bookmarks", "bookmarkTree.pdf")
 
 	bms := []pdfcpu.Bookmark{
-		{PageFrom: 1, Title: "Page 1: Level 1", Color: &color.Green,
+		{
+			PageFrom: 1, Title: "Page 1: Level 1", Color: &color.Green,
 			Kids: []pdfcpu.Bookmark{
 				{PageFrom: 2, Title: "Page 2: Level 1.1"},
-				{PageFrom: 3, Title: "Page 3: Level 1.2",
+				{
+					PageFrom: 3, Title: "Page 3: Level 1.2",
 					Kids: []pdfcpu.Bookmark{
 						{PageFrom: 4, Title: "Page 4: Level 1.2.1"},
-					}},
-			}},
-		{PageFrom: 5, Title: "Page 5: Level 2", Color: &color.Blue,
+					},
+				},
+			},
+		},
+		{
+			PageFrom: 5, Title: "Page 5: Level 2", Color: &color.Blue,
 			Kids: []pdfcpu.Bookmark{
 				{PageFrom: 6, Title: "Page 6: Level 2.1"},
 				{PageFrom: 7, Title: "Page 7: Level 2.2"},
 				{PageFrom: 8, Title: "Page 8: Level 2.3"},
-			}},
+			},
+		},
 	}
 
 	if err := api.AddBookmarksFile(inFile, outFile, bms, false, nil); err != nil {

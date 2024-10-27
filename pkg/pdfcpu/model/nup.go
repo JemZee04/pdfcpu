@@ -22,12 +22,12 @@ import (
 	"io"
 	"math"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
+	"github.com/JemZee04/pdfcpu/pkg/filter"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/matrix"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -101,8 +101,10 @@ func DefaultNUpConfig() *NUp {
 }
 
 func (nup NUp) String() string {
-	return fmt.Sprintf("N-Up conf: %s %s, orient=%s, grid=%s, pageGrid=%t, isImage=%t\n",
-		nup.PageSize, *nup.PageDim, nup.Orient, *nup.Grid, nup.PageGrid, nup.ImgInputFile)
+	return fmt.Sprintf(
+		"N-Up conf: %s %s, orient=%s, grid=%s, pageGrid=%t, isImage=%t\n",
+		nup.PageSize, *nup.PageDim, nup.Orient, *nup.Grid, nup.PageGrid, nup.ImgInputFile,
+	)
 }
 
 // N returns the nUp value.
@@ -174,7 +176,9 @@ func (nup NUp) RectsForGrid() []*types.Rectangle {
 	return rr
 }
 
-func createNUpFormForPDF(xRefTable *XRefTable, resDict *types.IndirectRef, content []byte, cropBox *types.Rectangle) (*types.IndirectRef, error) {
+func createNUpFormForPDF(
+	xRefTable *XRefTable, resDict *types.IndirectRef, content []byte, cropBox *types.Rectangle,
+) (*types.IndirectRef, error) {
 	sd := types.StreamDict{
 		Dict: types.Dict(
 			map[string]types.Object{
@@ -216,7 +220,8 @@ func NUpTilePDFBytes(wr io.Writer, rSrc, rDest *types.Rectangle, formResID strin
 
 	// Draw bounding box.
 	if nup.Border {
-		fmt.Fprintf(wr, "[]0 d 0.1 w %.2f %.2f m %.2f %.2f l %.2f %.2f l %.2f %.2f l s ",
+		fmt.Fprintf(
+			wr, "[]0 d 0.1 w %.2f %.2f m %.2f %.2f l %.2f %.2f l %.2f %.2f l s ",
 			rDest.LL.X, rDest.LL.Y, rDest.UR.X, rDest.LL.Y, rDest.UR.X, rDest.UR.Y, rDest.LL.X, rDest.UR.Y,
 		)
 	}
@@ -273,8 +278,10 @@ func NUpTilePDFBytes(wr io.Writer, rSrc, rDest *types.Rectangle, formResID strin
 	m := matrix.CalcTransformMatrix(sx, sy, sin, cos, dx, dy)
 
 	// Apply transform matrix and display form.
-	fmt.Fprintf(wr, "q %.5f %.5f %.5f %.5f %.5f %.5f cm /%s Do Q ",
-		m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1], formResID)
+	fmt.Fprintf(
+		wr, "q %.5f %.5f %.5f %.5f %.5f %.5f cm /%s Do Q ",
+		m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1], formResID,
+	)
 }
 
 func translationForPageRotation(pageRot int, w, h float64) (float64, float64) {
@@ -309,7 +316,8 @@ func (ctx *Context) NUpTilePDFBytesForPDF(
 	buf *bytes.Buffer,
 	rDest *types.Rectangle,
 	nup *NUp,
-	rotate bool) error {
+	rotate bool,
+) error {
 
 	consolidateRes := true
 	d, _, inhPAttrs, err := ctx.PageDict(pageNr, consolidateRes)

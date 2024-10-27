@@ -19,9 +19,9 @@ package validate
 import (
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -219,10 +219,14 @@ func validateDocumentInfoObject(xRefTable *model.XRefTable) error {
 
 // DocumentPageLayout returns true for valid page layout values.
 func DocumentPageLayout(s string) bool {
-	return types.MemberOf(strings.ToLower(s), []string{"singlepage", "twocolumnleft", "twocolumnright", "twopageleft", "twopageright"})
+	return types.MemberOf(
+		strings.ToLower(s), []string{"singlepage", "twocolumnleft", "twocolumnright", "twopageleft", "twopageright"},
+	)
 }
 
 // DocumentPageMode returns true for valid page mode values.
 func DocumentPageMode(s string) bool {
-	return types.MemberOf(strings.ToLower(s), []string{"usenone", "useoutlines", "usethumbs", "fullscreen", "useoc", "useattachments"})
+	return types.MemberOf(
+		strings.ToLower(s), []string{"usenone", "useoutlines", "usethumbs", "fullscreen", "useoc", "useattachments"},
+	)
 }

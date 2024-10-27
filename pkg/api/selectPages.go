@@ -23,8 +23,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -375,7 +375,9 @@ func selectedPages(pageCount int, pageSelection []string, log bool) (types.IntSe
 
 // PagesForPageSelection ensures a set of page numbers for an ascending page sequence
 // where each page number may appear only once.
-func PagesForPageSelection(pageCount int, pageSelection []string, ensureAllforNone bool, log bool) (types.IntSet, error) {
+func PagesForPageSelection(pageCount int, pageSelection []string, ensureAllforNone bool, log bool) (
+	types.IntSet, error,
+) {
 	if len(pageSelection) > 0 {
 		return selectedPages(pageCount, pageSelection, log)
 	}

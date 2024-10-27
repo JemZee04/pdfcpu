@@ -22,13 +22,13 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	pdffont "github.com/JemZee04/pdfcpu/pkg/pdfcpu/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/primitives"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/mattn/go-runewidth"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/primitives"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -115,7 +115,9 @@ func fields(xRefTable *model.XRefTable) (types.Array, error) {
 	return fields, nil
 }
 
-func fullyQualifiedFieldName(xRefTable *model.XRefTable, indRef types.IndirectRef, fields types.Array, id, name *string) (bool, error) {
+func fullyQualifiedFieldName(
+	xRefTable *model.XRefTable, indRef types.IndirectRef, fields types.Array, id, name *string,
+) (bool, error) {
 
 	d, err := xRefTable.DereferenceDict(indRef)
 	if err != nil {
@@ -585,7 +587,8 @@ func collectPageField(
 	i int,
 	fi *fieldInfo,
 	fm *FieldMeta,
-	fs *[]Field) error {
+	fs *[]Field,
+) error {
 
 	exists := false
 	for j, field := range *fs {
@@ -657,7 +660,8 @@ func collectPageFields(
 	fields types.Array,
 	p int,
 	fm *FieldMeta,
-	fs *[]Field) error {
+	fs *[]Field,
+) error {
 
 	indRefs := map[types.IndirectRef]bool{}
 
@@ -828,7 +832,9 @@ func renderMultiPageFields(m map[string][]Field, fm *FieldMeta) ([]string, error
 			pageFill := strings.Repeat(" ", fm.pageMax-runewidth.StringWidth(f.pageString()))
 			idFill := strings.Repeat(" ", fm.idMax-runewidth.StringWidth(f.ID))
 			nameFill := strings.Repeat(" ", fm.nameMax-runewidth.StringWidth(f.Name))
-			s := fmt.Sprintf("%s%s %s %-9s %s %s%s %s %s%s ", p, pageFill, l, t, draw.VBar, f.ID, idFill, draw.VBar, f.Name, nameFill)
+			s := fmt.Sprintf(
+				"%s%s %s %-9s %s %s%s %s %s%s ", p, pageFill, l, t, draw.VBar, f.ID, idFill, draw.VBar, f.Name, nameFill,
+			)
 			p = strings.Repeat(" ", len(p))
 			if fm.def {
 				dvFill := strings.Repeat(" ", fm.defMax-runewidth.StringWidth(f.Dv))
@@ -901,7 +907,9 @@ func renderFields(ctx *model.Context, fs []Field, fm *FieldMeta) ([]string, erro
 		pageFill := strings.Repeat(" ", fm.pageMax-runewidth.StringWidth(f.pageString()))
 		idFill := strings.Repeat(" ", fm.idMax-runewidth.StringWidth(f.ID))
 		nameFill := strings.Repeat(" ", fm.nameMax-runewidth.StringWidth(f.Name))
-		s := fmt.Sprintf("%s%s %s %-9s %s %s%s %s %s%s ", p, pageFill, l, t, draw.VBar, f.ID, idFill, draw.VBar, f.Name, nameFill)
+		s := fmt.Sprintf(
+			"%s%s %s %-9s %s %s%s %s %s%s ", p, pageFill, l, t, draw.VBar, f.ID, idFill, draw.VBar, f.Name, nameFill,
+		)
 		if fm.def {
 			dvFill := strings.Repeat(" ", fm.defMax-runewidth.StringWidth(f.Dv))
 			s += fmt.Sprintf("%s %s%s ", draw.VBar, f.Dv, dvFill)
@@ -984,7 +992,9 @@ func annotIndRefs(xRefTable *model.XRefTable, fields types.Array) ([]types.Indir
 	return indRefs, nil
 }
 
-func annotIndRefSameLevel(xRefTable *model.XRefTable, fields types.Array, fieldIDOrName string) (*types.IndirectRef, error) {
+func annotIndRefSameLevel(xRefTable *model.XRefTable, fields types.Array, fieldIDOrName string) (
+	*types.IndirectRef, error,
+) {
 	for _, v := range fields {
 		indRef := v.(types.IndirectRef)
 		d, err := xRefTable.DereferenceDict(indRef)
@@ -1009,7 +1019,9 @@ func annotIndRefSameLevel(xRefTable *model.XRefTable, fields types.Array, fieldI
 	return nil, nil
 }
 
-func annotIndRefForField(xRefTable *model.XRefTable, fields types.Array, fieldIDOrName string) (*types.IndirectRef, error) {
+func annotIndRefForField(xRefTable *model.XRefTable, fields types.Array, fieldIDOrName string) (
+	*types.IndirectRef, error,
+) {
 	if strings.IndexByte(fieldIDOrName, '.') < 0 {
 		// Must be on this level
 		return annotIndRefSameLevel(xRefTable, fields, fieldIDOrName)
@@ -1442,7 +1454,8 @@ func resetPageFields(
 	wAnnots model.Annot,
 	fields types.Array,
 	fonts map[string]types.IndirectRef,
-	ok *bool) error {
+	ok *bool,
+) error {
 
 	indRefs := map[types.IndirectRef]bool{}
 
@@ -1613,7 +1626,8 @@ func lockPageFields(
 	fields types.Array,
 	wAnnots model.Annot,
 	fonts map[string]types.IndirectRef,
-	ok *bool) error {
+	ok *bool,
+) error {
 
 	indRefs := map[types.IndirectRef]bool{}
 
@@ -1758,7 +1772,8 @@ func unlockPageFields(
 	fieldIDsOrNames []string,
 	fields types.Array,
 	wAnnots model.Annot,
-	ok *bool) error {
+	ok *bool,
+) error {
 
 	indRefs := map[types.IndirectRef]bool{}
 

@@ -17,9 +17,9 @@
 package primitives
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 // FieldGroup is a container for fields.
@@ -158,7 +158,9 @@ func (fg *FieldGroup) mergeIn(fg0 *FieldGroup) {
 	}
 }
 
-func (fg *FieldGroup) calcBBoxFromTextFields(bbox **types.Rectangle, p *model.Page, pageNr int, fonts model.FontMap) error {
+func (fg *FieldGroup) calcBBoxFromTextFields(
+	bbox **types.Rectangle, p *model.Page, pageNr int, fonts model.FontMap,
+) error {
 	for _, tf := range fg.TextFields {
 		if err := tf.prepForRender(p, pageNr, fonts); err != nil {
 			return err
@@ -168,7 +170,9 @@ func (fg *FieldGroup) calcBBoxFromTextFields(bbox **types.Rectangle, p *model.Pa
 	return nil
 }
 
-func (fg *FieldGroup) calcBBoxFromDateFields(bbox **types.Rectangle, p *model.Page, pageNr int, fonts model.FontMap) error {
+func (fg *FieldGroup) calcBBoxFromDateFields(
+	bbox **types.Rectangle, p *model.Page, pageNr int, fonts model.FontMap,
+) error {
 	for _, df := range fg.DateFields {
 		if err := df.prepForRender(p, pageNr, fonts); err != nil {
 			return err
@@ -178,7 +182,9 @@ func (fg *FieldGroup) calcBBoxFromDateFields(bbox **types.Rectangle, p *model.Pa
 	return nil
 }
 
-func (fg *FieldGroup) calcBBoxFromCheckBoxes(bbox **types.Rectangle, p *model.Page, pageNr int, fonts model.FontMap) error {
+func (fg *FieldGroup) calcBBoxFromCheckBoxes(
+	bbox **types.Rectangle, p *model.Page, pageNr int, fonts model.FontMap,
+) error {
 	for _, cb := range fg.CheckBoxes {
 		if err := cb.prepForRender(p, pageNr, fonts); err != nil {
 			return err
@@ -188,7 +194,9 @@ func (fg *FieldGroup) calcBBoxFromCheckBoxes(bbox **types.Rectangle, p *model.Pa
 	return nil
 }
 
-func (fg *FieldGroup) calcBBoxFromRadioButtonGroups(bbox **types.Rectangle, p *model.Page, pageNr int, fonts model.FontMap) error {
+func (fg *FieldGroup) calcBBoxFromRadioButtonGroups(
+	bbox **types.Rectangle, p *model.Page, pageNr int, fonts model.FontMap,
+) error {
 	for _, rbg := range fg.RadioButtonGroups {
 		if err := rbg.prepForRender(p, pageNr, fonts); err != nil {
 			return err
@@ -198,7 +206,9 @@ func (fg *FieldGroup) calcBBoxFromRadioButtonGroups(bbox **types.Rectangle, p *m
 	return nil
 }
 
-func (fg *FieldGroup) calcBBoxFromComboBoxes(bbox **types.Rectangle, p *model.Page, pageNr int, fonts model.FontMap) error {
+func (fg *FieldGroup) calcBBoxFromComboBoxes(
+	bbox **types.Rectangle, p *model.Page, pageNr int, fonts model.FontMap,
+) error {
 	for _, cb := range fg.ComboBoxes {
 		if err := cb.prepForRender(p, pageNr, fonts); err != nil {
 			return err
@@ -208,7 +218,9 @@ func (fg *FieldGroup) calcBBoxFromComboBoxes(bbox **types.Rectangle, p *model.Pa
 	return nil
 }
 
-func (fg *FieldGroup) calcBBoxFromListBoxes(bbox **types.Rectangle, p *model.Page, pageNr int, fonts model.FontMap) error {
+func (fg *FieldGroup) calcBBoxFromListBoxes(
+	bbox **types.Rectangle, p *model.Page, pageNr int, fonts model.FontMap,
+) error {
 	for _, lb := range fg.ListBoxes {
 		if err := lb.prepForRender(p, pageNr, fonts); err != nil {
 			return err

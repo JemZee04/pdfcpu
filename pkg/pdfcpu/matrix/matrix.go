@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 const (
@@ -53,10 +53,12 @@ func (m Matrix) Transform(p types.Point) types.Point {
 }
 
 func (m Matrix) String() string {
-	return fmt.Sprintf("%3.2f %3.2f %3.2f\n%3.2f %3.2f %3.2f\n%3.2f %3.2f %3.2f\n",
+	return fmt.Sprintf(
+		"%3.2f %3.2f %3.2f\n%3.2f %3.2f %3.2f\n%3.2f %3.2f %3.2f\n",
 		m[0][0], m[0][1], m[0][2],
 		m[1][0], m[1][1], m[1][2],
-		m[2][0], m[2][1], m[2][2])
+		m[2][0], m[2][1], m[2][2],
+	)
 }
 
 // CalcTransformMatrix returns a full transform matrix.

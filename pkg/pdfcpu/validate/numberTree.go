@@ -17,8 +17,8 @@ limitations under the License.
 package validate
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -34,7 +34,9 @@ func validatePageLabelDict(xRefTable *model.XRefTable, o types.Object) error {
 	dictName := "pageLabelDict"
 
 	// Type, optional, name
-	_, err = validateNameEntry(xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "PageLabel" })
+	_, err = validateNameEntry(
+		xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "PageLabel" },
+	)
 	if err != nil {
 		return err
 	}
@@ -61,7 +63,9 @@ func validatePageLabelDict(xRefTable *model.XRefTable, o types.Object) error {
 	return err
 }
 
-func validateNumberTreeDictNumsEntry(xRefTable *model.XRefTable, d types.Dict, name string) (firstKey, lastKey int, err error) {
+func validateNumberTreeDictNumsEntry(xRefTable *model.XRefTable, d types.Dict, name string) (
+	firstKey, lastKey int, err error,
+) {
 
 	// Nums: array of the form [key1 value1 key2 value2 ... key n value n]
 	o, found := d.Find("Nums")
@@ -79,7 +83,9 @@ func validateNumberTreeDictNumsEntry(xRefTable *model.XRefTable, d types.Dict, n
 
 	// arr length needs to be even because of contained key value pairs.
 	if len(a)%2 == 1 {
-		return 0, 0, errors.Errorf("pdfcpu: validateNumberTreeDictNumsEntry: Nums array entry length needs to be even, length=%d\n", len(a))
+		return 0, 0, errors.Errorf(
+			"pdfcpu: validateNumberTreeDictNumsEntry: Nums array entry length needs to be even, length=%d\n", len(a),
+		)
 	}
 
 	// every other entry is a value
@@ -132,7 +138,9 @@ func validateNumberTreeDictNumsEntry(xRefTable *model.XRefTable, d types.Dict, n
 
 func validateNumberTreeDictLimitsEntry(xRefTable *model.XRefTable, d types.Dict, firstKey, lastKey int) error {
 
-	a, err := validateIntegerArrayEntry(xRefTable, d, "numberTreeDict", "Limits", REQUIRED, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	a, err := validateIntegerArrayEntry(
+		xRefTable, d, "numberTreeDict", "Limits", REQUIRED, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 	if err != nil {
 		return err
 	}
@@ -141,13 +149,18 @@ func validateNumberTreeDictLimitsEntry(xRefTable *model.XRefTable, d types.Dict,
 	lk, _ := a[1].(types.Integer)
 
 	if firstKey < fk.Value() || lastKey > lk.Value() {
-		return errors.Errorf("pdfcpu: validateNumberTreeDictLimitsEntry: leaf node corrupted: firstKey(%d vs. %d) lastKey(%d vs. %d)\n", firstKey, fk.Value(), lastKey, lk.Value())
+		return errors.Errorf(
+			"pdfcpu: validateNumberTreeDictLimitsEntry: leaf node corrupted: firstKey(%d vs. %d) lastKey(%d vs. %d)\n",
+			firstKey, fk.Value(), lastKey, lk.Value(),
+		)
 	}
 
 	return nil
 }
 
-func validateNumberTree(xRefTable *model.XRefTable, name string, d types.Dict, root bool) (firstKey, lastKey int, err error) {
+func validateNumberTree(xRefTable *model.XRefTable, name string, d types.Dict, root bool) (
+	firstKey, lastKey int, err error,
+) {
 
 	// A node has "Kids" or "Nums" entry.
 

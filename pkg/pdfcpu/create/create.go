@@ -23,15 +23,17 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/primitives"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/font"
+	pdffont "github.com/JemZee04/pdfcpu/pkg/pdfcpu/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/primitives"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
-func ensureFontIndRef(xRefTable *model.XRefTable, fontName string, frPage model.FontResource, fonts model.FontMap) (*types.IndirectRef, error) {
+func ensureFontIndRef(
+	xRefTable *model.XRefTable, fontName string, frPage model.FontResource, fonts model.FontMap,
+) (*types.IndirectRef, error) {
 
 	frGlobal, ok := fonts[fontName]
 	if !ok {
@@ -212,7 +214,9 @@ func addAnnotations(ff []model.FieldAnnotation, m map[int]model.FieldAnnotation)
 	return arr
 }
 
-func mergeAnnotations(oldAnnots types.Array, ff []model.FieldAnnotation, m map[int]model.FieldAnnotation) (types.Array, error) {
+func mergeAnnotations(oldAnnots types.Array, ff []model.FieldAnnotation, m map[int]model.FieldAnnotation) (
+	types.Array, error,
+) {
 
 	if len(oldAnnots) == 0 {
 		return addAnnotations(ff, m), nil
@@ -291,7 +295,8 @@ func CreatePage(
 	xRefTable *model.XRefTable,
 	parentPageIndRef types.IndirectRef,
 	p *model.Page,
-	fonts model.FontMap) (*types.IndirectRef, types.Dict, error) {
+	fonts model.FontMap,
+) (*types.IndirectRef, types.Dict, error) {
 
 	pageDict := types.Dict(
 		map[string]types.Object{
@@ -349,7 +354,9 @@ func CreatePage(
 }
 
 // UpdatePage updates the existing page dict d with content provided by p.
-func UpdatePage(xRefTable *model.XRefTable, dIndRef types.IndirectRef, d, res types.Dict, p *model.Page, fonts model.FontMap) error {
+func UpdatePage(
+	xRefTable *model.XRefTable, dIndRef types.IndirectRef, d, res types.Dict, p *model.Page, fonts model.FontMap,
+) error {
 
 	// TODO Account for existing page rotation.
 
@@ -503,7 +510,8 @@ func appendPage(
 	pagesDictIndRef types.IndirectRef,
 	pagesDict types.Dict,
 	p *model.Page,
-	fonts model.FontMap) error {
+	fonts model.FontMap,
+) error {
 
 	ir, _, err := CreatePage(ctx.XRefTable, pagesDictIndRef, p, fonts)
 	if err != nil {
@@ -540,7 +548,9 @@ func updatePage(ctx *model.Context, pageNr int, p *model.Page, fonts model.FontM
 }
 
 // UpdatePageTree merges new pages or updates existing pages into ctx.
-func UpdatePageTree(ctx *model.Context, pages []*model.Page, fontMap model.FontMap) (types.Array, model.FontMap, error) {
+func UpdatePageTree(ctx *model.Context, pages []*model.Page, fontMap model.FontMap) (
+	types.Array, model.FontMap, error,
+) {
 
 	pageCount := ctx.PageCount
 
@@ -623,7 +633,8 @@ func createForm(
 	ctx *model.Context,
 	pdf *primitives.PDF,
 	fields types.Array,
-	fonts model.FontMap) error {
+	fonts model.FontMap,
+) error {
 
 	d := types.Dict{"Fields": fields}
 
@@ -644,7 +655,8 @@ func updateForm(
 	ctx *model.Context,
 	pdf *primitives.PDF,
 	fields types.Array,
-	fonts model.FontMap) error {
+	fonts model.FontMap,
+) error {
 
 	d := ctx.Form
 
@@ -704,7 +716,8 @@ func handleForm(
 	ctx *model.Context,
 	pdf *primitives.PDF,
 	fields types.Array,
-	fonts model.FontMap) error {
+	fonts model.FontMap,
+) error {
 
 	var err error
 	if pdf.Update() && pdf.HasForm {

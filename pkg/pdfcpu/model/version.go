@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/log"
 	"github.com/pkg/errors"
 )
 
@@ -99,11 +99,13 @@ func CheckConfigVersion(v string) {
 	}
 
 	if log.CLIEnabled() {
-		log.CLI.Println(`
+		log.CLI.Println(
+			`
 **************************** WARNING ****************************
 * Your configuration is not based on the current major version. *
 *        Please backup and then reset your configuration:       *
 *                     $ pdfcpu config reset                     *
-*****************************************************************`)
+*****************************************************************`,
+		)
 	}
 }

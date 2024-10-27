@@ -19,9 +19,9 @@ package pdfcpu
 import (
 	"fmt"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -190,7 +190,9 @@ func writeToObjectStream(ctx *model.Context, objNumber, genNumber int) (ok bool,
 		objStrEntry.Object = objStreamDict
 
 		if log.WriteEnabled() {
-			log.Write.Printf("writeObject end, obj#%d written to objectStream #%d\n", objNumber, *ctx.Write.CurrentObjStream)
+			log.Write.Printf(
+				"writeObject end, obj#%d written to objectStream #%d\n", objNumber, *ctx.Write.CurrentObjStream,
+			)
 		}
 
 		if objStreamDict.ObjCount == ObjectStreamMaxObjects {
@@ -404,7 +406,9 @@ func writeStream(w *model.WriteContext, sd types.StreamDict) (int64, error) {
 		return 0, errors.Wrapf(err, "writeStream: failed to write raw content")
 	}
 	if int64(c) != *sd.StreamLength {
-		return 0, errors.Errorf("writeStream: failed to write raw content: %d bytes written - streamlength:%d", c, *sd.StreamLength)
+		return 0, errors.Errorf(
+			"writeStream: failed to write raw content: %d bytes written - streamlength:%d", c, *sd.StreamLength,
+		)
 	}
 
 	e, err := w.WriteString(fmt.Sprintf("%sendstream", w.Eol))
@@ -423,7 +427,9 @@ func handleIndirectLength(ctx *model.Context, ir *types.IndirectRef) error {
 
 	if ctx.Write.HasWriteOffset(objNr) {
 		if log.WriteEnabled() {
-			log.Write.Printf("*** handleIndirectLength: object #%d already written offset=%d ***\n", objNr, ctx.Write.Offset)
+			log.Write.Printf(
+				"*** handleIndirectLength: object #%d already written offset=%d ***\n", objNr, ctx.Write.Offset,
+			)
 		}
 	} else {
 		length, err := ctx.DereferenceInteger(*ir)
@@ -438,7 +444,9 @@ func handleIndirectLength(ctx *model.Context, ir *types.IndirectRef) error {
 	return nil
 }
 
-func writeStreamObject(ctx *model.Context, objNr, genNr int, sd types.StreamDict, pdfString string) (int, int64, int, error) {
+func writeStreamObject(ctx *model.Context, objNr, genNr int, sd types.StreamDict, pdfString string) (
+	int, int64, int, error,
+) {
 	h, err := writeObjectHeader(ctx.Write, objNr, genNr)
 	if err != nil {
 		return 0, 0, 0, err
@@ -555,7 +563,9 @@ func writeDirectObject(ctx *model.Context, o types.Object) error {
 
 	default:
 		if log.WriteEnabled() {
-			log.Write.Printf("writeDirectObject: end, direct obj - nothing written: offset=%d\n%v\n", ctx.Write.Offset, o)
+			log.Write.Printf(
+				"writeDirectObject: end, direct obj - nothing written: offset=%d\n%v\n", ctx.Write.Offset, o,
+			)
 		}
 	}
 
@@ -768,7 +778,9 @@ func writeEntry(ctx *model.Context, d types.Dict, dictName, entryName string) (t
 
 	if o == nil {
 		if log.WriteEnabled() {
-			log.Write.Printf("writeEntry end: dict=%s entry=%s resolved to nil, offset=%d\n", dictName, entryName, ctx.Write.Offset)
+			log.Write.Printf(
+				"writeEntry end: dict=%s entry=%s resolved to nil, offset=%d\n", dictName, entryName, ctx.Write.Offset,
+			)
 		}
 		return nil, nil
 	}

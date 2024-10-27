@@ -21,11 +21,11 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/format"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/format"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -171,7 +171,10 @@ func (df *DateField) validateDefault() error {
 	}
 	if df.dateFormat != nil {
 		if err := df.dateFormat.validate(df.Default); err != nil {
-			return errors.Errorf("pdfcpu: field: %s date format failure, \"%s\" incompatible with  \"%s\"", df.ID, df.Default, df.dateFormat.Ext)
+			return errors.Errorf(
+				"pdfcpu: field: %s date format failure, \"%s\" incompatible with  \"%s\"", df.ID, df.Default,
+				df.dateFormat.Ext,
+			)
 		}
 		return nil
 	}
@@ -189,7 +192,10 @@ func (df *DateField) validateValue() error {
 	}
 	if df.dateFormat != nil {
 		if err := df.dateFormat.validate(df.Value); err != nil {
-			return errors.Errorf("pdfcpu: field: %s date format failure, \"%s\" incompatible with  \"%s\"", df.ID, df.Value, df.dateFormat.Ext)
+			return errors.Errorf(
+				"pdfcpu: field: %s date format failure, \"%s\" incompatible with  \"%s\"", df.ID, df.Value,
+				df.dateFormat.Ext,
+			)
 		}
 		return nil
 	}
@@ -281,7 +287,9 @@ func (df *DateField) validate() error {
 	return df.validateTab()
 }
 
-func (df *DateField) calcFontFromDA(ctx *model.Context, d types.Dict, fonts map[string]types.IndirectRef) (*types.IndirectRef, error) {
+func (df *DateField) calcFontFromDA(
+	ctx *model.Context, d types.Dict, fonts map[string]types.IndirectRef,
+) (*types.IndirectRef, error) {
 
 	s := d.StringEntry("DA")
 	if s == nil {
@@ -420,8 +428,10 @@ func (tf *DateField) renderBackground(w io.Writer, bgCol, boCol *color.SimpleCol
 			fmt.Fprintf(w, "%.2f %.2f %.2f rg 0 0 %.2f %.2f re f ", bgCol.R, bgCol.G, bgCol.B, width, height)
 		}
 		if boCol != nil && boWidth > 0 {
-			fmt.Fprintf(w, "%.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s ",
-				boCol.R, boCol.G, boCol.B, boWidth, boWidth/2, boWidth/2, width-boWidth, height-boWidth)
+			fmt.Fprintf(
+				w, "%.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s ",
+				boCol.R, boCol.G, boCol.B, boWidth, boWidth/2, boWidth/2, width-boWidth, height-boWidth,
+			)
 		}
 		fmt.Fprint(w, "Q ")
 	}
@@ -471,15 +481,19 @@ func (df *DateField) renderN(xRefTable *model.XRefTable) ([]byte, error) {
 	y := (df.BoundingBox.Height()-font.LineHeight(f.Name, f.Size))/2 + font.Descent(f.Name, f.Size)
 
 	fmt.Fprintf(buf, "BT /%s %d Tf ", df.fontID, f.Size)
-	fmt.Fprintf(buf, "%.2f %.2f %.2f RG %.2f %.2f %.2f rg %.2f %.2f Td (%s) Tj ET ",
+	fmt.Fprintf(
+		buf, "%.2f %.2f %.2f RG %.2f %.2f %.2f rg %.2f %.2f Td (%s) Tj ET ",
 		f.col.R, f.col.G, f.col.B,
-		f.col.R, f.col.G, f.col.B, x, y, s)
+		f.col.R, f.col.G, f.col.B, x, y, s,
+	)
 
 	fmt.Fprint(buf, "Q EMC ")
 
 	if boCol != nil && boWidth > 0 {
-		fmt.Fprintf(buf, "q %.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s Q ",
-			boCol.R, boCol.G, boCol.B, boWidth-1, boWidth/2, boWidth/2, w-boWidth, h-boWidth)
+		fmt.Fprintf(
+			buf, "q %.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s Q ",
+			boCol.R, boCol.G, boCol.B, boWidth-1, boWidth/2, boWidth/2, w-boWidth, h-boWidth,
+		)
 	}
 
 	return buf.Bytes(), nil
@@ -860,7 +874,8 @@ func NewDateField(
 	ctx *model.Context,
 	d types.Dict,
 	v string,
-	fonts map[string]types.IndirectRef) (*DateField, *types.IndirectRef, error) {
+	fonts map[string]types.IndirectRef,
+) (*DateField, *types.IndirectRef, error) {
 
 	df := &DateField{Value: v}
 
@@ -920,7 +935,9 @@ func renderDateFieldAP(ctx *model.Context, d types.Dict, v string, fonts map[str
 	return nil
 }
 
-func refreshDateFieldAP(ctx *model.Context, d types.Dict, v string, fonts map[string]types.IndirectRef, irN *types.IndirectRef) error {
+func refreshDateFieldAP(
+	ctx *model.Context, d types.Dict, v string, fonts map[string]types.IndirectRef, irN *types.IndirectRef,
+) error {
 
 	df, _, err := NewDateField(ctx, d, v, fonts)
 	if err != nil {

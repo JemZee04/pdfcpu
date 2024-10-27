@@ -17,11 +17,13 @@ limitations under the License.
 package pdfcpu
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
-func migrateIndRef(ir *types.IndirectRef, ctxSource, ctxDest *model.Context, migrated map[int]int) (types.Object, error) {
+func migrateIndRef(ir *types.IndirectRef, ctxSource, ctxDest *model.Context, migrated map[int]int) (
+	types.Object, error,
+) {
 	o, err := ctxSource.Dereference(*ir)
 	if err != nil {
 		return nil, err
@@ -88,7 +90,9 @@ func migrateObject(o types.Object, ctxSource, ctxDest *model.Context, migrated m
 	return o, nil
 }
 
-func migrateAnnots(o types.Object, pageIndRef types.IndirectRef, ctxSrc, ctxDest *model.Context, migrated map[int]int) (types.Object, error) {
+func migrateAnnots(
+	o types.Object, pageIndRef types.IndirectRef, ctxSrc, ctxDest *model.Context, migrated map[int]int,
+) (types.Object, error) {
 	arr := o.(types.Array)
 	for i, v := range o.(types.Array) {
 		var d types.Dict
@@ -137,7 +141,9 @@ func migrateAnnots(o types.Object, pageIndRef types.IndirectRef, ctxSrc, ctxDest
 	return arr, nil
 }
 
-func migratePageDict(d types.Dict, pageIndRef types.IndirectRef, ctxSrc, ctxDest *model.Context, migrated map[int]int) error {
+func migratePageDict(
+	d types.Dict, pageIndRef types.IndirectRef, ctxSrc, ctxDest *model.Context, migrated map[int]int,
+) error {
 	var err error
 	for k, v := range d {
 		if k == "Parent" {
@@ -174,7 +180,9 @@ func migratePageDict(d types.Dict, pageIndRef types.IndirectRef, ctxSrc, ctxDest
 	return nil
 }
 
-func migrateAnnot(indRef *types.IndirectRef, fieldsSrc, fieldsDest *types.Array, ctxSrc *model.Context, migrated map[int]int) error {
+func migrateAnnot(
+	indRef *types.IndirectRef, fieldsSrc, fieldsDest *types.Array, ctxSrc *model.Context, migrated map[int]int,
+) error {
 	for _, v := range *fieldsSrc {
 		ir, ok := v.(types.IndirectRef)
 		if !ok {
@@ -208,7 +216,9 @@ func migrateAnnot(indRef *types.IndirectRef, fieldsSrc, fieldsDest *types.Array,
 	return nil
 }
 
-func migrateFields(d types.Dict, fieldsSrc, fieldsDest *types.Array, ctxSrc, ctxDest *model.Context, migrated map[int]int) error {
+func migrateFields(
+	d types.Dict, fieldsSrc, fieldsDest *types.Array, ctxSrc, ctxDest *model.Context, migrated map[int]int,
+) error {
 	o, _ := d.Find("Annots")
 	annots, err := ctxDest.DereferenceArray(o)
 	if err != nil {
@@ -258,7 +268,9 @@ func migrateFormDict(d types.Dict, fields types.Array, ctxSrc, ctxDest *model.Co
 	return nil
 }
 
-func detectMigratedAnnot(ctxSrc *model.Context, indRef *types.IndirectRef, kids types.Array, migrated map[int]int) (bool, error) {
+func detectMigratedAnnot(
+	ctxSrc *model.Context, indRef *types.IndirectRef, kids types.Array, migrated map[int]int,
+) (bool, error) {
 	for _, v := range kids {
 		ir, ok := v.(types.IndirectRef)
 		if !ok {

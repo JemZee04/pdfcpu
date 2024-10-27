@@ -21,9 +21,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -36,11 +36,15 @@ const (
 	OPTIONAL = false
 )
 
-func validateEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) (types.Object, error) {
+func validateEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) (types.Object, error) {
 	o, found := d.Find(entryName)
 	if !found || o == nil {
 		if required {
-			return nil, errors.Errorf("dict=%s required entry=%s missing (obj#%d).", dictName, entryName, xRefTable.CurObj)
+			return nil, errors.Errorf(
+				"dict=%s required entry=%s missing (obj#%d).", dictName, entryName, xRefTable.CurObj,
+			)
 		}
 		return nil, nil
 	}
@@ -52,20 +56,27 @@ func validateEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName
 
 	if o == nil {
 		if required {
-			return nil, errors.Errorf("dict=%s required entry=%s missing (obj#%d).", dictName, entryName, xRefTable.CurObj)
+			return nil, errors.Errorf(
+				"dict=%s required entry=%s missing (obj#%d).", dictName, entryName, xRefTable.CurObj,
+			)
 		}
 		return nil, nil
 	}
 
 	// Version check
-	if err = xRefTable.ValidateVersion(fmt.Sprintf("dict=%s entry=%s (obj#%d)", dictName, entryName, xRefTable.CurObj), sinceVersion); err != nil {
+	if err = xRefTable.ValidateVersion(
+		fmt.Sprintf("dict=%s entry=%s (obj#%d)", dictName, entryName, xRefTable.CurObj), sinceVersion,
+	); err != nil {
 		return nil, err
 	}
 
 	return o, nil
 }
 
-func validateArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(types.Array) bool) (types.Array, error) {
+func validateArrayEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(types.Array) bool,
+) (types.Array, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateArrayEntry begin: entry=%s\n", entryName)
 	}
@@ -111,7 +122,10 @@ func validateArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entr
 	return a, nil
 }
 
-func validateBooleanEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(bool) bool) (*bool, error) {
+func validateBooleanEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(bool) bool,
+) (*bool, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateBooleanEntry begin: entry=%s\n", entryName)
 	}
@@ -158,7 +172,9 @@ func validateBooleanEntry(xRefTable *model.XRefTable, d types.Dict, dictName, en
 	return &flag, nil
 }
 
-func validateFlexBooleanEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) (*bool, error) {
+func validateFlexBooleanEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) (*bool, error) {
 	flag, err := validateBooleanEntry(xRefTable, d, dictName, entryName, required, sinceVersion, nil)
 	if err == nil {
 		return flag, nil
@@ -166,7 +182,8 @@ func validateFlexBooleanEntry(xRefTable *model.XRefTable, d types.Dict, dictName
 	if xRefTable.ValidationMode != model.ValidationRelaxed {
 		return nil, err
 	}
-	n, err := validateNameEntry(xRefTable, d, dictName, entryName, required, sinceVersion,
+	n, err := validateNameEntry(
+		xRefTable, d, dictName, entryName, required, sinceVersion,
 		func(s string) bool {
 			return types.MemberOf(strings.ToLower(s), []string{"false", "true"})
 		},
@@ -180,7 +197,10 @@ func validateFlexBooleanEntry(xRefTable *model.XRefTable, d types.Dict, dictName
 	return flag, nil
 }
 
-func validateBooleanArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(types.Array) bool) (types.Array, error) {
+func validateBooleanArrayEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(types.Array) bool,
+) (types.Array, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateBooleanArrayEntry begin: entry=%s\n", entryName)
 	}
@@ -201,7 +221,9 @@ func validateBooleanArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictNam
 		}
 
 		if _, ok := o.(types.Boolean); !ok {
-			return nil, errors.Errorf("validateBooleanArrayEntry: dict=%s entry=%s invalid type at index %d\n", dictName, entryName, i)
+			return nil, errors.Errorf(
+				"validateBooleanArrayEntry: dict=%s entry=%s invalid type at index %d\n", dictName, entryName, i,
+			)
 		}
 
 	}
@@ -249,7 +271,9 @@ func validateDateObject(xRefTable *model.XRefTable, o types.Object, sinceVersion
 	return types.DateString(t), nil
 }
 
-func validateDateEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) (*time.Time, error) {
+func validateDateEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) (*time.Time, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateDateEntry begin: entry=%s\n", entryName)
 	}
@@ -286,7 +310,10 @@ func validateDateEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entry
 	return &time, nil
 }
 
-func validateDictEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(types.Dict) bool) (types.Dict, error) {
+func validateDictEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(types.Dict) bool,
+) (types.Dict, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateDictEntry begin: entry=%s\n", entryName)
 	}
@@ -363,7 +390,10 @@ func validateFloat(xRefTable *model.XRefTable, o types.Object, validate func(flo
 	return &f, nil
 }
 
-func validateFunctionArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(types.Array) bool) (types.Array, error) {
+func validateFunctionArrayEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(types.Array) bool,
+) (types.Array, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateFunctionArrayEntry begin: entry=%s\n", entryName)
 	}
@@ -386,7 +416,9 @@ func validateFunctionArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictNa
 	return a, nil
 }
 
-func validateFunctionOrArrayOfFunctionsEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateFunctionOrArrayOfFunctionsEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateFunctionOrArrayOfFunctionsEntry begin: entry=%s\n", entryName)
 	}
@@ -402,7 +434,9 @@ func validateFunctionOrArrayOfFunctionsEntry(xRefTable *model.XRefTable, d types
 
 	if o == nil {
 		if required {
-			return errors.Errorf("pdfcpu: validateFunctionOrArrayOfFunctionsEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return errors.Errorf(
+				"pdfcpu: validateFunctionOrArrayOfFunctionsEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateFunctionOrArrayOfFunctionsEntry end: optional entry %s is nil\n", entryName)
@@ -444,7 +478,9 @@ func validateFunctionOrArrayOfFunctionsEntry(xRefTable *model.XRefTable, d types
 	return nil
 }
 
-func validateIndRefEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) (*types.IndirectRef, error) {
+func validateIndRefEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) (*types.IndirectRef, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateIndRefEntry begin: entry=%s\n", entryName)
 	}
@@ -471,7 +507,10 @@ func validateIndRefEntry(xRefTable *model.XRefTable, d types.Dict, dictName, ent
 	return &ir, nil
 }
 
-func validateIndRefArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(types.Array) bool) (types.Array, error) {
+func validateIndRefArrayEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(types.Array) bool,
+) (types.Array, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateIndRefArrayEntry begin: entry=%s\n", entryName)
 	}
@@ -525,7 +564,10 @@ func validateInteger(xRefTable *model.XRefTable, o types.Object, validate func(i
 	return &i, nil
 }
 
-func validateIntegerEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(int) bool) (*types.Integer, error) {
+func validateIntegerEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(int) bool,
+) (*types.Integer, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateIntegerEntry begin: entry=%s\n", entryName)
 	}
@@ -541,7 +583,9 @@ func validateIntegerEntry(xRefTable *model.XRefTable, d types.Dict, dictName, en
 
 	if o == nil {
 		if required {
-			return nil, errors.Errorf("pdfcpu: validateIntegerEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return nil, errors.Errorf(
+				"pdfcpu: validateIntegerEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateIntegerEntry end: optional entry %s is nil\n", entryName)
@@ -561,7 +605,9 @@ func validateIntegerEntry(xRefTable *model.XRefTable, d types.Dict, dictName, en
 
 	// Validation
 	if validate != nil && !validate(i.Value()) {
-		return nil, errors.Errorf("pdfcpu: validateIntegerEntry: dict=%s entry=%s invalid dict entry", dictName, entryName)
+		return nil, errors.Errorf(
+			"pdfcpu: validateIntegerEntry: dict=%s entry=%s invalid dict entry", dictName, entryName,
+		)
 	}
 
 	if log.ValidateEnabled() {
@@ -610,7 +656,10 @@ func validateIntegerArray(xRefTable *model.XRefTable, o types.Object) (types.Arr
 	return a, nil
 }
 
-func validateIntegerArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(types.Array) bool) (types.Array, error) {
+func validateIntegerArrayEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(types.Array) bool,
+) (types.Array, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateIntegerArrayEntry begin: entry=%s\n", entryName)
 	}
@@ -632,7 +681,9 @@ func validateIntegerArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictNam
 		}
 
 		if _, ok := o.(types.Integer); !ok {
-			return nil, errors.Errorf("pdfcpu: validateIntegerArrayEntry: dict=%s entry=%s invalid type at index %d\n", dictName, entryName, i)
+			return nil, errors.Errorf(
+				"pdfcpu: validateIntegerArrayEntry: dict=%s entry=%s invalid type at index %d\n", dictName, entryName, i,
+			)
 		}
 
 	}
@@ -675,7 +726,10 @@ func validateName(xRefTable *model.XRefTable, o types.Object, validate func(stri
 	return &name, nil
 }
 
-func validateNameEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(string) bool) (*types.Name, error) {
+func validateNameEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(string) bool,
+) (*types.Name, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateNameEntry begin: entry=%s\n", entryName)
 	}
@@ -691,7 +745,9 @@ func validateNameEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entry
 
 	if o == nil {
 		if required {
-			return nil, errors.Errorf("pdfcpu: validateNameEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return nil, errors.Errorf(
+				"pdfcpu: validateNameEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateNameEntry end: optional entry %s is nil\n", entryName)
@@ -712,7 +768,9 @@ func validateNameEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entry
 	// Validation
 	v := name.Value()
 	if validate != nil && (required || len(v) > 0) && !validate(v) {
-		return &name, errors.Errorf("pdfcpu: validateNameEntry: dict=%s entry=%s invalid dict entry: %s", dictName, entryName, v)
+		return &name, errors.Errorf(
+			"pdfcpu: validateNameEntry: dict=%s entry=%s invalid dict entry: %s", dictName, entryName, v,
+		)
 	}
 
 	if log.ValidateEnabled() {
@@ -756,7 +814,10 @@ func validateNameArray(xRefTable *model.XRefTable, o types.Object) (types.Array,
 	return a, nil
 }
 
-func validateNameArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(a types.Array) bool) (types.Array, error) {
+func validateNameArrayEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(a types.Array) bool,
+) (types.Array, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateNameArrayEntry begin: entry=%s\n", entryName)
 	}
@@ -778,7 +839,9 @@ func validateNameArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName, 
 		}
 
 		if _, ok := o.(types.Name); !ok {
-			return nil, errors.Errorf("pdfcpu: validateNameArrayEntry: dict=%s entry=%s invalid type at index %d\n", dictName, entryName, i)
+			return nil, errors.Errorf(
+				"pdfcpu: validateNameArrayEntry: dict=%s entry=%s invalid type at index %d\n", dictName, entryName, i,
+			)
 		}
 
 	}
@@ -824,7 +887,10 @@ func validateNumber(xRefTable *model.XRefTable, o types.Object) (types.Object, e
 	return o, nil
 }
 
-func validateNumberEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(f float64) bool) (types.Object, error) {
+func validateNumberEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(f float64) bool,
+) (types.Object, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateNumberEntry begin: entry=%s\n", entryName)
 	}
@@ -856,7 +922,9 @@ func validateNumberEntry(xRefTable *model.XRefTable, d types.Dict, dictName, ent
 	}
 
 	if validate != nil && !validate(f) {
-		return nil, errors.Errorf("pdfcpu: validateFloatEntry: dict=%s entry=%s invalid dict entry", dictName, entryName)
+		return nil, errors.Errorf(
+			"pdfcpu: validateFloatEntry: dict=%s entry=%s invalid dict entry", dictName, entryName,
+		)
 	}
 
 	if log.ValidateEnabled() {
@@ -908,7 +976,10 @@ func validateNumberArray(xRefTable *model.XRefTable, o types.Object) (types.Arra
 	return a, err
 }
 
-func validateNumberArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(types.Array) bool) (types.Array, error) {
+func validateNumberArrayEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(types.Array) bool,
+) (types.Array, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateNumberArrayEntry begin: entry=%s\n", entryName)
 	}
@@ -950,18 +1021,25 @@ func validateNumberArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName
 	return a, nil
 }
 
-func validateRectangleEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(types.Array) bool) (types.Array, error) {
+func validateRectangleEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(types.Array) bool,
+) (types.Array, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateRectangleEntry begin: entry=%s\n", entryName)
 	}
 
-	a, err := validateNumberArrayEntry(xRefTable, d, dictName, entryName, required, sinceVersion, func(a types.Array) bool { return len(a) == 4 })
+	a, err := validateNumberArrayEntry(
+		xRefTable, d, dictName, entryName, required, sinceVersion, func(a types.Array) bool { return len(a) == 4 },
+	)
 	if err != nil || a == nil {
 		return nil, err
 	}
 
 	if validate != nil && !validate(a) {
-		return nil, errors.Errorf("pdfcpu: validateRectangleEntry: dict=%s entry=%s invalid rectangle entry", dictName, entryName)
+		return nil, errors.Errorf(
+			"pdfcpu: validateRectangleEntry: dict=%s entry=%s invalid rectangle entry", dictName, entryName,
+		)
 	}
 
 	if log.ValidateEnabled() {
@@ -997,7 +1075,10 @@ func validateStreamDict(xRefTable *model.XRefTable, o types.Object) (*types.Stre
 	return &sd, nil
 }
 
-func validateStreamDictEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(types.StreamDict) bool) (*types.StreamDict, error) {
+func validateStreamDictEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(types.StreamDict) bool,
+) (*types.StreamDict, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateStreamDictEntry begin: entry=%s\n", entryName)
 	}
@@ -1018,7 +1099,9 @@ func validateStreamDictEntry(xRefTable *model.XRefTable, d types.Dict, dictName,
 
 	if sd == nil {
 		if required {
-			return nil, errors.Errorf("pdfcpu: validateStreamDictEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return nil, errors.Errorf(
+				"pdfcpu: validateStreamDictEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateStreamDictEntry end: optional entry %s is nil\n", entryName)
@@ -1033,7 +1116,9 @@ func validateStreamDictEntry(xRefTable *model.XRefTable, d types.Dict, dictName,
 
 	// Validation
 	if validate != nil && !validate(*sd) {
-		return nil, errors.Errorf("pdfcpu: validateStreamDictEntry: dict=%s entry=%s invalid dict entry", dictName, entryName)
+		return nil, errors.Errorf(
+			"pdfcpu: validateStreamDictEntry: dict=%s entry=%s invalid dict entry", dictName, entryName,
+		)
 	}
 
 	if log.ValidateEnabled() {
@@ -1055,7 +1140,10 @@ func decodeString(o types.Object, dictName, entryName string) (s string, err err
 	return s, err
 }
 
-func validateStringEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(string) bool) (*string, error) {
+func validateStringEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(string) bool,
+) (*string, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateStringEntry begin: entry=%s\n", entryName)
 	}
@@ -1071,7 +1159,9 @@ func validateStringEntry(xRefTable *model.XRefTable, d types.Dict, dictName, ent
 
 	if o == nil {
 		if required {
-			return nil, errors.Errorf("pdfcpu: validateStringEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return nil, errors.Errorf(
+				"pdfcpu: validateStringEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateStringEntry end: optional entry %s is nil\n", entryName)
@@ -1091,7 +1181,9 @@ func validateStringEntry(xRefTable *model.XRefTable, d types.Dict, dictName, ent
 
 	// Validation
 	if validate != nil && (required || len(s) > 0) && !validate(s) {
-		return nil, errors.Errorf("pdfcpu: validateStringEntry: dict=%s entry=%s invalid dict entry", dictName, entryName)
+		return nil, errors.Errorf(
+			"pdfcpu: validateStringEntry: dict=%s entry=%s invalid dict entry", dictName, entryName,
+		)
 	}
 
 	if log.ValidateEnabled() {
@@ -1101,7 +1193,10 @@ func validateStringEntry(xRefTable *model.XRefTable, d types.Dict, dictName, ent
 	return &s, nil
 }
 
-func validateStringArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(types.Array) bool) (types.Array, error) {
+func validateStringArrayEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(types.Array) bool,
+) (types.Array, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateStringArrayEntry begin: entry=%s\n", entryName)
 	}
@@ -1143,7 +1238,10 @@ func validateStringArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName
 	return a, nil
 }
 
-func validateArrayArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, validate func(types.Array) bool) (types.Array, error) {
+func validateArrayArrayEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	validate func(types.Array) bool,
+) (types.Array, error) {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateArrayArrayEntry begin: entry=%s\n", entryName)
 	}
@@ -1182,7 +1280,9 @@ func validateArrayArrayEntry(xRefTable *model.XRefTable, d types.Dict, dictName,
 	return a, nil
 }
 
-func validateStringOrStreamEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateStringOrStreamEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateStringOrStreamEntry begin: entry=%s\n", entryName)
 	}
@@ -1198,7 +1298,9 @@ func validateStringOrStreamEntry(xRefTable *model.XRefTable, d types.Dict, dictN
 
 	if o == nil {
 		if required {
-			return errors.Errorf("pdfcpu: validateStringOrStreamEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return errors.Errorf(
+				"pdfcpu: validateStringOrStreamEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateStringOrStreamEntry end: optional entry %s is nil\n", entryName)
@@ -1227,7 +1329,9 @@ func validateStringOrStreamEntry(xRefTable *model.XRefTable, d types.Dict, dictN
 	return nil
 }
 
-func validateNameOrStringEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateNameOrStringEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateNameOrStringEntry begin: entry=%s\n", entryName)
 	}
@@ -1243,7 +1347,9 @@ func validateNameOrStringEntry(xRefTable *model.XRefTable, d types.Dict, dictNam
 
 	if o == nil {
 		if required {
-			return errors.Errorf("pdfcpu: validateNameOrStringEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return errors.Errorf(
+				"pdfcpu: validateNameOrStringEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateNameOrStringEntry end: optional entry %s is nil\n", entryName)
@@ -1272,7 +1378,9 @@ func validateNameOrStringEntry(xRefTable *model.XRefTable, d types.Dict, dictNam
 	return nil
 }
 
-func validateIntOrStringEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateIntOrStringEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateIntOrStringEntry begin: entry=%s\n", entryName)
 	}
@@ -1288,7 +1396,9 @@ func validateIntOrStringEntry(xRefTable *model.XRefTable, d types.Dict, dictName
 
 	if o == nil {
 		if required {
-			return errors.Errorf("pdfcpu: validateIntOrStringEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return errors.Errorf(
+				"pdfcpu: validateIntOrStringEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateIntOrStringEntry end: optional entry %s is nil\n", entryName)
@@ -1317,7 +1427,9 @@ func validateIntOrStringEntry(xRefTable *model.XRefTable, d types.Dict, dictName
 	return nil
 }
 
-func validateBooleanOrStreamEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateBooleanOrStreamEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateBooleanOrStreamEntry begin: entry=%s\n", entryName)
 	}
@@ -1333,7 +1445,9 @@ func validateBooleanOrStreamEntry(xRefTable *model.XRefTable, d types.Dict, dict
 
 	if o == nil {
 		if required {
-			return errors.Errorf("pdfcpu: validateBooleanOrStreamEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return errors.Errorf(
+				"pdfcpu: validateBooleanOrStreamEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateBooleanOrStreamEntry end: optional entry %s is nil\n", entryName)
@@ -1362,7 +1476,9 @@ func validateBooleanOrStreamEntry(xRefTable *model.XRefTable, d types.Dict, dict
 	return nil
 }
 
-func validateStreamDictOrDictEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateStreamDictOrDictEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateStreamDictOrDictEntry begin: entry=%s\n", entryName)
 	}
@@ -1378,7 +1494,9 @@ func validateStreamDictOrDictEntry(xRefTable *model.XRefTable, d types.Dict, dic
 
 	if o == nil {
 		if required {
-			return errors.Errorf("pdfcpu: validateStreamDictOrDictEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return errors.Errorf(
+				"pdfcpu: validateStreamDictOrDictEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateStreamDictOrDictEntry end: optional entry %s is nil\n", entryName)
@@ -1400,7 +1518,9 @@ func validateStreamDictOrDictEntry(xRefTable *model.XRefTable, d types.Dict, dic
 		// TODO validate 3D reference dict
 
 	default:
-		return errors.Errorf("pdfcpu: validateStreamDictOrDictEntry: dict=%s entry=%s invalid type", dictName, entryName)
+		return errors.Errorf(
+			"pdfcpu: validateStreamDictOrDictEntry: dict=%s entry=%s invalid type", dictName, entryName,
+		)
 	}
 
 	if log.ValidateEnabled() {
@@ -1430,19 +1550,26 @@ func validateIntegerOrArrayOfInteger(xRefTable *model.XRefTable, o types.Object,
 			}
 
 			if _, ok := o.(types.Integer); !ok {
-				return errors.Errorf("pdfcpu: validateIntegerOrArrayOfInteger: dict=%s entry=%s invalid type at index %d\n", dictName, entryName, i)
+				return errors.Errorf(
+					"pdfcpu: validateIntegerOrArrayOfInteger: dict=%s entry=%s invalid type at index %d\n", dictName,
+					entryName, i,
+				)
 			}
 
 		}
 
 	default:
-		return errors.Errorf("pdfcpu: validateIntegerOrArrayOfInteger: dict=%s entry=%s invalid type", dictName, entryName)
+		return errors.Errorf(
+			"pdfcpu: validateIntegerOrArrayOfInteger: dict=%s entry=%s invalid type", dictName, entryName,
+		)
 	}
 
 	return nil
 }
 
-func validateIntegerOrArrayOfIntegerEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateIntegerOrArrayOfIntegerEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateIntegerOrArrayOfIntegerEntry begin: entry=%s\n", entryName)
 	}
@@ -1458,7 +1585,9 @@ func validateIntegerOrArrayOfIntegerEntry(xRefTable *model.XRefTable, d types.Di
 
 	if o == nil {
 		if required {
-			return errors.Errorf("pdfcpu: validateIntegerOrArrayOfIntegerEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return errors.Errorf(
+				"pdfcpu: validateIntegerOrArrayOfIntegerEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateIntegerOrArrayOfIntegerEntry end: optional entry %s is nil\n", entryName)
@@ -1502,7 +1631,10 @@ func validateNameOrArrayOfName(xRefTable *model.XRefTable, o types.Object, dictN
 			}
 
 			if _, ok := o.(types.Name); !ok {
-				err = errors.Errorf("pdfcpu: validateNameOrArrayOfName: dict=%s entry=%s invalid type at index %d\n", dictName, entryName, i)
+				err = errors.Errorf(
+					"pdfcpu: validateNameOrArrayOfName: dict=%s entry=%s invalid type at index %d\n", dictName,
+					entryName, i,
+				)
 				return err
 			}
 
@@ -1515,7 +1647,9 @@ func validateNameOrArrayOfName(xRefTable *model.XRefTable, o types.Object, dictN
 	return nil
 }
 
-func validateNameOrArrayOfNameEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateNameOrArrayOfNameEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateNameOrArrayOfNameEntry begin: entry=%s\n", entryName)
 	}
@@ -1531,7 +1665,9 @@ func validateNameOrArrayOfNameEntry(xRefTable *model.XRefTable, d types.Dict, di
 
 	if o == nil {
 		if required {
-			return errors.Errorf("pdfcpu: validateNameOrArrayOfNameEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return errors.Errorf(
+				"pdfcpu: validateNameOrArrayOfNameEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateNameOrArrayOfNameEntry end: optional entry %s is nil\n", entryName)
@@ -1575,19 +1711,26 @@ func validateBooleanOrArrayOfBoolean(xRefTable *model.XRefTable, o types.Object,
 			}
 
 			if _, ok := o.(types.Boolean); !ok {
-				return errors.Errorf("pdfcpu: validateBooleanOrArrayOfBoolean: dict=%s entry=%s invalid type at index %d\n", dictName, entryName, i)
+				return errors.Errorf(
+					"pdfcpu: validateBooleanOrArrayOfBoolean: dict=%s entry=%s invalid type at index %d\n", dictName,
+					entryName, i,
+				)
 			}
 
 		}
 
 	default:
-		return errors.Errorf("pdfcpu: validateBooleanOrArrayOfBoolean: dict=%s entry=%s invalid type", dictName, entryName)
+		return errors.Errorf(
+			"pdfcpu: validateBooleanOrArrayOfBoolean: dict=%s entry=%s invalid type", dictName, entryName,
+		)
 	}
 
 	return nil
 }
 
-func validateBooleanOrArrayOfBooleanEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateBooleanOrArrayOfBooleanEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 	if log.ValidateEnabled() {
 		log.Validate.Printf("validateBooleanOrArrayOfBooleanEntry begin: entry=%s\n", entryName)
 	}
@@ -1603,7 +1746,9 @@ func validateBooleanOrArrayOfBooleanEntry(xRefTable *model.XRefTable, d types.Di
 
 	if o == nil {
 		if required {
-			return errors.Errorf("pdfcpu: validateBooleanOrArrayOfBooleanEntry: dict=%s required entry=%s is nil", dictName, entryName)
+			return errors.Errorf(
+				"pdfcpu: validateBooleanOrArrayOfBooleanEntry: dict=%s required entry=%s is nil", dictName, entryName,
+			)
 		}
 		if log.ValidateEnabled() {
 			log.Validate.Printf("validateBooleanOrArrayOfBooleanEntry end: optional entry %s is nil\n", entryName)

@@ -26,15 +26,17 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
 	"github.com/pkg/errors"
 )
 
 // ExtractImagesRaw returns []pdfcpu.Image containing io.Readers for images contained in selectedPages.
 // Beware of memory intensive returned slice.
-func ExtractImagesRaw(rs io.ReadSeeker, selectedPages []string, conf *model.Configuration) ([]map[int]model.Image, error) {
+func ExtractImagesRaw(rs io.ReadSeeker, selectedPages []string, conf *model.Configuration) (
+	[]map[int]model.Image, error,
+) {
 	if rs == nil {
 		return nil, errors.New("pdfcpu: ExtractImages: missing rs")
 	}
@@ -70,7 +72,9 @@ func ExtractImagesRaw(rs io.ReadSeeker, selectedPages []string, conf *model.Conf
 }
 
 // ExtractImages extracts and digests embedded image resources from rs for selected pages.
-func ExtractImages(rs io.ReadSeeker, selectedPages []string, digestImage func(model.Image, bool, int) error, conf *model.Configuration) error {
+func ExtractImages(
+	rs io.ReadSeeker, selectedPages []string, digestImage func(model.Image, bool, int) error, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: ExtractImages: missing rs")
 	}
@@ -299,7 +303,9 @@ func ExtractPagesFile(inFile, outDir string, selectedPages []string, conf *model
 }
 
 // ExtractContent dumps "PDF source" files from rs into outDir for selected pages.
-func ExtractContent(rs io.ReadSeeker, outDir, fileName string, selectedPages []string, conf *model.Configuration) error {
+func ExtractContent(
+	rs io.ReadSeeker, outDir, fileName string, selectedPages []string, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: ExtractContent: missing rs")
 	}
@@ -392,7 +398,9 @@ func ExtractMetadata(rs io.ReadSeeker, outDir, fileName string, conf *model.Conf
 	if len(mm) > 0 {
 		fileName = strings.TrimSuffix(filepath.Base(fileName), ".pdf")
 		for _, m := range mm {
-			outFile := filepath.Join(outDir, fmt.Sprintf("%s_Metadata_%s_%d_%d.txt", fileName, m.ParentType, m.ParentObjNr, m.ObjNr))
+			outFile := filepath.Join(
+				outDir, fmt.Sprintf("%s_Metadata_%s_%d_%d.txt", fileName, m.ParentType, m.ParentObjNr, m.ObjNr),
+			)
 			logWritingTo(outFile)
 			f, err := os.Create(outFile)
 			if err != nil {

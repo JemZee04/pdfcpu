@@ -29,8 +29,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/filter"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 	_ "golang.org/x/image/webp"
 )
@@ -424,7 +424,9 @@ func convertToSepia(img image.Image) *image.RGBA {
 	return m
 }
 
-func createImageDict(xRefTable *XRefTable, buf, softMask []byte, w, h, bpc int, format, cs string) (*types.StreamDict, int, int, error) {
+func createImageDict(xRefTable *XRefTable, buf, softMask []byte, w, h, bpc int, format, cs string) (
+	*types.StreamDict, int, int, error,
+) {
 	var (
 		sd  *types.StreamDict
 		err error
@@ -554,7 +556,9 @@ func colorSpaceForJPEGColorModel(cm color.Model) string {
 	return ""
 }
 
-func createDCTImageObjectForJPEG(xRefTable *XRefTable, c image.Config, bb bytes.Buffer) (*types.StreamDict, int, int, error) {
+func createDCTImageObjectForJPEG(xRefTable *XRefTable, c image.Config, bb bytes.Buffer) (
+	*types.StreamDict, int, int, error,
+) {
 	cs := colorSpaceForJPEGColorModel(c.ColorModel)
 	if cs == "" {
 		return nil, 0, 0, errors.New("pdfcpu: unexpected color model for JPEG")

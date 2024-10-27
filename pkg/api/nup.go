@@ -20,10 +20,10 @@ import (
 	"io"
 	"os"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 // PDFNUpConfig returns an NUp configuration for Nup-ing PDF files.
@@ -91,7 +91,9 @@ func NUpFromImage(conf *model.Configuration, imageFileNames []string, nup *model
 
 // NUp rearranges PDF pages or images into page grids and writes the result to w.
 // Either rs or imgFiles will be used.
-func NUp(rs io.ReadSeeker, w io.Writer, imgFiles, selectedPages []string, nup *model.NUp, conf *model.Configuration) error {
+func NUp(
+	rs io.ReadSeeker, w io.Writer, imgFiles, selectedPages []string, nup *model.NUp, conf *model.Configuration,
+) error {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -135,7 +137,9 @@ func NUp(rs io.ReadSeeker, w io.Writer, imgFiles, selectedPages []string, nup *m
 }
 
 // NUpFile rearranges PDF pages or images into page grids and writes the result to outFile.
-func NUpFile(inFiles []string, outFile string, selectedPages []string, nup *model.NUp, conf *model.Configuration) (err error) {
+func NUpFile(
+	inFiles []string, outFile string, selectedPages []string, nup *model.NUp, conf *model.Configuration,
+) (err error) {
 	var f1, f2 *os.File
 
 	if !nup.ImgInputFile {

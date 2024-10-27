@@ -20,10 +20,10 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	pdffont "github.com/JemZee04/pdfcpu/pkg/pdfcpu/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -365,7 +365,10 @@ func (cb *CheckBox) irNYes(fonts model.FontMap, bgCol *color.SimpleColor) (*type
 
 	s, x, y := 14.532/18, 2.853/18, 4.081/18
 	fmt.Fprintf(buf, "0 0 %.1f %.1f re f 0.5 0.5 %.1f %.1f re s Q ", cb.Width, cb.Width, cb.Width-1, cb.Width-1)
-	fmt.Fprintf(buf, "q 1 1 %.1f %.1f re W n BT /F0 %f Tf %f %f Td (4) Tj ET Q ", cb.Width-2, cb.Width-2, s*cb.Width, x*cb.Width, y*cb.Width)
+	fmt.Fprintf(
+		buf, "q 1 1 %.1f %.1f re W n BT /F0 %f Tf %f %f Td (4) Tj ET Q ", cb.Width-2, cb.Width-2, s*cb.Width,
+		x*cb.Width, y*cb.Width,
+	)
 	sd, err := pdf.XRefTable.NewStreamDictForBuf(buf.Bytes())
 	if err != nil {
 		return nil, err
@@ -421,7 +424,9 @@ func (cb *CheckBox) irDOff(bgCol *color.SimpleColor) (*types.IndirectRef, error)
 		return ap.irDOffL, nil
 	}
 
-	buf := fmt.Sprintf("q 0.75293 g 0 0 %.1f %.1f re f 0.5 0.5 %.1f %.1f re se Q ", cb.Width, cb.Width, cb.Width-1, cb.Width-1)
+	buf := fmt.Sprintf(
+		"q 0.75293 g 0 0 %.1f %.1f re f 0.5 0.5 %.1f %.1f re se Q ", cb.Width, cb.Width, cb.Width-1, cb.Width-1,
+	)
 	sd, err := pdf.XRefTable.NewStreamDictForBuf([]byte(buf))
 	if err != nil {
 		return nil, err
@@ -461,8 +466,13 @@ func (cb *CheckBox) irDYes(fonts model.FontMap, bgCol *color.SimpleColor) (*type
 	}
 
 	s, x, y := 14.532/18, 2.853/18, 4.081/18
-	buf := fmt.Sprintf("q 0.75293 g 0 0 %.1f %.1f re f 0.5 0.5 %.1f %.1f re se Q ", cb.Width, cb.Width, cb.Width-1, cb.Width-1)
-	buf += fmt.Sprintf("q 1 1 %.1f %.1f re W n BT /F0 %f Tf %f %f Td (4) Tj ET Q ", cb.Width-2, cb.Width-2, s*cb.Width, x*cb.Width, y*cb.Width)
+	buf := fmt.Sprintf(
+		"q 0.75293 g 0 0 %.1f %.1f re f 0.5 0.5 %.1f %.1f re se Q ", cb.Width, cb.Width, cb.Width-1, cb.Width-1,
+	)
+	buf += fmt.Sprintf(
+		"q 1 1 %.1f %.1f re W n BT /F0 %f Tf %f %f Td (4) Tj ET Q ", cb.Width-2, cb.Width-2, s*cb.Width, x*cb.Width,
+		y*cb.Width,
+	)
 	sd, _ := cb.pdf.XRefTable.NewStreamDictForBuf([]byte(buf))
 	sd.InsertName("Type", "XObject")
 	sd.InsertName("Subtype", "Form")
@@ -506,7 +516,8 @@ func (cb *CheckBox) irDYes(fonts model.FontMap, bgCol *color.SimpleColor) (*type
 }
 
 func (cb *CheckBox) appearanceIndRefs(fonts model.FontMap, bgCol *color.SimpleColor) (
-	*types.IndirectRef, *types.IndirectRef, *types.IndirectRef, *types.IndirectRef, error) {
+	*types.IndirectRef, *types.IndirectRef, *types.IndirectRef, *types.IndirectRef, error,
+) {
 
 	irDOff, err := cb.irDOff(bgCol)
 	if err != nil {

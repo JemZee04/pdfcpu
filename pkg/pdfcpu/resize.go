@@ -22,12 +22,12 @@ import (
 	"math"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/matrix"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -94,7 +94,9 @@ func prepTransform(rSrc, rDest *types.Rectangle, enforce bool) (float64, float64
 	return sc, sin, cos, dx, dy
 }
 
-func prepResize(res *model.Resize, cropBox *types.Rectangle) (*types.Rectangle, float64, float64, float64, float64, float64) {
+func prepResize(res *model.Resize, cropBox *types.Rectangle) (
+	*types.Rectangle, float64, float64, float64, float64, float64,
+) {
 	ar := cropBox.AspectRatio()
 
 	var (
@@ -190,7 +192,9 @@ func resizePage(ctx *model.Context, pageNr int, res *model.Resize) error {
 	}
 
 	if inhPAttrs.Rotate != 0 {
-		bbInvRot := append([]byte(" q "), model.ContentBytesForPageRotation(inhPAttrs.Rotate, cropBox.Width(), cropBox.Height())...)
+		bbInvRot := append(
+			[]byte(" q "), model.ContentBytesForPageRotation(inhPAttrs.Rotate, cropBox.Width(), cropBox.Height())...,
+		)
 		bb = append(bbInvRot, bb...)
 		bb = append(bb, []byte(" Q")...)
 	}

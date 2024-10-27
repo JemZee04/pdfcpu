@@ -16,7 +16,7 @@ limitations under the License.
 
 package model
 
-import "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+import "github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 
 // DestinationType represents the various PDF destination types.
 type DestinationType int
@@ -71,7 +71,10 @@ func (dest Destination) Array(indRef types.IndirectRef) types.Array {
 	case DestFitV:
 		arr = append(arr, types.Integer(dest.Left))
 	case DestFitR:
-		arr = append(arr, types.Integer(dest.Left), types.Integer(dest.Bottom), types.Integer(dest.Right), types.Integer(dest.Top))
+		arr = append(
+			arr, types.Integer(dest.Left), types.Integer(dest.Bottom), types.Integer(dest.Right),
+			types.Integer(dest.Top),
+		)
 	case DestFitBH:
 		arr = append(arr, types.Integer(dest.Top))
 	case DestFitBV:

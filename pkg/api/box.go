@@ -20,9 +20,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -66,7 +66,9 @@ func Boxes(rs io.ReadSeeker, selectedPages []string, conf *model.Configuration) 
 }
 
 // AddBoxes adds page boundaries for selected pages of rs and writes result to w.
-func AddBoxes(rs io.ReadSeeker, w io.Writer, selectedPages []string, pb *model.PageBoundaries, conf *model.Configuration) error {
+func AddBoxes(
+	rs io.ReadSeeker, w io.Writer, selectedPages []string, pb *model.PageBoundaries, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: AddBoxes: missing rs")
 	}
@@ -94,7 +96,9 @@ func AddBoxes(rs io.ReadSeeker, w io.Writer, selectedPages []string, pb *model.P
 }
 
 // AddBoxesFile adds page boundaries for selected pages of inFile and writes result to outFile.
-func AddBoxesFile(inFile, outFile string, selectedPages []string, pb *model.PageBoundaries, conf *model.Configuration) (err error) {
+func AddBoxesFile(
+	inFile, outFile string, selectedPages []string, pb *model.PageBoundaries, conf *model.Configuration,
+) (err error) {
 	var f1, f2 *os.File
 	if log.CLIEnabled() {
 		log.CLI.Printf("adding %s for %s\n", pb, inFile)
@@ -139,7 +143,9 @@ func AddBoxesFile(inFile, outFile string, selectedPages []string, pb *model.Page
 }
 
 // RemoveBoxes removes page boundaries as specified in pb for selected pages of rs and writes result to w.
-func RemoveBoxes(rs io.ReadSeeker, w io.Writer, selectedPages []string, pb *model.PageBoundaries, conf *model.Configuration) error {
+func RemoveBoxes(
+	rs io.ReadSeeker, w io.Writer, selectedPages []string, pb *model.PageBoundaries, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: RemoveBoxes: missing rs")
 	}
@@ -167,7 +173,9 @@ func RemoveBoxes(rs io.ReadSeeker, w io.Writer, selectedPages []string, pb *mode
 }
 
 // RemoveBoxesFile removes page boundaries as specified in pb for selected pages of inFile and writes result to outFile.
-func RemoveBoxesFile(inFile, outFile string, selectedPages []string, pb *model.PageBoundaries, conf *model.Configuration) (err error) {
+func RemoveBoxesFile(
+	inFile, outFile string, selectedPages []string, pb *model.PageBoundaries, conf *model.Configuration,
+) (err error) {
 	var f1, f2 *os.File
 
 	if log.CLIEnabled() {

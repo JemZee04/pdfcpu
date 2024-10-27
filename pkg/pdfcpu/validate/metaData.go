@@ -21,13 +21,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/filter"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
-func validateMetadataStream(xRefTable *model.XRefTable, d types.Dict, required bool, sinceVersion model.Version) (*types.StreamDict, error) {
+func validateMetadataStream(
+	xRefTable *model.XRefTable, d types.Dict, required bool, sinceVersion model.Version,
+) (*types.StreamDict, error) {
 	if xRefTable.ValidationMode == model.ValidationRelaxed {
 		sinceVersion = model.V13
 	}
@@ -39,11 +41,15 @@ func validateMetadataStream(xRefTable *model.XRefTable, d types.Dict, required b
 
 	dictName := "metaDataDict"
 
-	if _, err = validateNameEntry(xRefTable, sd.Dict, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Metadata" }); err != nil {
+	if _, err = validateNameEntry(
+		xRefTable, sd.Dict, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Metadata" },
+	); err != nil {
 		return nil, err
 	}
 
-	if _, err = validateNameEntry(xRefTable, sd.Dict, dictName, "Subtype", OPTIONAL, sinceVersion, func(s string) bool { return s == "XML" }); err != nil {
+	if _, err = validateNameEntry(
+		xRefTable, sd.Dict, dictName, "Subtype", OPTIONAL, sinceVersion, func(s string) bool { return s == "XML" },
+	); err != nil {
 		return nil, err
 	}
 
@@ -61,7 +67,9 @@ func validateMetadata(xRefTable *model.XRefTable, d types.Dict, required bool, s
 	return err
 }
 
-func catalogMetaData(xRefTable *model.XRefTable, rootDict types.Dict, required bool, sinceVersion model.Version) (*model.XMPMeta, error) {
+func catalogMetaData(
+	xRefTable *model.XRefTable, rootDict types.Dict, required bool, sinceVersion model.Version,
+) (*model.XMPMeta, error) {
 	sd, err := validateMetadataStream(xRefTable, rootDict, required, sinceVersion)
 	if err != nil || sd == nil {
 		return nil, err
@@ -93,7 +101,9 @@ func catalogMetaData(xRefTable *model.XRefTable, rootDict types.Dict, required b
 	return &x, nil
 }
 
-func validateRootMetadata(xRefTable *model.XRefTable, rootDict types.Dict, required bool, sinceVersion model.Version) error {
+func validateRootMetadata(
+	xRefTable *model.XRefTable, rootDict types.Dict, required bool, sinceVersion model.Version,
+) error {
 
 	if xRefTable.CatalogXMPMeta == nil {
 		return nil

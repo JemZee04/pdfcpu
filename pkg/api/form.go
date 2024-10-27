@@ -27,11 +27,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/create"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/form"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/create"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/form"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -431,7 +431,10 @@ func validateComboBoxValues(f form.Form) error {
 				if err == nil && i < len(cb.Options) {
 					return nil
 				}
-				return errors.Errorf("pdfcpu: fill field name: \"%s\" unknown value: \"%s\" - options: [%v]\n", cb.Name, cb.Value, strings.Join(cb.Options, ", "))
+				return errors.Errorf(
+					"pdfcpu: fill field name: \"%s\" unknown value: \"%s\" - options: [%v]\n", cb.Name, cb.Value,
+					strings.Join(cb.Options, ", "),
+				)
 			}
 		}
 	}
@@ -450,7 +453,10 @@ func validateListBoxValues(f form.Form) error {
 					if err == nil && i < len(lb.Options) {
 						return nil
 					}
-					return errors.Errorf("pdfcpu: fill field name: \"%s\" unknown value: \"%s\" - options: [%v]\n", lb.Name, v, strings.Join(lb.Options, ", "))
+					return errors.Errorf(
+						"pdfcpu: fill field name: \"%s\" unknown value: \"%s\" - options: [%v]\n", lb.Name, v,
+						strings.Join(lb.Options, ", "),
+					)
 				}
 			}
 		}
@@ -469,7 +475,10 @@ func validateRadioButtonGroupValues(f form.Form) error {
 				if err == nil && i < len(rbg.Options) {
 					return nil
 				}
-				return errors.Errorf("pdfcpu: fill field name: \"%s\" unknown value: \"%s\" - options: [%v]\n", rbg.Name, rbg.Value, strings.Join(rbg.Options, ", "))
+				return errors.Errorf(
+					"pdfcpu: fill field name: \"%s\" unknown value: \"%s\" - options: [%v]\n", rbg.Name, rbg.Value,
+					strings.Join(rbg.Options, ", "),
+				)
 			}
 		}
 	}
@@ -660,7 +669,9 @@ func mergeForms(outDir, fileName string, outFiles []string, conf *model.Configur
 	return nil
 }
 
-func multiFillFormJSON(inFilePDF string, rd io.Reader, outDir, fileName string, merge bool, conf *model.Configuration) error {
+func multiFillFormJSON(
+	inFilePDF string, rd io.Reader, outDir, fileName string, merge bool, conf *model.Configuration,
+) error {
 	formGroup, err := parseFormGroup(rd)
 	if err != nil {
 		return err
@@ -749,7 +760,9 @@ func parseCSVLines(rd io.Reader) ([][]string, error) {
 	return csvLines, nil
 }
 
-func multiFillFormCSV(inFilePDF string, rd io.Reader, outDir, fileName string, merge bool, conf *model.Configuration) error {
+func multiFillFormCSV(
+	inFilePDF string, rd io.Reader, outDir, fileName string, merge bool, conf *model.Configuration,
+) error {
 	csvLines, err := parseCSVLines(rd)
 	if err != nil {
 		return err
@@ -812,7 +825,10 @@ func multiFillFormCSV(inFilePDF string, rd io.Reader, outDir, fileName string, m
 }
 
 // MultiFillForm populates multiples instances of inFilePDF's form with data from rd and writes the result to outDir.
-func MultiFillForm(inFilePDF string, rd io.Reader, outDir, fileName string, format form.DataFormat, merge bool, conf *model.Configuration) error {
+func MultiFillForm(
+	inFilePDF string, rd io.Reader, outDir, fileName string, format form.DataFormat, merge bool,
+	conf *model.Configuration,
+) error {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -828,7 +844,9 @@ func MultiFillForm(inFilePDF string, rd io.Reader, outDir, fileName string, form
 }
 
 // MultiFillFormFile populates multiples instances of inFilePDFs form with data from inFileData and writes the result to outDir.
-func MultiFillFormFile(inFilePDF, inFileData, outDir, outFilePDF string, merge bool, conf *model.Configuration) (err error) {
+func MultiFillFormFile(
+	inFilePDF, inFileData, outDir, outFilePDF string, merge bool, conf *model.Configuration,
+) (err error) {
 	format := form.JSON
 	if strings.HasSuffix(strings.ToLower(inFileData), ".csv") {
 		format = form.CSV
@@ -855,7 +873,10 @@ func MultiFillFormFile(inFilePDF, inFileData, outDir, outFilePDF string, merge b
 	outFileBase := filepath.Base(outFilePDF)
 
 	if log.CLIEnabled() {
-		log.CLI.Printf("filling multiple forms via %s based on %s data from %s into %s/%s ...\n", inFilePDF, s, inFileData, outDir, outFileBase)
+		log.CLI.Printf(
+			"filling multiple forms via %s based on %s data from %s into %s/%s ...\n", inFilePDF, s, inFileData, outDir,
+			outFileBase,
+		)
 	}
 
 	return MultiFillForm(inFilePDF, f, outDir, outFileBase, format, merge, conf)

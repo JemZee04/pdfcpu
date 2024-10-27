@@ -17,8 +17,8 @@ limitations under the License.
 package validate
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -125,7 +125,9 @@ func validateSampledFunctionStreamDict(xRefTable *model.XRefTable, sd *types.Str
 		return err
 	}
 
-	_, err = validateIntegerEntry(xRefTable, sd.Dict, dictName, "Order", OPTIONAL, model.V12, func(i int) bool { return i == 1 || i == 3 })
+	_, err = validateIntegerEntry(
+		xRefTable, sd.Dict, dictName, "Order", OPTIONAL, model.V12, func(i int) bool { return i == 1 || i == 3 },
+	)
 	if err != nil {
 		return err
 	}
@@ -162,7 +164,9 @@ func validatePostScriptCalculatorFunctionStreamDict(xRefTable *model.XRefTable, 
 
 func processFunctionDict(xRefTable *model.XRefTable, d types.Dict) error {
 
-	funcType, err := validateIntegerEntry(xRefTable, d, "functionDict", "FunctionType", REQUIRED, model.V10, func(i int) bool { return i == 2 || i == 3 })
+	funcType, err := validateIntegerEntry(
+		xRefTable, d, "functionDict", "FunctionType", REQUIRED, model.V10, func(i int) bool { return i == 2 || i == 3 },
+	)
 	if err != nil {
 		return err
 	}
@@ -182,7 +186,10 @@ func processFunctionDict(xRefTable *model.XRefTable, d types.Dict) error {
 
 func processFunctionStreamDict(xRefTable *model.XRefTable, sd *types.StreamDict) error {
 
-	funcType, err := validateIntegerEntry(xRefTable, sd.Dict, "functionDict", "FunctionType", REQUIRED, model.V10, func(i int) bool { return i == 0 || i == 4 })
+	funcType, err := validateIntegerEntry(
+		xRefTable, sd.Dict, "functionDict", "FunctionType", REQUIRED, model.V10,
+		func(i int) bool { return i == 0 || i == 4 },
+	)
 	if err != nil {
 		return err
 	}

@@ -17,8 +17,8 @@
 package primitives
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -56,7 +56,9 @@ func (b *Border) validate() error {
 		case "bevel":
 			b.style = types.LJBevel
 		default:
-			return errors.Errorf("pdfcpu: invalid border style: %s (should be \"miter\", \"round\" or \"bevel\")", b.Style)
+			return errors.Errorf(
+				"pdfcpu: invalid border style: %s (should be \"miter\", \"round\" or \"bevel\")", b.Style,
+			)
 		}
 	}
 

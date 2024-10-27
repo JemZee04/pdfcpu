@@ -21,12 +21,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/api"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 var sampleText string = `MOST of the adventures recorded in this book really occurred; one or
@@ -217,7 +217,8 @@ func writeTextDemoAlignedWidthAndMargin(
 	p model.Page,
 	region *types.Rectangle,
 	hAlign types.HAlignment,
-	w, mLeft, mRight, mTop, mBot float64) {
+	w, mLeft, mRight, mTop, mBot float64,
+) {
 
 	buf := p.Buf
 	mediaBox := p.MediaBox
@@ -303,7 +304,9 @@ func writeTextDemoAlignedWidthAndMargin(
 	draw.DrawHairCross(buf, 0, 0, r)
 }
 
-func createTextDemoAlignedWidthAndMargin(xRefTable *model.XRefTable, mediaBox *types.Rectangle, hAlign types.HAlignment, w, mLeft, mRight, mTop, mBot float64) model.Page {
+func createTextDemoAlignedWidthAndMargin(
+	xRefTable *model.XRefTable, mediaBox *types.Rectangle, hAlign types.HAlignment, w, mLeft, mRight, mTop, mBot float64,
+) model.Page {
 	p := model.NewPage(mediaBox, nil)
 	var region *types.Rectangle
 	writeTextDemoAlignedWidthAndMargin(xRefTable, p, region, hAlign, w, mLeft, mRight, mTop, mBot)
@@ -601,7 +604,9 @@ func createTextDemoAnchorsWithOffset(xRefTable *model.XRefTable, mediaBox *types
 	return p
 }
 
-func writeTextDemoColumnAnchoredWithOffset(xRefTable *model.XRefTable, p model.Page, region *types.Rectangle, dx, dy float64) {
+func writeTextDemoColumnAnchoredWithOffset(
+	xRefTable *model.XRefTable, p model.Page, region *types.Rectangle, dx, dy float64,
+) {
 	mediaBox := p.MediaBox
 	buf := p.Buf
 
@@ -859,7 +864,9 @@ func createTextRotateDemoWithOffset(xRefTable *model.XRefTable, mediaBox *types.
 	return p
 }
 
-func writeTextScaleAbsoluteDemoWithOffset(xRefTable *model.XRefTable, p model.Page, region *types.Rectangle, dx, dy float64) {
+func writeTextScaleAbsoluteDemoWithOffset(
+	xRefTable *model.XRefTable, p model.Page, region *types.Rectangle, dx, dy float64,
+) {
 	mediaBox := p.MediaBox
 	buf := p.Buf
 
@@ -1056,7 +1063,9 @@ func createTextScaleAbsoluteDemoWithOffset(xRefTable *model.XRefTable, mediaBox 
 	return p
 }
 
-func writeTextScaleRelativeDemoWithOffset(xRefTable *model.XRefTable, p model.Page, region *types.Rectangle, dx, dy float64) {
+func writeTextScaleRelativeDemoWithOffset(
+	xRefTable *model.XRefTable, p model.Page, region *types.Rectangle, dx, dy float64,
+) {
 	mediaBox := p.MediaBox
 	buf := p.Buf
 
@@ -1661,7 +1670,10 @@ func createTextBorderNoMarginAlignJustifyTest(xRefTable *model.XRefTable, mediaB
 	return p
 }
 
-func createXRefAndWritePDF(t *testing.T, msg, fileName string, mediaBox *types.Rectangle, f func(xRefTable *model.XRefTable, mediaBox *types.Rectangle) model.Page) {
+func createXRefAndWritePDF(
+	t *testing.T, msg, fileName string, mediaBox *types.Rectangle,
+	f func(xRefTable *model.XRefTable, mediaBox *types.Rectangle) model.Page,
+) {
 	t.Helper()
 	xRefTable, err := pdfcpu.CreateDemoXRef()
 	if err != nil {
@@ -1820,7 +1832,9 @@ func writecreateTestRTLUserFont(xRefTable *model.XRefTable, p model.Page, region
 	draw.DrawHairCross(p.Buf, 0, 0, mediaBox)
 }
 
-func createTestRTLUserFont(xRefTable *model.XRefTable, mediaBox *types.Rectangle, language, fontName string) model.Page {
+func createTestRTLUserFont(
+	xRefTable *model.XRefTable, mediaBox *types.Rectangle, language, fontName string,
+) model.Page {
 	p := model.NewPage(mediaBox, nil)
 	var region *types.Rectangle
 	text := sampleTextRTL[language]
@@ -1919,11 +1933,13 @@ func TestUserFontJustified(t *testing.T) {
 	createXRefAndWriteJustifiedPDF(t, msg, "UserFont_JustifiedRightToLeft", mediaBox, true)
 }
 
-func createXRefAndWriteRTLPDF(t *testing.T,
+func createXRefAndWriteRTLPDF(
+	t *testing.T,
 	msg, fileName string,
 	mediaBox *types.Rectangle,
 	language, fontName string,
-	f func(xRefTable *model.XRefTable, mediaBox *types.Rectangle, language, fontName string) model.Page) {
+	f func(xRefTable *model.XRefTable, mediaBox *types.Rectangle, language, fontName string) model.Page,
+) {
 	t.Helper()
 
 	xRefTable, err := pdfcpu.CreateDemoXRef()

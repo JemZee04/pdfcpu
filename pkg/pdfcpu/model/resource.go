@@ -21,7 +21,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 // FontObject represents a font used in a PDF file.
@@ -93,10 +93,12 @@ func (fo FontObject) Embedded() (embedded bool) {
 }
 
 func (fo FontObject) String() string {
-	return fmt.Sprintf("%-10s %-30s %-10s %-20s %-8v %s\n",
+	return fmt.Sprintf(
+		"%-10s %-30s %-10s %-20s %-8v %s\n",
 		fo.Prefix, fo.FontName,
 		fo.SubType(), fo.Encoding(),
-		fo.Embedded(), fo.ResourceNamesString())
+		fo.Embedded(), fo.ResourceNamesString(),
+	)
 }
 
 // ImageObject represents an image used in a PDF file.
@@ -129,7 +131,11 @@ func (io ImageObject) ResourceNamesString() string {
 	return strings.Join(resNames, ",")
 }
 
-var resourceTypes = types.NewStringSet([]string{"ColorSpace", "ExtGState", "Font", "Pattern", "Properties", "Shading", "XObject"})
+var resourceTypes = types.NewStringSet(
+	[]string{
+		"ColorSpace", "ExtGState", "Font", "Pattern", "Properties", "Shading", "XObject",
+	},
+)
 
 // PageResourceNames represents the required resource names for a specific page as extracted from its content streams.
 type PageResourceNames map[string]types.StringSet

@@ -23,9 +23,9 @@ import (
 	"fmt"
 	"path/filepath"
 
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	pdffont "github.com/JemZee04/pdfcpu/pkg/pdfcpu/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 var (
@@ -636,8 +636,10 @@ func CreateTestPageContent(p model.Page) {
 	b.WriteString("[3]0 d 0 w ")
 
 	// X
-	fmt.Fprintf(b, "0 0 m %f %f l s %f 0 m 0 %f l s ",
-		mb.Width(), mb.Height(), mb.Width(), mb.Height())
+	fmt.Fprintf(
+		b, "0 0 m %f %f l s %f 0 m 0 %f l s ",
+		mb.Width(), mb.Height(), mb.Width(), mb.Height(),
+	)
 
 	// Horizontal guides
 	c := 6
@@ -815,7 +817,9 @@ func annotRect(i int, w, h, d, l float64) *types.Rectangle {
 }
 
 // createAnnotsArray generates side by side lined up annotations starting in the lower left corner of the page.
-func createAnnotsArray(xRefTable *model.XRefTable, pageIndRef types.IndirectRef, mediaBox types.Array) (types.Array, error) {
+func createAnnotsArray(xRefTable *model.XRefTable, pageIndRef types.IndirectRef, mediaBox types.Array) (
+	types.Array, error,
+) {
 	pageWidth := mediaBox[2].(types.Float)
 	pageHeight := mediaBox[3].(types.Float)
 
@@ -869,7 +873,9 @@ func createAnnotsArray(xRefTable *model.XRefTable, pageIndRef types.IndirectRef,
 	return a, nil
 }
 
-func createPageWithAnnotations(xRefTable *model.XRefTable, parentPageIndRef types.IndirectRef, mediaBox *types.Rectangle, fontName string) (*types.IndirectRef, error) {
+func createPageWithAnnotations(
+	xRefTable *model.XRefTable, parentPageIndRef types.IndirectRef, mediaBox *types.Rectangle, fontName string,
+) (*types.IndirectRef, error) {
 	mba := mediaBox.Array()
 
 	pageDict := types.Dict(
@@ -880,7 +886,8 @@ func createPageWithAnnotations(xRefTable *model.XRefTable, parentPageIndRef type
 			"TrimBox":      mba,
 			"ArtBox":       mba,
 			"BoxColorInfo": createBoxColorDict(),
-			"UserUnit":     types.Float(1.5)}, // Note: not honoured by Apple Preview
+			"UserUnit":     types.Float(1.5),
+		}, // Note: not honoured by Apple Preview
 	)
 
 	err := addResources(xRefTable, pageDict, fontName)
@@ -933,7 +940,10 @@ func createPageWithAnnotations(xRefTable *model.XRefTable, parentPageIndRef type
 	return pageIndRef, nil
 }
 
-func createPageWithForm(xRefTable *model.XRefTable, parentPageIndRef types.IndirectRef, annotsArray types.Array, mediaBox *types.Rectangle, fontName string) (*types.IndirectRef, error) {
+func createPageWithForm(
+	xRefTable *model.XRefTable, parentPageIndRef types.IndirectRef, annotsArray types.Array, mediaBox *types.Rectangle,
+	fontName string,
+) (*types.IndirectRef, error) {
 	mba := mediaBox.Array()
 
 	pageDict := types.Dict(
@@ -1017,7 +1027,9 @@ func AddPageTreeWithSamplePage(xRefTable *model.XRefTable, rootDict types.Dict, 
 	return nil
 }
 
-func addPageTreeWithAnnotations(xRefTable *model.XRefTable, rootDict types.Dict, fontName string) (*types.IndirectRef, error) {
+func addPageTreeWithAnnotations(xRefTable *model.XRefTable, rootDict types.Dict, fontName string) (
+	*types.IndirectRef, error,
+) {
 	// mediabox = physical page dimensions
 	mediaBox := types.RectForFormat("A4")
 	mba := mediaBox.Array()
@@ -1047,7 +1059,9 @@ func addPageTreeWithAnnotations(xRefTable *model.XRefTable, rootDict types.Dict,
 	return pageIndRef, nil
 }
 
-func addPageTreeWithFormFields(xRefTable *model.XRefTable, rootDict types.Dict, annotsArray types.Array, fontName string) (*types.IndirectRef, error) {
+func addPageTreeWithFormFields(
+	xRefTable *model.XRefTable, rootDict types.Dict, annotsArray types.Array, fontName string,
+) (*types.IndirectRef, error) {
 	// mediabox = physical page dimensions
 	mediaBox := types.RectForFormat("A4")
 	mba := mediaBox.Array()
@@ -1392,7 +1406,9 @@ func createDownAppearanceForFormField(xRefTable *model.XRefTable, w, h float64) 
 	return xRefTable.IndRefForNewObject(*sd)
 }
 
-func createFormTextField(xRefTable *model.XRefTable, pageAnnots *types.Array, fontName string) (*types.IndirectRef, error) {
+func createFormTextField(xRefTable *model.XRefTable, pageAnnots *types.Array, fontName string) (
+	*types.IndirectRef, error,
+) {
 	// lower left corner
 	x := 100.0
 	y := 300.0
@@ -1466,7 +1482,9 @@ func createFormTextField(xRefTable *model.XRefTable, pageAnnots *types.Array, fo
 	return ir, nil
 }
 
-func createYesAppearance(xRefTable *model.XRefTable, resourceDict types.Dict, w, h float64) (*types.IndirectRef, error) {
+func createYesAppearance(xRefTable *model.XRefTable, resourceDict types.Dict, w, h float64) (
+	*types.IndirectRef, error,
+) {
 	var b bytes.Buffer
 	fmt.Fprintf(&b, "q 0 0 1 rg BT /ZaDb 12 Tf 0 0 Td (8) Tj ET Q")
 
@@ -1506,7 +1524,9 @@ func createYesAppearance(xRefTable *model.XRefTable, resourceDict types.Dict, w,
 	return xRefTable.IndRefForNewObject(*sd)
 }
 
-func createOffAppearance(xRefTable *model.XRefTable, resourceDict types.Dict, w, h float64) (*types.IndirectRef, error) {
+func createOffAppearance(xRefTable *model.XRefTable, resourceDict types.Dict, w, h float64) (
+	*types.IndirectRef, error,
+) {
 	var b bytes.Buffer
 	fmt.Fprintf(&b, "q 0 0 1 rg BT /ZaDb 12 Tf 0 0 Td (4) Tj ET Q")
 
@@ -1868,7 +1888,9 @@ func createFormDict(xRefTable *model.XRefTable, fontName string) (types.Dict, ty
 
 	d := types.Dict(
 		map[string]types.Object{
-			"Fields":          types.Array{*text, *checkBox, *radioButton, *resetButton, *submitButton}, // indRefs of fieldDicts
+			"Fields": types.Array{
+				*text, *checkBox, *radioButton, *resetButton, *submitButton,
+			}, // indRefs of fieldDicts
 			"NeedAppearances": types.Boolean(true),
 			"CO":              types.Array{*text},
 			"XFA":             xfaArr,
@@ -1904,7 +1926,8 @@ func CreateFormDemoXRef() (*model.XRefTable, error) {
 		return nil, err
 	}
 
-	rootDict.Insert("ViewerPreferences",
+	rootDict.Insert(
+		"ViewerPreferences",
 		types.Dict(
 			map[string]types.Object{
 				"FitWindow":    types.Boolean(true),
@@ -1949,7 +1972,9 @@ func CreateContextWithXRefTable(conf *model.Configuration, pageDim *types.Dim) (
 	return CreateContext(xRefTable, conf), nil
 }
 
-func createDemoContentStreamDict(xRefTable *model.XRefTable, pageDict types.Dict, b []byte) (*types.IndirectRef, error) {
+func createDemoContentStreamDict(xRefTable *model.XRefTable, pageDict types.Dict, b []byte) (
+	*types.IndirectRef, error,
+) {
 	sd, _ := xRefTable.NewStreamDictForBuf(b)
 	if err := sd.Encode(); err != nil {
 		return nil, err
@@ -1957,7 +1982,9 @@ func createDemoContentStreamDict(xRefTable *model.XRefTable, pageDict types.Dict
 	return xRefTable.IndRefForNewObject(*sd)
 }
 
-func createDemoPage(xRefTable *model.XRefTable, parentPageIndRef types.IndirectRef, p model.Page) (*types.IndirectRef, error) {
+func createDemoPage(xRefTable *model.XRefTable, parentPageIndRef types.IndirectRef, p model.Page) (
+	*types.IndirectRef, error,
+) {
 
 	pageDict := types.Dict(
 		map[string]types.Object{

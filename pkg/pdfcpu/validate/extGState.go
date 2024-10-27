@@ -17,8 +17,8 @@ limitations under the License.
 package validate
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -28,14 +28,23 @@ func validateBlendMode(s string) bool {
 
 	// see 11.3.5; table 136
 
-	return types.MemberOf(s, []string{"None", "Normal", "Compatible", "Multiply", "Screen", "Overlay", "Darken", "Lighten",
-		"ColorDodge", "ColorBurn", "HardLight", "SoftLight", "Difference", "Exclusion",
-		"Hue", "Saturation", "Color", "Luminosity"})
+	return types.MemberOf(
+		s, []string{
+			"None", "Normal", "Compatible", "Multiply", "Screen", "Overlay", "Darken", "Lighten",
+			"ColorDodge", "ColorBurn", "HardLight", "SoftLight", "Difference", "Exclusion",
+			"Hue", "Saturation", "Color", "Luminosity",
+		},
+	)
 }
 
-func validateLineDashPatternEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateLineDashPatternEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
-	a, err := validateArrayEntry(xRefTable, d, dictName, entryName, required, sinceVersion, func(a types.Array) bool { return len(a) == 2 })
+	a, err := validateArrayEntry(
+		xRefTable, d, dictName, entryName, required, sinceVersion, func(a types.Array) bool { return len(a) == 2 },
+	)
 	if err != nil || a == nil {
 		return err
 	}
@@ -50,7 +59,10 @@ func validateLineDashPatternEntry(xRefTable *model.XRefTable, d types.Dict, dict
 	return err
 }
 
-func validateBGEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateBGEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -83,7 +95,10 @@ func validateBGEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, 
 	return err
 }
 
-func validateBG2Entry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateBG2Entry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -112,7 +127,10 @@ func validateBG2Entry(xRefTable *model.XRefTable, d types.Dict, dictName string,
 	return err
 }
 
-func validateUCREntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateUCREntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -145,7 +163,10 @@ func validateUCREntry(xRefTable *model.XRefTable, d types.Dict, dictName string,
 	return err
 }
 
-func validateUCR2Entry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateUCR2Entry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -221,7 +242,10 @@ func validateTransferFunction(xRefTable *model.XRefTable, o types.Object) (err e
 	return err
 }
 
-func validateTransferFunctionEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateTransferFunctionEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -287,7 +311,10 @@ func validateTR(xRefTable *model.XRefTable, o types.Object) (err error) {
 	return err
 }
 
-func validateTREntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateTREntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -359,7 +386,10 @@ func validateTR2(xRefTable *model.XRefTable, o types.Object) (err error) {
 	return err
 }
 
-func validateTR2Entry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateTR2Entry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -369,7 +399,10 @@ func validateTR2Entry(xRefTable *model.XRefTable, d types.Dict, dictName string,
 	return validateTR2(xRefTable, o)
 }
 
-func validateSpotFunctionEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateSpotFunctionEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -380,10 +413,13 @@ func validateSpotFunctionEntry(xRefTable *model.XRefTable, d types.Dict, dictNam
 
 	case types.Name:
 		validateSpotFunctionName := func(s string) bool {
-			return types.MemberOf(s, []string{
-				"SimpleDot", "InvertedSimpleDot", "DoubleDot", "InvertedDoubleDot", "CosineDot",
-				"Double", "InvertedDouble", "Line", "LineX", "LineY", "Round", "Ellipse", "EllipseA",
-				"InvertedEllipseA", "EllipseB", "EllipseC", "InvertedEllipseC", "Square", "Cross", "Rhomboid"})
+			return types.MemberOf(
+				s, []string{
+					"SimpleDot", "InvertedSimpleDot", "DoubleDot", "InvertedDoubleDot", "CosineDot",
+					"Double", "InvertedDouble", "Line", "LineX", "LineY", "Round", "Ellipse", "EllipseA",
+					"InvertedEllipseA", "EllipseB", "EllipseC", "InvertedEllipseC", "Square", "Cross", "Rhomboid",
+				},
+			)
 		}
 		s := o.Value()
 		if !validateSpotFunctionName(s) {
@@ -462,7 +498,9 @@ func validateType5HalftoneDict(xRefTable *model.XRefTable, d types.Dict, sinceVe
 	return validateHalfToneEntry(xRefTable, d, dictName, "Default", REQUIRED, sinceVersion)
 }
 
-func validateType6HalftoneStreamDict(xRefTable *model.XRefTable, sd *types.StreamDict, sinceVersion model.Version) error {
+func validateType6HalftoneStreamDict(
+	xRefTable *model.XRefTable, sd *types.StreamDict, sinceVersion model.Version,
+) error {
 
 	dictName := "type6HalftoneDict"
 
@@ -484,7 +522,9 @@ func validateType6HalftoneStreamDict(xRefTable *model.XRefTable, sd *types.Strea
 	return validateTransferFunctionEntry(xRefTable, sd.Dict, dictName, "TransferFunction", OPTIONAL, sinceVersion)
 }
 
-func validateType10HalftoneStreamDict(xRefTable *model.XRefTable, sd *types.StreamDict, sinceVersion model.Version) error {
+func validateType10HalftoneStreamDict(
+	xRefTable *model.XRefTable, sd *types.StreamDict, sinceVersion model.Version,
+) error {
 
 	dictName := "type10HalftoneDict"
 
@@ -506,7 +546,9 @@ func validateType10HalftoneStreamDict(xRefTable *model.XRefTable, sd *types.Stre
 	return validateTransferFunctionEntry(xRefTable, sd.Dict, dictName, "TransferFunction", OPTIONAL, sinceVersion)
 }
 
-func validateType16HalftoneStreamDict(xRefTable *model.XRefTable, sd *types.StreamDict, sinceVersion model.Version) error {
+func validateType16HalftoneStreamDict(
+	xRefTable *model.XRefTable, sd *types.StreamDict, sinceVersion model.Version,
+) error {
 
 	dictName := "type16HalftoneDict"
 
@@ -543,7 +585,9 @@ func validateHalfToneDict(xRefTable *model.XRefTable, d types.Dict, sinceVersion
 	dictName := "halfToneDict"
 
 	// Type, optional, name
-	_, err := validateNameEntry(xRefTable, d, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Halftone" })
+	_, err := validateNameEntry(
+		xRefTable, d, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Halftone" },
+	)
 	if err != nil {
 		return err
 	}
@@ -575,7 +619,9 @@ func validateHalfToneStreamDict(xRefTable *model.XRefTable, sd *types.StreamDict
 	dictName := "writeHalfToneStreamDict"
 
 	// Type, name, optional
-	_, err := validateNameEntry(xRefTable, sd.Dict, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Halftone" })
+	_, err := validateNameEntry(
+		xRefTable, sd.Dict, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Halftone" },
+	)
 	if err != nil {
 		return err
 	}
@@ -605,7 +651,10 @@ func validateHalfToneStreamDict(xRefTable *model.XRefTable, sd *types.StreamDict
 	return err
 }
 
-func validateHalfToneEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) (err error) {
+func validateHalfToneEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) (err error) {
 
 	// See 10.5
 
@@ -634,7 +683,10 @@ func validateHalfToneEntry(xRefTable *model.XRefTable, d types.Dict, dictName st
 	return err
 }
 
-func validateBlendModeEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateBlendModeEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -665,7 +717,10 @@ func validateBlendModeEntry(xRefTable *model.XRefTable, d types.Dict, dictName s
 	return nil
 }
 
-func validateSoftMaskTransferFunctionEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateSoftMaskTransferFunctionEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -687,7 +742,9 @@ func validateSoftMaskTransferFunctionEntry(xRefTable *model.XRefTable, d types.D
 		err = processFunction(xRefTable, o)
 
 	default:
-		return errors.Errorf("pdfcpu: validateSoftMaskTransferFunctionEntry: dict=%s corrupt entry \"%s\"\n", dictName, entryName)
+		return errors.Errorf(
+			"pdfcpu: validateSoftMaskTransferFunctionEntry: dict=%s corrupt entry \"%s\"\n", dictName, entryName,
+		)
 
 	}
 
@@ -701,13 +758,18 @@ func validateSoftMaskDict(xRefTable *model.XRefTable, d types.Dict) error {
 	dictName := "softMaskDict"
 
 	// Type, name, optional
-	_, err := validateNameEntry(xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "Mask" })
+	_, err := validateNameEntry(
+		xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "Mask" },
+	)
 	if err != nil {
 		return err
 	}
 
 	// S, name, required
-	_, err = validateNameEntry(xRefTable, d, dictName, "S", REQUIRED, model.V10, func(s string) bool { return s == "Alpha" || s == "Luminosity" })
+	_, err = validateNameEntry(
+		xRefTable, d, dictName, "S", REQUIRED, model.V10,
+		func(s string) bool { return s == "Alpha" || s == "Luminosity" },
+	)
 	if err != nil {
 		return err
 	}
@@ -743,7 +805,10 @@ func validateSoftMaskDict(xRefTable *model.XRefTable, d types.Dict) error {
 	return err
 }
 
-func validateSoftMaskEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateSoftMaskEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	// see 11.3.7.2 Source Shape and Opacity
 	// see 11.6.4.3 Mask Shape and Opacity
@@ -971,7 +1036,9 @@ func validateExtGStateDict(xRefTable *model.XRefTable, o types.Object) error {
 	dictName := "extGStateDict"
 
 	// Type, name, optional
-	_, err = validateNameEntry(xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "ExtGState" })
+	_, err = validateNameEntry(
+		xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "ExtGState" },
+	)
 	if err != nil {
 		return err
 	}

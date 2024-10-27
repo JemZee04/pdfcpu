@@ -19,8 +19,8 @@ package cli
 import (
 	"io"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
 )
 
 // Command represents an execution context.
@@ -151,7 +151,8 @@ func ValidateCommand(inFiles []string, conf *model.Configuration) *Command {
 	return &Command{
 		Mode:    model.VALIDATE,
 		InFiles: inFiles,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // OptimizeCommand creates a new command to optimize a file.
@@ -164,7 +165,8 @@ func OptimizeCommand(inFile, outFile string, conf *model.Configuration) *Command
 		Mode:    model.OPTIMIZE,
 		InFile:  &inFile,
 		OutFile: &outFile,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // SplitCommand creates a new command to split a file according to span or along bookmarks..
@@ -178,7 +180,8 @@ func SplitCommand(inFile, dirNameOut string, span int, conf *model.Configuration
 		InFile: &inFile,
 		OutDir: &dirNameOut,
 		IntVal: span,
-		Conf:   conf}
+		Conf:   conf,
+	}
 }
 
 // SplitByPageNrCommand creates a new command to split a file into files along given pages.
@@ -192,7 +195,8 @@ func SplitByPageNrCommand(inFile, dirNameOut string, pageNrs []int, conf *model.
 		InFile:  &inFile,
 		OutDir:  &dirNameOut,
 		IntVals: pageNrs,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // MergeCreateCommand creates a new command to merge files.
@@ -207,7 +211,8 @@ func MergeCreateCommand(inFiles []string, outFile string, dividerPage bool, conf
 		InFiles:  inFiles,
 		OutFile:  &outFile,
 		BoolVal1: dividerPage,
-		Conf:     conf}
+		Conf:     conf,
+	}
 }
 
 // MergeCreateZipCommand creates a new command to zip merge 2 files.
@@ -221,7 +226,8 @@ func MergeCreateZipCommand(inFiles []string, outFile string, conf *model.Configu
 		Mode:    model.MERGECREATEZIP,
 		InFiles: inFiles,
 		OutFile: &outFile,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // MergeAppendCommand creates a new command to merge files.
@@ -236,7 +242,8 @@ func MergeAppendCommand(inFiles []string, outFile string, dividerPage bool, conf
 		InFiles:  inFiles,
 		OutFile:  &outFile,
 		BoolVal1: dividerPage,
-		Conf:     conf}
+		Conf:     conf,
+	}
 }
 
 // ExtractImagesCommand creates a new command to extract embedded images.
@@ -251,7 +258,8 @@ func ExtractImagesCommand(inFile string, outDir string, pageSelection []string, 
 		InFile:        &inFile,
 		OutDir:        &outDir,
 		PageSelection: pageSelection,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // ExtractFontsCommand creates a new command to extract embedded fonts.
@@ -266,7 +274,8 @@ func ExtractFontsCommand(inFile string, outDir string, pageSelection []string, c
 		InFile:        &inFile,
 		OutDir:        &outDir,
 		PageSelection: pageSelection,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // ExtractPagesCommand creates a new command to extract specific pages of a file.
@@ -280,7 +289,8 @@ func ExtractPagesCommand(inFile string, outDir string, pageSelection []string, c
 		InFile:        &inFile,
 		OutDir:        &outDir,
 		PageSelection: pageSelection,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // ExtractContentCommand creates a new command to extract page content streams.
@@ -294,7 +304,8 @@ func ExtractContentCommand(inFile string, outDir string, pageSelection []string,
 		InFile:        &inFile,
 		OutDir:        &outDir,
 		PageSelection: pageSelection,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // ExtractMetadataCommand creates a new command to extract metadata streams.
@@ -307,7 +318,8 @@ func ExtractMetadataCommand(inFile string, outDir string, conf *model.Configurat
 		Mode:   model.EXTRACTMETADATA,
 		InFile: &inFile,
 		OutDir: &outDir,
-		Conf:   conf}
+		Conf:   conf,
+	}
 }
 
 // TrimCommand creates a new command to trim the pages of a file.
@@ -321,7 +333,8 @@ func TrimCommand(inFile, outFile string, pageSelection []string, conf *model.Con
 		InFile:        &inFile,
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // ListAttachmentsCommand create a new command to list attachments.
@@ -333,7 +346,8 @@ func ListAttachmentsCommand(inFile string, conf *model.Configuration) *Command {
 	return &Command{
 		Mode:   model.LISTATTACHMENTS,
 		InFile: &inFile,
-		Conf:   conf}
+		Conf:   conf,
+	}
 }
 
 // AddAttachmentsCommand creates a new command to add attachments.
@@ -347,7 +361,8 @@ func AddAttachmentsCommand(inFile, outFile string, fileNames []string, conf *mod
 		InFile:  &inFile,
 		OutFile: &outFile,
 		InFiles: fileNames,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // AddAttachmentsPortfolioCommand creates a new command to add attachments to a portfolio.
@@ -361,7 +376,8 @@ func AddAttachmentsPortfolioCommand(inFile, outFile string, fileNames []string, 
 		InFile:  &inFile,
 		OutFile: &outFile,
 		InFiles: fileNames,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // RemoveAttachmentsCommand creates a new command to remove attachments.
@@ -375,7 +391,8 @@ func RemoveAttachmentsCommand(inFile, outFile string, fileNames []string, conf *
 		InFile:  &inFile,
 		OutFile: &outFile,
 		InFiles: fileNames,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // ExtractAttachmentsCommand creates a new command to extract attachments.
@@ -389,7 +406,8 @@ func ExtractAttachmentsCommand(inFile string, outDir string, fileNames []string,
 		InFile:  &inFile,
 		OutDir:  &outDir,
 		InFiles: fileNames,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // EncryptCommand creates a new command to encrypt a file.
@@ -402,7 +420,8 @@ func EncryptCommand(inFile, outFile string, conf *model.Configuration) *Command 
 		Mode:    model.ENCRYPT,
 		InFile:  &inFile,
 		OutFile: &outFile,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // DecryptCommand creates a new command to decrypt a file.
@@ -415,7 +434,8 @@ func DecryptCommand(inFile, outFile string, conf *model.Configuration) *Command 
 		Mode:    model.DECRYPT,
 		InFile:  &inFile,
 		OutFile: &outFile,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // ChangeUserPWCommand creates a new command to change the user password.
@@ -430,7 +450,8 @@ func ChangeUserPWCommand(inFile, outFile string, pwOld, pwNew *string, conf *mod
 		OutFile: &outFile,
 		PWOld:   pwOld,
 		PWNew:   pwNew,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // ChangeOwnerPWCommand creates a new command to change the owner password.
@@ -445,7 +466,8 @@ func ChangeOwnerPWCommand(inFile, outFile string, pwOld, pwNew *string, conf *mo
 		OutFile: &outFile,
 		PWOld:   pwOld,
 		PWNew:   pwNew,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // ListPermissionsCommand create a new command to list permissions.
@@ -457,7 +479,8 @@ func ListPermissionsCommand(inFiles []string, conf *model.Configuration) *Comman
 	return &Command{
 		Mode:    model.LISTPERMISSIONS,
 		InFiles: inFiles,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // SetPermissionsCommand creates a new command to add permissions.
@@ -470,11 +493,14 @@ func SetPermissionsCommand(inFile, outFile string, conf *model.Configuration) *C
 		Mode:    model.SETPERMISSIONS,
 		InFile:  &inFile,
 		OutFile: &outFile,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // AddWatermarksCommand creates a new command to add Watermarks to a file.
-func AddWatermarksCommand(inFile, outFile string, pageSelection []string, wm *model.Watermark, conf *model.Configuration) *Command {
+func AddWatermarksCommand(
+	inFile, outFile string, pageSelection []string, wm *model.Watermark, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -485,7 +511,8 @@ func AddWatermarksCommand(inFile, outFile string, pageSelection []string, wm *mo
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
 		Watermark:     wm,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // RemoveWatermarksCommand creates a new command to remove Watermarks from a file.
@@ -499,7 +526,8 @@ func RemoveWatermarksCommand(inFile, outFile string, pageSelection []string, con
 		InFile:        &inFile,
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // ImportImagesCommand creates a new command to import images.
@@ -513,11 +541,15 @@ func ImportImagesCommand(imageFiles []string, outFile string, imp *pdfcpu.Import
 		InFiles: imageFiles,
 		OutFile: &outFile,
 		Import:  imp,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // InsertPagesCommand creates a new command to insert a blank page before or after selected pages.
-func InsertPagesCommand(inFile, outFile string, pageSelection []string, conf *model.Configuration, mode string, pageConf *pdfcpu.PageConfiguration) *Command {
+func InsertPagesCommand(
+	inFile, outFile string, pageSelection []string, conf *model.Configuration, mode string,
+	pageConf *pdfcpu.PageConfiguration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -532,7 +564,8 @@ func InsertPagesCommand(inFile, outFile string, pageSelection []string, conf *mo
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
 		PageConf:      pageConf,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // RemovePagesCommand creates a new command to remove selected pages.
@@ -546,7 +579,8 @@ func RemovePagesCommand(inFile, outFile string, pageSelection []string, conf *mo
 		InFile:        &inFile,
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // RotateCommand creates a new command to rotate pages.
@@ -561,11 +595,14 @@ func RotateCommand(inFile, outFile string, rotation int, pageSelection []string,
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
 		IntVal:        rotation,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // NUpCommand creates a new command to render PDFs or image files in n-up fashion.
-func NUpCommand(inFiles []string, outFile string, pageSelection []string, nUp *model.NUp, conf *model.Configuration) *Command {
+func NUpCommand(
+	inFiles []string, outFile string, pageSelection []string, nUp *model.NUp, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -576,11 +613,14 @@ func NUpCommand(inFiles []string, outFile string, pageSelection []string, nUp *m
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
 		NUp:           nUp,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // BookletCommand creates a new command to render PDFs or image files in booklet fashion.
-func BookletCommand(inFiles []string, outFile string, pageSelection []string, nup *model.NUp, conf *model.Configuration) *Command {
+func BookletCommand(
+	inFiles []string, outFile string, pageSelection []string, nup *model.NUp, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -591,7 +631,8 @@ func BookletCommand(inFiles []string, outFile string, pageSelection []string, nu
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
 		NUp:           nup,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // InfoCommand creates a new command to output information about inFile.
@@ -605,7 +646,8 @@ func InfoCommand(inFiles []string, pageSelection []string, json bool, conf *mode
 		InFiles:       inFiles,
 		PageSelection: pageSelection,
 		BoolVal1:      json,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // ListFontsCommand returns a list of supported fonts.
@@ -616,7 +658,8 @@ func ListFontsCommand(conf *model.Configuration) *Command {
 	conf.Cmd = model.LISTFONTS
 	return &Command{
 		Mode: model.LISTFONTS,
-		Conf: conf}
+		Conf: conf,
+	}
 }
 
 // InstallFontsCommand installs true type fonts for embedding.
@@ -628,7 +671,8 @@ func InstallFontsCommand(fontFiles []string, conf *model.Configuration) *Command
 	return &Command{
 		Mode:    model.INSTALLFONTS,
 		InFiles: fontFiles,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // CreateCheatSheetsFontsCommand creates single page PDF cheat sheets in current dir.
@@ -640,7 +684,8 @@ func CreateCheatSheetsFontsCommand(fontFiles []string, conf *model.Configuration
 	return &Command{
 		Mode:    model.CHEATSHEETSFONTS,
 		InFiles: fontFiles,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // ListKeywordsCommand create a new command to list keywords.
@@ -652,7 +697,8 @@ func ListKeywordsCommand(inFile string, conf *model.Configuration) *Command {
 	return &Command{
 		Mode:   model.LISTKEYWORDS,
 		InFile: &inFile,
-		Conf:   conf}
+		Conf:   conf,
+	}
 }
 
 // AddKeywordsCommand creates a new command to add keywords.
@@ -666,7 +712,8 @@ func AddKeywordsCommand(inFile, outFile string, keywords []string, conf *model.C
 		InFile:     &inFile,
 		OutFile:    &outFile,
 		StringVals: keywords,
-		Conf:       conf}
+		Conf:       conf,
+	}
 }
 
 // RemoveKeywordsCommand creates a new command to remove keywords.
@@ -680,7 +727,8 @@ func RemoveKeywordsCommand(inFile, outFile string, keywords []string, conf *mode
 		InFile:     &inFile,
 		OutFile:    &outFile,
 		StringVals: keywords,
-		Conf:       conf}
+		Conf:       conf,
+	}
 }
 
 // ListPropertiesCommand creates a new command to list document properties.
@@ -692,7 +740,8 @@ func ListPropertiesCommand(inFile string, conf *model.Configuration) *Command {
 	return &Command{
 		Mode:   model.LISTPROPERTIES,
 		InFile: &inFile,
-		Conf:   conf}
+		Conf:   conf,
+	}
 }
 
 // AddPropertiesCommand creates a new command to add document properties.
@@ -706,7 +755,8 @@ func AddPropertiesCommand(inFile, outFile string, properties map[string]string, 
 		InFile:    &inFile,
 		OutFile:   &outFile,
 		StringMap: properties,
-		Conf:      conf}
+		Conf:      conf,
+	}
 }
 
 // RemovePropertiesCommand creates a new command to remove document properties.
@@ -720,7 +770,8 @@ func RemovePropertiesCommand(inFile, outFile string, propKeys []string, conf *mo
 		InFile:     &inFile,
 		OutFile:    &outFile,
 		StringVals: propKeys,
-		Conf:       conf}
+		Conf:       conf,
+	}
 }
 
 // CollectCommand creates a new command to create a custom PDF page sequence.
@@ -734,11 +785,14 @@ func CollectCommand(inFile, outFile string, pageSelection []string, conf *model.
 		InFile:        &inFile,
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // ListBoxesCommand creates a new command to list page boundaries for selected pages.
-func ListBoxesCommand(inFile string, pageSelection []string, pb *model.PageBoundaries, conf *model.Configuration) *Command {
+func ListBoxesCommand(
+	inFile string, pageSelection []string, pb *model.PageBoundaries, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -748,11 +802,14 @@ func ListBoxesCommand(inFile string, pageSelection []string, pb *model.PageBound
 		InFile:         &inFile,
 		PageSelection:  pageSelection,
 		PageBoundaries: pb,
-		Conf:           conf}
+		Conf:           conf,
+	}
 }
 
 // AddBoxesCommand creates a new command to add page boundaries for selected pages.
-func AddBoxesCommand(inFile, outFile string, pageSelection []string, pb *model.PageBoundaries, conf *model.Configuration) *Command {
+func AddBoxesCommand(
+	inFile, outFile string, pageSelection []string, pb *model.PageBoundaries, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -763,11 +820,14 @@ func AddBoxesCommand(inFile, outFile string, pageSelection []string, pb *model.P
 		OutFile:        &outFile,
 		PageSelection:  pageSelection,
 		PageBoundaries: pb,
-		Conf:           conf}
+		Conf:           conf,
+	}
 }
 
 // RemoveBoxesCommand creates a new command to remove page boundaries for selected pages.
-func RemoveBoxesCommand(inFile, outFile string, pageSelection []string, pb *model.PageBoundaries, conf *model.Configuration) *Command {
+func RemoveBoxesCommand(
+	inFile, outFile string, pageSelection []string, pb *model.PageBoundaries, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -778,7 +838,8 @@ func RemoveBoxesCommand(inFile, outFile string, pageSelection []string, pb *mode
 		OutFile:        &outFile,
 		PageSelection:  pageSelection,
 		PageBoundaries: pb,
-		Conf:           conf}
+		Conf:           conf,
+	}
 }
 
 // CropCommand creates a new command to apply a cropBox to selected pages.
@@ -793,7 +854,8 @@ func CropCommand(inFile, outFile string, pageSelection []string, box *model.Box,
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
 		Box:           box,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // ListAnnotationsCommand creates a new command to list annotations for selected pages.
@@ -806,11 +868,14 @@ func ListAnnotationsCommand(inFile string, pageSelection []string, conf *model.C
 		Mode:          model.LISTANNOTATIONS,
 		InFile:        &inFile,
 		PageSelection: pageSelection,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // RemoveAnnotationsCommand creates a new command to remove annotations for selected pages.
-func RemoveAnnotationsCommand(inFile, outFile string, pageSelection []string, idsAndTypes []string, objNrs []int, conf *model.Configuration) *Command {
+func RemoveAnnotationsCommand(
+	inFile, outFile string, pageSelection []string, idsAndTypes []string, objNrs []int, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -822,7 +887,8 @@ func RemoveAnnotationsCommand(inFile, outFile string, pageSelection []string, id
 		PageSelection: pageSelection,
 		StringVals:    idsAndTypes,
 		IntVals:       objNrs,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // ListImagesCommand creates a new command to list annotations for selected pages.
@@ -835,11 +901,14 @@ func ListImagesCommand(inFiles []string, pageSelection []string, conf *model.Con
 		Mode:          model.LISTIMAGES,
 		InFiles:       inFiles,
 		PageSelection: pageSelection,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // UpdateImagesCommand creates a new command to update images.
-func UpdateImagesCommand(inFile, imageFile, outFile string, objNrOrPageNr int, id string, conf *model.Configuration) *Command {
+func UpdateImagesCommand(
+	inFile, imageFile, outFile string, objNrOrPageNr int, id string, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -851,7 +920,8 @@ func UpdateImagesCommand(inFile, imageFile, outFile string, objNrOrPageNr int, i
 		OutFile:   &outFile,
 		IntVal:    objNrOrPageNr,
 		StringVal: id,
-		Conf:      conf}
+		Conf:      conf,
+	}
 }
 
 // DumpCommand creates a new command to dump objects on stdout.
@@ -864,7 +934,8 @@ func DumpCommand(inFilePDF string, vals []int, conf *model.Configuration) *Comma
 		Mode:    model.DUMP,
 		InFile:  &inFilePDF,
 		IntVals: vals,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // CreateCommand creates a new command to create a PDF file.
@@ -878,7 +949,8 @@ func CreateCommand(inFilePDF, inFileJSON, outFilePDF string, conf *model.Configu
 		InFile:     &inFilePDF,
 		InFileJSON: &inFileJSON,
 		OutFile:    &outFilePDF,
-		Conf:       conf}
+		Conf:       conf,
+	}
 }
 
 // ListFormFieldsCommand creates a new command to list the field ids from a PDF form.
@@ -890,7 +962,8 @@ func ListFormFieldsCommand(inFiles []string, conf *model.Configuration) *Command
 	return &Command{
 		Mode:    model.LISTFORMFIELDS,
 		InFiles: inFiles,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // RemoveFormFieldsCommand creates a new command to remove fields from a PDF form.
@@ -904,7 +977,8 @@ func RemoveFormFieldsCommand(inFile, outFile string, fieldIDs []string, conf *mo
 		InFile:     &inFile,
 		OutFile:    &outFile,
 		StringVals: fieldIDs,
-		Conf:       conf}
+		Conf:       conf,
+	}
 }
 
 // LockFormCommand creates a new command to lock PDF form fields.
@@ -918,7 +992,8 @@ func LockFormCommand(inFile, outFile string, fieldIDs []string, conf *model.Conf
 		InFile:     &inFile,
 		OutFile:    &outFile,
 		StringVals: fieldIDs,
-		Conf:       conf}
+		Conf:       conf,
+	}
 }
 
 // UnlockFormCommand creates a new command to unlock PDF form fields.
@@ -932,7 +1007,8 @@ func UnlockFormCommand(inFile, outFile string, fieldIDs []string, conf *model.Co
 		InFile:     &inFile,
 		OutFile:    &outFile,
 		StringVals: fieldIDs,
-		Conf:       conf}
+		Conf:       conf,
+	}
 }
 
 // ResetFormCommand creates a new command to lock PDF form fields.
@@ -946,7 +1022,8 @@ func ResetFormCommand(inFile, outFile string, fieldIDs []string, conf *model.Con
 		InFile:     &inFile,
 		OutFile:    &outFile,
 		StringVals: fieldIDs,
-		Conf:       conf}
+		Conf:       conf,
+	}
 }
 
 // ExportFormCommand creates a new command to export a PDF form.
@@ -959,7 +1036,8 @@ func ExportFormCommand(inFilePDF, outFileJSON string, conf *model.Configuration)
 		Mode:        model.EXPORTFORMFIELDS,
 		InFile:      &inFilePDF,
 		OutFileJSON: &outFileJSON,
-		Conf:        conf}
+		Conf:        conf,
+	}
 }
 
 // FillFormCommand creates a new command to fill a PDF form with data.
@@ -973,11 +1051,14 @@ func FillFormCommand(inFilePDF, inFileJSON, outFilePDF string, conf *model.Confi
 		InFile:     &inFilePDF,
 		InFileJSON: &inFileJSON,
 		OutFile:    &outFilePDF,
-		Conf:       conf}
+		Conf:       conf,
+	}
 }
 
 // MultiFillFormCommand creates a new command to fill multiple PDF forms with JSON or CSV data.
-func MultiFillFormCommand(inFilePDF, inFileData, outDir, outFilePDF string, merge bool, conf *model.Configuration) *Command {
+func MultiFillFormCommand(
+	inFilePDF, inFileData, outDir, outFilePDF string, merge bool, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -989,11 +1070,14 @@ func MultiFillFormCommand(inFilePDF, inFileData, outDir, outFilePDF string, merg
 		OutDir:     &outDir,
 		OutFile:    &outFilePDF,
 		BoolVal1:   merge,
-		Conf:       conf}
+		Conf:       conf,
+	}
 }
 
 // ResizeCommand creates a new command to scale selected pages.
-func ResizeCommand(inFile, outFile string, pageSelection []string, resize *model.Resize, conf *model.Configuration) *Command {
+func ResizeCommand(
+	inFile, outFile string, pageSelection []string, resize *model.Resize, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -1004,11 +1088,14 @@ func ResizeCommand(inFile, outFile string, pageSelection []string, resize *model
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
 		Resize:        resize,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // PosterCommand creates a new command to cut and slice pages horizontally or vertically.
-func PosterCommand(inFile, outDir, outFile string, pageSelection []string, cut *model.Cut, conf *model.Configuration) *Command {
+func PosterCommand(
+	inFile, outDir, outFile string, pageSelection []string, cut *model.Cut, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -1020,11 +1107,14 @@ func PosterCommand(inFile, outDir, outFile string, pageSelection []string, cut *
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
 		Cut:           cut,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // NDownCommand creates a new command to cut and slice pages horizontally or vertically.
-func NDownCommand(inFile, outDir, outFile string, pageSelection []string, n int, cut *model.Cut, conf *model.Configuration) *Command {
+func NDownCommand(
+	inFile, outDir, outFile string, pageSelection []string, n int, cut *model.Cut, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -1037,11 +1127,14 @@ func NDownCommand(inFile, outDir, outFile string, pageSelection []string, n int,
 		PageSelection: pageSelection,
 		IntVal:        n,
 		Cut:           cut,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // CutCommand creates a new command to cut and slice pages horizontally or vertically.
-func CutCommand(inFile, outDir, outFile string, pageSelection []string, cut *model.Cut, conf *model.Configuration) *Command {
+func CutCommand(
+	inFile, outDir, outFile string, pageSelection []string, cut *model.Cut, conf *model.Configuration,
+) *Command {
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
 	}
@@ -1053,7 +1146,8 @@ func CutCommand(inFile, outDir, outFile string, pageSelection []string, cut *mod
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
 		Cut:           cut,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }
 
 // ListBookmarksCommand creates a new command to list bookmarks of inFile.
@@ -1065,7 +1159,8 @@ func ListBookmarksCommand(inFile string, conf *model.Configuration) *Command {
 	return &Command{
 		Mode:   model.LISTBOOKMARKS,
 		InFile: &inFile,
-		Conf:   conf}
+		Conf:   conf,
+	}
 }
 
 // ExportBookmarksCommand creates a new command to export bookmarks of inFile.
@@ -1078,7 +1173,8 @@ func ExportBookmarksCommand(inFile, outFileJSON string, conf *model.Configuratio
 		Mode:        model.EXPORTBOOKMARKS,
 		InFile:      &inFile,
 		OutFileJSON: &outFileJSON,
-		Conf:        conf}
+		Conf:        conf,
+	}
 }
 
 // ImportBookmarksCommand creates a new command to import bookmarks to inFile.
@@ -1093,7 +1189,8 @@ func ImportBookmarksCommand(inFile, inFileJSON, outFile string, replace bool, co
 		InFile:     &inFile,
 		InFileJSON: &inFileJSON,
 		OutFile:    &outFile,
-		Conf:       conf}
+		Conf:       conf,
+	}
 }
 
 // RemoveBookmarksCommand creates a new command to remove all bookmarks from inFile.
@@ -1106,7 +1203,8 @@ func RemoveBookmarksCommand(inFile, outFile string, conf *model.Configuration) *
 		Mode:    model.REMOVEBOOKMARKS,
 		InFile:  &inFile,
 		OutFile: &outFile,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // ListPageLayoutCommand creates a new command to list the document page layout.
@@ -1118,7 +1216,8 @@ func ListPageLayoutCommand(inFile string, conf *model.Configuration) *Command {
 	return &Command{
 		Mode:   model.LISTPAGELAYOUT,
 		InFile: &inFile,
-		Conf:   conf}
+		Conf:   conf,
+	}
 }
 
 // SetPageLayoutCommand creates a new command to set the document page layout.
@@ -1132,7 +1231,8 @@ func SetPageLayoutCommand(inFile, outFile, value string, conf *model.Configurati
 		InFile:    &inFile,
 		OutFile:   &outFile,
 		StringVal: value,
-		Conf:      conf}
+		Conf:      conf,
+	}
 }
 
 // ResetPageLayoutCommand creates a new command to reset the document page layout.
@@ -1145,7 +1245,8 @@ func ResetPageLayoutCommand(inFile, outFile string, conf *model.Configuration) *
 		Mode:    model.RESETPAGELAYOUT,
 		InFile:  &inFile,
 		OutFile: &outFile,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // ListPageModeCommand creates a new command to list the document page mode.
@@ -1157,7 +1258,8 @@ func ListPageModeCommand(inFile string, conf *model.Configuration) *Command {
 	return &Command{
 		Mode:   model.LISTPAGEMODE,
 		InFile: &inFile,
-		Conf:   conf}
+		Conf:   conf,
+	}
 }
 
 // SetPageModeCommand creates a new command to set the document page mode.
@@ -1171,7 +1273,8 @@ func SetPageModeCommand(inFile, outFile, value string, conf *model.Configuration
 		InFile:    &inFile,
 		OutFile:   &outFile,
 		StringVal: value,
-		Conf:      conf}
+		Conf:      conf,
+	}
 }
 
 // ResetPageModeCommand creates a new command to reset the document page mode.
@@ -1184,7 +1287,8 @@ func ResetPageModeCommand(inFile, outFile string, conf *model.Configuration) *Co
 		Mode:    model.RESETPAGEMODE,
 		InFile:  &inFile,
 		OutFile: &outFile,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // ListViewerPreferencesCommand creates a new command to list the viewer preferences.
@@ -1199,11 +1303,14 @@ func ListViewerPreferencesCommand(inFile string, all, json bool, conf *model.Con
 		InFile:   &inFile,
 		BoolVal1: all,
 		BoolVal2: json,
-		Conf:     conf}
+		Conf:     conf,
+	}
 }
 
 // SetViewerPreferencesCommand creates a new command to set the viewer preferences.
-func SetViewerPreferencesCommand(inFilePDF, inFileJSON, outFilePDF, stringJSON string, conf *model.Configuration) *Command {
+func SetViewerPreferencesCommand(
+	inFilePDF, inFileJSON, outFilePDF, stringJSON string, conf *model.Configuration,
+) *Command {
 
 	if conf == nil {
 		conf = model.NewDefaultConfiguration()
@@ -1215,7 +1322,8 @@ func SetViewerPreferencesCommand(inFilePDF, inFileJSON, outFilePDF, stringJSON s
 		InFileJSON: &inFileJSON,
 		OutFile:    &outFilePDF,
 		StringVal:  stringJSON,
-		Conf:       conf}
+		Conf:       conf,
+	}
 }
 
 // ResetViewerPreferencesCommand creates a new command to reset the viewer preferences.
@@ -1228,7 +1336,8 @@ func ResetViewerPreferencesCommand(inFile, outFile string, conf *model.Configura
 		Mode:    model.RESETVIEWERPREFERENCES,
 		InFile:  &inFile,
 		OutFile: &outFile,
-		Conf:    conf}
+		Conf:    conf,
+	}
 }
 
 // ZoomCommand creates a new command to zoom in/out of selected pages.
@@ -1243,5 +1352,6 @@ func ZoomCommand(inFile, outFile string, pageSelection []string, zoom *model.Zoo
 		OutFile:       &outFile,
 		PageSelection: pageSelection,
 		Zoom:          zoom,
-		Conf:          conf}
+		Conf:          conf,
+	}
 }

@@ -23,11 +23,11 @@ import (
 	"math"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/matrix"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -149,7 +149,8 @@ func createOutline(
 	pagesDict, d types.Dict,
 	cropBox *types.Rectangle,
 	migrated map[int]int,
-	cut *model.Cut) error {
+	cut *model.Cut,
+) error {
 
 	cb := cropBox.Clone()
 
@@ -230,7 +231,8 @@ func prepForCut(ctxSrc *model.Context, i int) (
 	types.Dict,
 	types.Dict,
 	*model.InheritedPageAttrs,
-	error) {
+	error,
+) {
 
 	ctxDest, err := CreateContextWithXRefTable(nil, types.PaperSize["A4"])
 	if err != nil {
@@ -271,7 +273,9 @@ func internPageRot(ctxSrc *model.Context, rotate int, cropBox *types.Rectangle, 
 	}
 
 	if rotate != 0 {
-		bbInvRot := append([]byte(" q "), model.ContentBytesForPageRotation(rotate, cropBox.Width(), cropBox.Height())...)
+		bbInvRot := append(
+			[]byte(" q "), model.ContentBytesForPageRotation(rotate, cropBox.Width(), cropBox.Height())...,
+		)
 		bb = append(bbInvRot, bb...)
 		bb = append(bb, []byte(" Q ")...)
 	}
@@ -297,7 +301,10 @@ func internPageRot(ctxSrc *model.Context, rotate int, cropBox *types.Rectangle, 
 	return nil
 }
 
-func handleCutMargin(ctxSrc *model.Context, d, d1 types.Dict, cropBox, cb *types.Rectangle, i, j int, w, h float64, sc *float64, cut *model.Cut) error {
+func handleCutMargin(
+	ctxSrc *model.Context, d, d1 types.Dict, cropBox, cb *types.Rectangle, i, j int, w, h float64, sc *float64,
+	cut *model.Cut,
+) error {
 	ar := cb.AspectRatio()
 	mv := cut.Margin / ar
 
@@ -386,7 +393,8 @@ func createTiles(
 	cropBox *types.Rectangle,
 	inhPAttrs *model.InheritedPageAttrs,
 	migrated map[int]int,
-	cut *model.Cut) error {
+	cut *model.Cut,
+) error {
 
 	var sc float64
 

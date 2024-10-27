@@ -24,9 +24,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/api"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 func TestExtractImages(t *testing.T) {
@@ -314,7 +314,9 @@ func TestExtractMetadataLowLevel(t *testing.T) {
 		if err != nil {
 			t.Fatalf("%s metadata readAll: %v\n", msg, err)
 		}
-		t.Logf("Metadata: objNr=%d parentDictObjNr=%d parentDictType=%s\n%s\n",
-			md.ObjNr, md.ParentObjNr, md.ParentType, string(bb))
+		t.Logf(
+			"Metadata: objNr=%d parentDictObjNr=%d parentDictType=%s\n%s\n",
+			md.ObjNr, md.ParentObjNr, md.ParentType, string(bb),
+		)
 	}
 }

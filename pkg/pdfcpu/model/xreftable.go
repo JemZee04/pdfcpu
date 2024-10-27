@@ -28,10 +28,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/scan"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/filter"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/scan"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -631,7 +631,9 @@ func (xRefTable *XRefTable) NewEmbeddedFileStreamDict(filename string) (*types.I
 }
 
 // NewSoundStreamDict returns a new sound stream dict.
-func (xRefTable *XRefTable) NewSoundStreamDict(filename string, samplingRate int, fileSpecDict types.Dict) (*types.IndirectRef, error) {
+func (xRefTable *XRefTable) NewSoundStreamDict(
+	filename string, samplingRate int, fileSpecDict types.Dict,
+) (*types.IndirectRef, error) {
 	sd, err := xRefTable.NewStreamDictForFile(filename)
 	if err != nil {
 		return nil, err
@@ -655,7 +657,9 @@ func (xRefTable *XRefTable) NewSoundStreamDict(filename string, samplingRate int
 }
 
 // NewFileSpecDict creates and returns a new fileSpec dictionary.
-func (xRefTable *XRefTable) NewFileSpecDict(f, uf, desc string, indRefStreamDict types.IndirectRef) (types.Dict, error) {
+func (xRefTable *XRefTable) NewFileSpecDict(f, uf, desc string, indRefStreamDict types.IndirectRef) (
+	types.Dict, error,
+) {
 	d := types.NewDict()
 	d.InsertName("Type", "Filespec")
 
@@ -1083,12 +1087,17 @@ func objStr(entry *XRefTableEntry, objNr int) string {
 
 	if entry.ObjectStream != nil {
 		// was compressed, offset is nil.
-		return fmt.Sprintf("%5d: was compressed %d[%d] generation=%d %s \n%s\n", objNr, *entry.ObjectStream, *entry.ObjectStreamInd, *entry.Generation, typeStr, entry.Object)
+		return fmt.Sprintf(
+			"%5d: was compressed %d[%d] generation=%d %s \n%s\n", objNr, *entry.ObjectStream, *entry.ObjectStreamInd,
+			*entry.Generation, typeStr, entry.Object,
+		)
 	}
 
 	// regular in use object with offset.
 	if entry.Offset != nil {
-		return fmt.Sprintf("%5d:   offset=%8d generation=%d %s \n%s\n", objNr, *entry.Offset, *entry.Generation, typeStr, entry.Object)
+		return fmt.Sprintf(
+			"%5d:   offset=%8d generation=%d %s \n%s\n", objNr, *entry.Offset, *entry.Generation, typeStr, entry.Object,
+		)
 	}
 
 	return fmt.Sprintf("%5d:   offset=nil generation=%d %s \n%s\n", objNr, *entry.Generation, typeStr, entry.Object)
@@ -1158,7 +1167,10 @@ func (xRefTable *XRefTable) list(logStr []string) []string {
 		if entry.Free {
 			str = fmt.Sprintf("%5d: f   next=%8d generation=%d\n", k, *entry.Offset, *entry.Generation)
 		} else if entry.Compressed {
-			str = fmt.Sprintf("%5d: c => obj:%d[%d] generation=%d \n%s\n", k, *entry.ObjectStream, *entry.ObjectStreamInd, *entry.Generation, entry.Object)
+			str = fmt.Sprintf(
+				"%5d: c => obj:%d[%d] generation=%d \n%s\n", k, *entry.ObjectStream, *entry.ObjectStreamInd,
+				*entry.Generation, entry.Object,
+			)
 		} else {
 			if entry.Object != nil {
 
@@ -1177,16 +1189,22 @@ func (xRefTable *XRefTable) list(logStr []string) []string {
 
 				if entry.ObjectStream != nil {
 					// was compressed, offset is nil.
-					str = fmt.Sprintf("%5d: was compressed %d[%d] generation=%d %s \n%s\n",
-						k, *entry.ObjectStream, *entry.ObjectStreamInd, *entry.Generation, typeStr, entry.Object)
+					str = fmt.Sprintf(
+						"%5d: was compressed %d[%d] generation=%d %s \n%s\n",
+						k, *entry.ObjectStream, *entry.ObjectStreamInd, *entry.Generation, typeStr, entry.Object,
+					)
 				} else {
 					// regular in use object with offset.
 					if entry.Offset != nil {
-						str = fmt.Sprintf("%5d:   offset=%8d generation=%d %s \n%s\n",
-							k, *entry.Offset, *entry.Generation, typeStr, entry.Object)
+						str = fmt.Sprintf(
+							"%5d:   offset=%8d generation=%d %s \n%s\n",
+							k, *entry.Offset, *entry.Generation, typeStr, entry.Object,
+						)
 					} else {
-						str = fmt.Sprintf("%5d:   offset=nil generation=%d %s \n%s\n",
-							k, *entry.Generation, typeStr, entry.Object)
+						str = fmt.Sprintf(
+							"%5d:   offset=nil generation=%d %s \n%s\n",
+							k, *entry.Generation, typeStr, entry.Object,
+						)
 					}
 
 				}
@@ -1203,7 +1221,9 @@ func (xRefTable *XRefTable) list(logStr []string) []string {
 
 				osd, ok := entry.Object.(types.ObjectStreamDict)
 				if ok {
-					str += fmt.Sprintf("object stream count:%d size of objectarray:%d\n", osd.ObjCount, len(osd.ObjArray))
+					str += fmt.Sprintf(
+						"object stream count:%d size of objectarray:%d\n", osd.ObjCount, len(osd.ObjArray),
+					)
 				}
 
 			} else {
@@ -1679,7 +1699,9 @@ func (xRefTable *XRefTable) consolidateResources(obj types.Object, pAttrs *Inher
 	return nil
 }
 
-func (xRefTable *XRefTable) checkInheritedPageAttrs(pageDict types.Dict, pAttrs *InheritedPageAttrs, consolidateRes bool) error {
+func (xRefTable *XRefTable) checkInheritedPageAttrs(
+	pageDict types.Dict, pAttrs *InheritedPageAttrs, consolidateRes bool,
+) error {
 	// Return mediaBox, cropBox and rotate as inherited.
 	// if consolidateRes is true
 	// then consolidate all inherited resources as required by content stream
@@ -1837,7 +1859,9 @@ func consolidateResourceDict(d types.Dict, prn PageResourceNames, pageNr int) er
 	return nil
 }
 
-func (xRefTable *XRefTable) consolidateResourcesWithContent(pageDict, resDict types.Dict, page int, consolidateRes bool) error {
+func (xRefTable *XRefTable) consolidateResourcesWithContent(
+	pageDict, resDict types.Dict, page int, consolidateRes bool,
+) error {
 	if !consolidateRes {
 		return nil
 	}
@@ -1863,7 +1887,9 @@ func (xRefTable *XRefTable) consolidateResourcesWithContent(pageDict, resDict ty
 	return consolidateResourceDict(resDict, prn, page)
 }
 
-func (xRefTable *XRefTable) processPageTreeForPageDict(root *types.IndirectRef, pAttrs *InheritedPageAttrs, p *int, page int, consolidateRes bool) (types.Dict, *types.IndirectRef, error) {
+func (xRefTable *XRefTable) processPageTreeForPageDict(
+	root *types.IndirectRef, pAttrs *InheritedPageAttrs, p *int, page int, consolidateRes bool,
+) (types.Dict, *types.IndirectRef, error) {
 	// Walk this page tree all the way down to the leaf node representing page.
 
 	//fmt.Printf("entering processPageTreeForPageDict: p=%d obj#%d\n", *p, root.ObjectNumber.Value())
@@ -1913,7 +1939,9 @@ func (xRefTable *XRefTable) processPageTreeForPageDict(root *types.IndirectRef, 
 
 		case "Pages":
 			// Recurse over sub pagetree.
-			pageDict, pageDictIndRef, err := xRefTable.processPageTreeForPageDict(&indRef, pAttrs, p, page, consolidateRes)
+			pageDict, pageDictIndRef, err := xRefTable.processPageTreeForPageDict(
+				&indRef, pAttrs, p, page, consolidateRes,
+			)
 			if err != nil {
 				return nil, nil, err
 			}
@@ -1936,7 +1964,9 @@ func (xRefTable *XRefTable) processPageTreeForPageDict(root *types.IndirectRef, 
 
 // PageDict returns a specific page dict along with the resources, mediaBox and CropBox in effect.
 // consolidateRes ensures optimized resources in InheritedPageAttrs.
-func (xRefTable *XRefTable) PageDict(pageNr int, consolidateRes bool) (types.Dict, *types.IndirectRef, *InheritedPageAttrs, error) {
+func (xRefTable *XRefTable) PageDict(pageNr int, consolidateRes bool) (
+	types.Dict, *types.IndirectRef, *InheritedPageAttrs, error,
+) {
 	var (
 		inhPAttrs InheritedPageAttrs
 		pageCount int
@@ -1954,7 +1984,9 @@ func (xRefTable *XRefTable) PageDict(pageNr int, consolidateRes bool) (types.Dic
 
 	// Calculate and return only resources that are really needed by
 	// any content stream of this page and any possible forms or type 3 fonts referenced.
-	pageDict, pageDictindRef, err := xRefTable.processPageTreeForPageDict(pageRootDictIndRef, &inhPAttrs, &pageCount, pageNr, consolidateRes)
+	pageDict, pageDictindRef, err := xRefTable.processPageTreeForPageDict(
+		pageRootDictIndRef, &inhPAttrs, &pageCount, pageNr, consolidateRes,
+	)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -1984,7 +2016,9 @@ func (xRefTable *XRefTable) PageDictIndRef(page int) (*types.IndirectRef, error)
 }
 
 // Calculate logical page number for page dict object number.
-func (xRefTable *XRefTable) processPageTreeForPageNumber(root *types.IndirectRef, pageCount *int, pageObjNr int) (int, error) {
+func (xRefTable *XRefTable) processPageTreeForPageNumber(root *types.IndirectRef, pageCount *int, pageObjNr int) (
+	int, error,
+) {
 	//fmt.Printf("entering processPageTreeForPageNumber: p=%d obj#%d\n", *p, root.ObjectNumber.Value())
 
 	d, err := xRefTable.DereferenceDict(*root)
@@ -2082,7 +2116,9 @@ func (xRefTable *XRefTable) resolvePageBoundary(d types.Dict, boxName string) (*
 	return rect(xRefTable, a)
 }
 
-func (xRefTable *XRefTable) collectPageBoundariesForPage(d types.Dict, pb []PageBoundaries, inhMediaBox, inhCropBox *types.Rectangle, rot, p int) error {
+func (xRefTable *XRefTable) collectPageBoundariesForPage(
+	d types.Dict, pb []PageBoundaries, inhMediaBox, inhCropBox *types.Rectangle, rot, p int,
+) error {
 	if inhMediaBox != nil {
 		pb[p].Media = &Box{Rect: inhMediaBox, Inherited: true}
 	}
@@ -2169,7 +2205,8 @@ func (xRefTable *XRefTable) collectPageBoundariesForPageTreeKids(
 	pb []PageBoundaries,
 	r int,
 	p *int,
-	selectedPages types.IntSet) error {
+	selectedPages types.IntSet,
+) error {
 
 	// Iterate over page tree.
 	for _, o := range kids {
@@ -2192,7 +2229,9 @@ func (xRefTable *XRefTable) collectPageBoundariesForPageTreeKids(
 		switch *pageNodeDict.Type() {
 
 		case "Pages":
-			if err = xRefTable.collectPageBoundariesForPageTree(&indRef, inhMediaBox, inhCropBox, pb, r, p, selectedPages); err != nil {
+			if err = xRefTable.collectPageBoundariesForPageTree(
+				&indRef, inhMediaBox, inhCropBox, pb, r, p, selectedPages,
+			); err != nil {
 				return err
 			}
 
@@ -2202,7 +2241,9 @@ func (xRefTable *XRefTable) collectPageBoundariesForPageTreeKids(
 				_, collect = selectedPages[(*p)+1]
 			}
 			if collect {
-				if err = xRefTable.collectPageBoundariesForPageTree(&indRef, inhMediaBox, inhCropBox, pb, r, p, selectedPages); err != nil {
+				if err = xRefTable.collectPageBoundariesForPageTree(
+					&indRef, inhMediaBox, inhCropBox, pb, r, p, selectedPages,
+				); err != nil {
 					return err
 				}
 			}
@@ -2220,7 +2261,8 @@ func (xRefTable *XRefTable) collectPageBoundariesForPageTree(
 	pb []PageBoundaries,
 	r int,
 	p *int,
-	selectedPages types.IntSet) error {
+	selectedPages types.IntSet,
+) error {
 
 	d, err := xRefTable.DereferenceDict(*root)
 	if err != nil {
@@ -2296,7 +2338,9 @@ func (xRefTable *XRefTable) PageDims() ([]types.Dim, error) {
 	return dims, nil
 }
 
-func (xRefTable *XRefTable) EmptyPage(parentIndRef *types.IndirectRef, mediaBox *types.Rectangle) (*types.IndirectRef, error) {
+func (xRefTable *XRefTable) EmptyPage(parentIndRef *types.IndirectRef, mediaBox *types.Rectangle) (
+	*types.IndirectRef, error,
+) {
 	sd, _ := xRefTable.NewStreamDictForBuf(nil)
 
 	if err := sd.Encode(); err != nil {
@@ -2335,7 +2379,9 @@ func (xRefTable *XRefTable) pageMediaBox(d types.Dict) (*types.Rectangle, error)
 	return rect(xRefTable, a)
 }
 
-func (xRefTable *XRefTable) emptyPage(parent *types.IndirectRef, d types.Dict, dim *types.Dim, pAttrs *InheritedPageAttrs) (*types.IndirectRef, error) {
+func (xRefTable *XRefTable) emptyPage(
+	parent *types.IndirectRef, d types.Dict, dim *types.Dim, pAttrs *InheritedPageAttrs,
+) (*types.IndirectRef, error) {
 	if dim != nil {
 		return xRefTable.EmptyPage(parent, types.RectForDim(dim.Width, dim.Height))
 	}
@@ -2357,7 +2403,8 @@ func (xRefTable *XRefTable) insertBlankPages(
 	pAttrs *InheritedPageAttrs,
 	p *int, selectedPages types.IntSet,
 	dim *types.Dim,
-	before bool) (int, error) {
+	before bool,
+) (int, error) {
 
 	d, err := xRefTable.DereferenceDict(*parent)
 	if err != nil {

@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/cli"
+	"github.com/JemZee04/pdfcpu/pkg/cli"
 )
 
 /**************************************************************
@@ -104,11 +104,15 @@ func TestUnlockFormFields(t *testing.T) {
 		inFile  string
 		outFile string
 	}{
-		{"TestUnlockFormEN", "english-locked.pdf", "english-unlocked.pdf"},              // Core font (Helvetica)
-		{"TestUnlockFormUK", "ukrainian-locked.pdf", "ukrainian-unlocked.pdf"},          // User font (Roboto-Regular)
-		{"TestUnlockFormRTL", "arabic-locked.pdf", "arabic-unlocked.pdf"},               // User font RTL (Roboto-Regular)
-		{"TestUnlockFormCJK", "chineseSimple-locked.pdf", "chineseSimple-unlocked.pdf"}, // User font CJK (UnifontMedium)
-		{"TestUnlockPersonForm", "person-locked.pdf", "person-unlocked.pdf"},            // Person Form
+		{"TestUnlockFormEN", "english-locked.pdf", "english-unlocked.pdf"},     // Core font (Helvetica)
+		{"TestUnlockFormUK", "ukrainian-locked.pdf", "ukrainian-unlocked.pdf"}, // User font (Roboto-Regular)
+		{
+			"TestUnlockFormRTL", "arabic-locked.pdf", "arabic-unlocked.pdf",
+		}, // User font RTL (Roboto-Regular)
+		{
+			"TestUnlockFormCJK", "chineseSimple-locked.pdf", "chineseSimple-unlocked.pdf",
+		}, // User font CJK (UnifontMedium)
+		{"TestUnlockPersonForm", "person-locked.pdf", "person-unlocked.pdf"}, // Person Form
 	} {
 		inFile := filepath.Join(samplesDir, "form", "lock", tt.inFile)
 		outFile := filepath.Join(outDir, tt.outFile)
@@ -156,11 +160,17 @@ func TestFillForm(t *testing.T) {
 		inFileJSON string
 		outFile    string
 	}{
-		{"TestFillFormEN", "english.pdf", "english.json", "english.pdf"},                    // Core font (Helvetica)
-		{"TestFillFormUK", "ukrainian.pdf", "ukrainian.json", "ukrainian.pdf"},              // User font (Roboto-Regular)
-		{"TestFillFormRTL", "arabic.pdf", "arabic.json", "arabic.pdf"},                      // User font RTL (Roboto-Regular)
-		{"TestFillFormCJK", "chineseSimple.pdf", "chineseSimple.json", "chineseSimple.pdf"}, // User font CJK (UnifontMedium)
-		{"TestFillPersonForm", "person.pdf", "person.json", "person.pdf"},                   // Person Form
+		{"TestFillFormEN", "english.pdf", "english.json", "english.pdf"}, // Core font (Helvetica)
+		{
+			"TestFillFormUK", "ukrainian.pdf", "ukrainian.json", "ukrainian.pdf",
+		}, // User font (Roboto-Regular)
+		{
+			"TestFillFormRTL", "arabic.pdf", "arabic.json", "arabic.pdf",
+		}, // User font RTL (Roboto-Regular)
+		{
+			"TestFillFormCJK", "chineseSimple.pdf", "chineseSimple.json", "chineseSimple.pdf",
+		}, // User font CJK (UnifontMedium)
+		{"TestFillPersonForm", "person.pdf", "person.json", "person.pdf"}, // Person Form
 	} {
 		inFile := filepath.Join(inDir, tt.inFile)
 		inFileJSON := filepath.Join(jsonDir, tt.inFileJSON)

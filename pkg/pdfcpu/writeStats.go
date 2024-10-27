@@ -22,9 +22,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -106,37 +106,45 @@ func statsLine(ctx *model.Context) *string {
 	sourceBinarySize := ctx.Read.BinaryTotalSize
 	sourceNonBinarySize := sourceFileSize - sourceBinarySize
 
-	sourceSizeStats := fmt.Sprintf("%s (%4.1f%% | %4.1f%%)",
+	sourceSizeStats := fmt.Sprintf(
+		"%s (%4.1f%% | %4.1f%%)",
 		types.ByteSize(sourceFileSize),
 		float32(sourceBinarySize)/float32(sourceFileSize)*100,
-		float32(sourceNonBinarySize)/float32(sourceFileSize)*100)
+		float32(sourceNonBinarySize)/float32(sourceFileSize)*100,
+	)
 
 	sourceBinaryImageSize := ctx.Read.BinaryImageSize + ctx.Read.BinaryImageDuplSize
 	sourceBinaryFontSize := ctx.Read.BinaryFontSize + ctx.Read.BinaryFontDuplSize
 	sourceBinaryOtherSize := sourceBinarySize - sourceBinaryImageSize - sourceBinaryFontSize
 
-	sourceBinaryStats := fmt.Sprintf("%4.1f%% | %4.1f%% | %4.1f%%",
+	sourceBinaryStats := fmt.Sprintf(
+		"%4.1f%% | %4.1f%% | %4.1f%%",
 		float32(sourceBinaryImageSize)/float32(sourceBinarySize)*100,
 		float32(sourceBinaryFontSize)/float32(sourceBinarySize)*100,
-		float32(sourceBinaryOtherSize)/float32(sourceBinarySize)*100)
+		float32(sourceBinaryOtherSize)/float32(sourceBinarySize)*100,
+	)
 
 	destFileSize := ctx.Write.FileSize
 	destBinarySize := ctx.Write.BinaryTotalSize
 	destNonBinarySize := destFileSize - destBinarySize
 
-	destSizeStats := fmt.Sprintf("%s (%4.1f%% | %4.1f%%)",
+	destSizeStats := fmt.Sprintf(
+		"%s (%4.1f%% | %4.1f%%)",
 		types.ByteSize(destFileSize),
 		float32(destBinarySize)/float32(destFileSize)*100,
-		float32(destNonBinarySize)/float32(destFileSize)*100)
+		float32(destNonBinarySize)/float32(destFileSize)*100,
+	)
 
 	destBinaryImageSize := ctx.Write.BinaryImageSize
 	destBinaryFontSize := ctx.Write.BinaryFontSize
 	destBinaryOtherSize := destBinarySize - destBinaryImageSize - destBinaryFontSize
 
-	destBinaryStats := fmt.Sprintf("%4.1f%% | %4.1f%% | %4.1f%%",
+	destBinaryStats := fmt.Sprintf(
+		"%4.1f%% | %4.1f%% | %4.1f%%",
 		float32(destBinaryImageSize)/float32(destBinarySize)*100,
 		float32(destBinaryFontSize)/float32(destBinarySize)*100,
-		float32(destBinaryOtherSize)/float32(destBinarySize)*100)
+		float32(destBinaryOtherSize)/float32(destBinarySize)*100,
+	)
 
 	var missingObjs string
 	if count, mstr := xRefTable.MissingObjects(); count > 0 {
@@ -152,7 +160,8 @@ func statsLine(ctx *model.Context) *string {
 		nonreferencedObjs = fmt.Sprintf("%d:%s", len(ctx.Optimize.NonReferencedObjs), strings.Join(s, ","))
 	}
 
-	line := fmt.Sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%v;%v;%v;%v;%d;%d;%s;%s;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v\n",
+	line := fmt.Sprintf(
+		"%s;%s;%s;%s;%s;%s;%s;%s;%s;%v;%v;%v;%v;%d;%d;%s;%s;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v;%v\n",
 		filepath.Base(ctx.Read.FileName),
 		version,
 		xRefTable.Author,
@@ -224,7 +233,8 @@ func statsLine(ctx *model.Context) *string {
 		xRefTable.Stats.UsesPageAttr(model.PageTemplateInstantiated),
 		xRefTable.Stats.UsesPageAttr(model.PagePresSteps),
 		xRefTable.Stats.UsesPageAttr(model.PageUserUnit),
-		xRefTable.Stats.UsesPageAttr(model.PageVP))
+		xRefTable.Stats.UsesPageAttr(model.PageVP),
+	)
 
 	return &line
 }

@@ -20,9 +20,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -100,7 +100,9 @@ func AddWatermarksMapFile(inFile, outFile string, m map[int]*model.Watermark, co
 }
 
 // AddWatermarksSliceMap adds watermarks in m to corresponding pages in rs and writes the result to w.
-func AddWatermarksSliceMap(rs io.ReadSeeker, w io.Writer, m map[int][]*model.Watermark, conf *model.Configuration) error {
+func AddWatermarksSliceMap(
+	rs io.ReadSeeker, w io.Writer, m map[int][]*model.Watermark, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: AddWatermarksSliceMap: missing rs")
 	}
@@ -127,7 +129,9 @@ func AddWatermarksSliceMap(rs io.ReadSeeker, w io.Writer, m map[int][]*model.Wat
 }
 
 // AddWatermarksSliceMapFile adds watermarks to corresponding pages in m of inFile and writes the result to outFile.
-func AddWatermarksSliceMapFile(inFile, outFile string, m map[int][]*model.Watermark, conf *model.Configuration) (err error) {
+func AddWatermarksSliceMapFile(
+	inFile, outFile string, m map[int][]*model.Watermark, conf *model.Configuration,
+) (err error) {
 	var f1, f2 *os.File
 
 	if f1, err = os.Open(inFile); err != nil {
@@ -168,7 +172,9 @@ func AddWatermarksSliceMapFile(inFile, outFile string, m map[int][]*model.Waterm
 }
 
 // AddWatermarks adds watermarks to all pages selected in rs and writes the result to w.
-func AddWatermarks(rs io.ReadSeeker, w io.Writer, selectedPages []string, wm *model.Watermark, conf *model.Configuration) error {
+func AddWatermarks(
+	rs io.ReadSeeker, w io.Writer, selectedPages []string, wm *model.Watermark, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: AddWatermarks: missing rs")
 	}
@@ -202,7 +208,9 @@ func AddWatermarks(rs io.ReadSeeker, w io.Writer, selectedPages []string, wm *mo
 }
 
 // AddWatermarksFile adds watermarks to all selected pages of inFile and writes the result to outFile.
-func AddWatermarksFile(inFile, outFile string, selectedPages []string, wm *model.Watermark, conf *model.Configuration) (err error) {
+func AddWatermarksFile(
+	inFile, outFile string, selectedPages []string, wm *model.Watermark, conf *model.Configuration,
+) (err error) {
 	var f1, f2 *os.File
 
 	if f1, err = os.Open(inFile); err != nil {
@@ -370,7 +378,9 @@ func ImageWatermark(fileName, desc string, onTop, update bool, u types.DisplayUn
 }
 
 // ImageWatermarkForReader returns an image watermark configuration for r.
-func ImageWatermarkForReader(r io.Reader, desc string, onTop, update bool, u types.DisplayUnit) (*model.Watermark, error) {
+func ImageWatermarkForReader(r io.Reader, desc string, onTop, update bool, u types.DisplayUnit) (
+	*model.Watermark, error,
+) {
 	wm, err := pdfcpu.ParseImageWatermarkDetails("", desc, onTop, u)
 	if err != nil {
 		return nil, err
@@ -397,7 +407,9 @@ func PDFWatermark(fileName, desc string, onTop, update bool, u types.DisplayUnit
 // PDFWatermarkForReadSeeker returns a PDF watermark configuration.
 // Apply watermark/stamp to destination file with pageNrSrc of rs for selected pages.
 // If pageNr == 0 apply a multi watermark/stamp applying all src pages in ascending manner to destination pages.
-func PDFWatermarkForReadSeeker(rs io.ReadSeeker, pageNrSrc int, desc string, onTop, update bool, u types.DisplayUnit) (*model.Watermark, error) {
+func PDFWatermarkForReadSeeker(
+	rs io.ReadSeeker, pageNrSrc int, desc string, onTop, update bool, u types.DisplayUnit,
+) (*model.Watermark, error) {
 	wm, err := pdfcpu.ParsePDFWatermarkDetails("", desc, onTop, u)
 	if err != nil {
 		return nil, err
@@ -413,7 +425,9 @@ func PDFWatermarkForReadSeeker(rs io.ReadSeeker, pageNrSrc int, desc string, onT
 // PDFMultiWatermarkForReadSeeker returns a PDF watermark configuration.
 // Define a source PDF watermark/stamp sequence using rs from page startPageNrSrc thru the last page of rs.
 // Apply this sequence to the destination PDF file starting at page startPageNrDest for selected pages.
-func PDFMultiWatermarkForReadSeeker(rs io.ReadSeeker, startPageNrSrc, startPageNrDest int, desc string, onTop, update bool, u types.DisplayUnit) (*model.Watermark, error) {
+func PDFMultiWatermarkForReadSeeker(
+	rs io.ReadSeeker, startPageNrSrc, startPageNrDest int, desc string, onTop, update bool, u types.DisplayUnit,
+) (*model.Watermark, error) {
 	wm, err := pdfcpu.ParsePDFWatermarkDetails("", desc, onTop, u)
 	if err != nil {
 		return nil, err
@@ -428,7 +442,9 @@ func PDFMultiWatermarkForReadSeeker(rs io.ReadSeeker, startPageNrSrc, startPageN
 }
 
 // AddTextWatermarksFile adds text stamps/watermarks to all selected pages of inFile and writes the result to outFile.
-func AddTextWatermarksFile(inFile, outFile string, selectedPages []string, onTop bool, text, desc string, conf *model.Configuration) error {
+func AddTextWatermarksFile(
+	inFile, outFile string, selectedPages []string, onTop bool, text, desc string, conf *model.Configuration,
+) error {
 	unit := types.POINTS
 	if conf != nil {
 		unit = conf.Unit
@@ -443,7 +459,9 @@ func AddTextWatermarksFile(inFile, outFile string, selectedPages []string, onTop
 }
 
 // AddImageWatermarksFile adds image stamps/watermarks to all selected pages of inFile and writes the result to outFile.
-func AddImageWatermarksFile(inFile, outFile string, selectedPages []string, onTop bool, fileName, desc string, conf *model.Configuration) error {
+func AddImageWatermarksFile(
+	inFile, outFile string, selectedPages []string, onTop bool, fileName, desc string, conf *model.Configuration,
+) error {
 	unit := types.POINTS
 	if conf != nil {
 		unit = conf.Unit
@@ -458,7 +476,9 @@ func AddImageWatermarksFile(inFile, outFile string, selectedPages []string, onTo
 }
 
 // AddImageWatermarksForReaderFile adds image stamps/watermarks to all selected pages of inFile for r and writes the result to outFile.
-func AddImageWatermarksForReaderFile(inFile, outFile string, selectedPages []string, onTop bool, r io.Reader, desc string, conf *model.Configuration) error {
+func AddImageWatermarksForReaderFile(
+	inFile, outFile string, selectedPages []string, onTop bool, r io.Reader, desc string, conf *model.Configuration,
+) error {
 	unit := types.POINTS
 	if conf != nil {
 		unit = conf.Unit
@@ -473,7 +493,9 @@ func AddImageWatermarksForReaderFile(inFile, outFile string, selectedPages []str
 }
 
 // AddPDFWatermarksFile adds PDF stamps/watermarks to inFile and writes the result to outFile.
-func AddPDFWatermarksFile(inFile, outFile string, selectedPages []string, onTop bool, fileName, desc string, conf *model.Configuration) error {
+func AddPDFWatermarksFile(
+	inFile, outFile string, selectedPages []string, onTop bool, fileName, desc string, conf *model.Configuration,
+) error {
 	unit := types.POINTS
 	if conf != nil {
 		unit = conf.Unit
@@ -488,7 +510,9 @@ func AddPDFWatermarksFile(inFile, outFile string, selectedPages []string, onTop 
 }
 
 // UpdateTextWatermarksFile adds text stamps/watermarks to all selected pages of inFile and writes the result to outFile.
-func UpdateTextWatermarksFile(inFile, outFile string, selectedPages []string, onTop bool, text, desc string, conf *model.Configuration) error {
+func UpdateTextWatermarksFile(
+	inFile, outFile string, selectedPages []string, onTop bool, text, desc string, conf *model.Configuration,
+) error {
 	unit := types.POINTS
 	if conf != nil {
 		unit = conf.Unit
@@ -503,7 +527,9 @@ func UpdateTextWatermarksFile(inFile, outFile string, selectedPages []string, on
 }
 
 // UpdateImageWatermarksFile adds image stamps/watermarks to all selected pages of inFile and writes the result to outFile.
-func UpdateImageWatermarksFile(inFile, outFile string, selectedPages []string, onTop bool, fileName, desc string, conf *model.Configuration) error {
+func UpdateImageWatermarksFile(
+	inFile, outFile string, selectedPages []string, onTop bool, fileName, desc string, conf *model.Configuration,
+) error {
 	unit := types.POINTS
 	if conf != nil {
 		unit = conf.Unit
@@ -516,7 +542,9 @@ func UpdateImageWatermarksFile(inFile, outFile string, selectedPages []string, o
 }
 
 // UpdatePDFWatermarksFile adds PDF stamps/watermarks to all selected pages of inFile and writes the result to outFile.
-func UpdatePDFWatermarksFile(inFile, outFile string, selectedPages []string, onTop bool, fileName, desc string, conf *model.Configuration) error {
+func UpdatePDFWatermarksFile(
+	inFile, outFile string, selectedPages []string, onTop bool, fileName, desc string, conf *model.Configuration,
+) error {
 	unit := types.POINTS
 	if conf != nil {
 		unit = conf.Unit

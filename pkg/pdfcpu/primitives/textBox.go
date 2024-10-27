@@ -19,10 +19,10 @@ package primitives
 import (
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/format"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/format"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -286,7 +286,9 @@ func tdMargin(p *Padding, td *model.TextDescriptor) {
 	}
 }
 
-func (tb *TextBox) prepareTextDescriptor(p *model.Page, pageNr int, fonts model.FontMap) (*model.TextDescriptor, error) {
+func (tb *TextBox) prepareTextDescriptor(p *model.Page, pageNr int, fonts model.FontMap) (
+	*model.TextDescriptor, error,
+) {
 
 	pdf := tb.pdf
 	f := tb.Font

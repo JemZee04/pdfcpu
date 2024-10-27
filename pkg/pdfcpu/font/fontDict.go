@@ -29,9 +29,9 @@ import (
 	"time"
 	"unicode/utf16"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -155,7 +155,9 @@ func ttfFontFile(xRefTable *model.XRefTable, ttf font.TTFLight, fontName string)
 	return flateEncodedStreamIndRef(xRefTable, bb)
 }
 
-func ttfSubFontFile(xRefTable *model.XRefTable, ttf font.TTFLight, fontName string, indRef *types.IndirectRef) (*types.IndirectRef, error) {
+func ttfSubFontFile(
+	xRefTable *model.XRefTable, ttf font.TTFLight, fontName string, indRef *types.IndirectRef,
+) (*types.IndirectRef, error) {
 	bb, err := font.Subset(fontName, xRefTable.UsedGIDs[fontName])
 	if err != nil {
 		return nil, err
@@ -184,34 +186,51 @@ func PDFDocEncoding(xRefTable *model.XRefTable) (*types.IndirectRef, error) {
 		types.Integer(96),
 		types.Name("grave"),
 		types.Integer(128),
-		types.Name("bullet"), types.Name("dagger"), types.Name("daggerdbl"), types.Name("ellipsis"), types.Name("emdash"), types.Name("endash"),
-		types.Name("florin"), types.Name("fraction"), types.Name("guilsinglleft"), types.Name("guilsinglright"), types.Name("minus"), types.Name("perthousand"),
-		types.Name("quotedblbase"), types.Name("quotedblleft"), types.Name("quotedblright"), types.Name("quoteleft"), types.Name("quoteright"), types.Name("quotesinglbase"),
-		types.Name("trademark"), types.Name("fi"), types.Name("fl"), types.Name("Lslash"), types.Name("OE"), types.Name("Scaron"), types.Name("Ydieresis"),
-		types.Name("Zcaron"), types.Name("dotlessi"), types.Name("lslash"), types.Name("oe"), types.Name("scaron"), types.Name("zcaron"),
+		types.Name("bullet"), types.Name("dagger"), types.Name("daggerdbl"), types.Name("ellipsis"),
+		types.Name("emdash"), types.Name("endash"),
+		types.Name("florin"), types.Name("fraction"), types.Name("guilsinglleft"), types.Name("guilsinglright"),
+		types.Name("minus"), types.Name("perthousand"),
+		types.Name("quotedblbase"), types.Name("quotedblleft"), types.Name("quotedblright"), types.Name("quoteleft"),
+		types.Name("quoteright"), types.Name("quotesinglbase"),
+		types.Name("trademark"), types.Name("fi"), types.Name("fl"), types.Name("Lslash"), types.Name("OE"),
+		types.Name("Scaron"), types.Name("Ydieresis"),
+		types.Name("Zcaron"), types.Name("dotlessi"), types.Name("lslash"), types.Name("oe"), types.Name("scaron"),
+		types.Name("zcaron"),
 		types.Integer(160),
 		types.Name("Euro"),
 		types.Integer(164),
 		types.Name("currency"),
 		types.Integer(166),
-		types.Name("brokenbar"), types.Integer(168), types.Name("dieresis"), types.Name("copyright"), types.Name("ordfeminine"),
+		types.Name("brokenbar"), types.Integer(168), types.Name("dieresis"), types.Name("copyright"),
+		types.Name("ordfeminine"),
 		types.Integer(172),
-		types.Name("logicalnot"), types.Name(".notdef"), types.Name("registered"), types.Name("macron"), types.Name("degree"),
-		types.Name("plusminus"), types.Name("twosuperior"), types.Name("threesuperior"), types.Name("acute"), types.Name("mu"),
+		types.Name("logicalnot"), types.Name(".notdef"), types.Name("registered"), types.Name("macron"),
+		types.Name("degree"),
+		types.Name("plusminus"), types.Name("twosuperior"), types.Name("threesuperior"), types.Name("acute"),
+		types.Name("mu"),
 		types.Integer(183),
 		types.Name("periodcentered"), types.Name("cedilla"), types.Name("onesuperior"), types.Name("ordmasculine"),
 		types.Integer(188),
 		types.Name("onequarter"), types.Name("onehalf"), types.Name("threequarters"),
 		types.Integer(192),
-		types.Name("Agrave"), types.Name("Aacute"), types.Name("Acircumflex"), types.Name("Atilde"), types.Name("Adieresis"), types.Name("Aring"), types.Name("AE"),
-		types.Name("Ccedilla"), types.Name("Egrave"), types.Name("Eacute"), types.Name("Ecircumflex"), types.Name("Edieresis"), types.Name("Igrave"), types.Name("Iacute"),
-		types.Name("Icircumflex"), types.Name("Idieresis"), types.Name("Eth"), types.Name("Ntilde"), types.Name("Ograve"), types.Name("Oacute"), types.Name("Ocircumflex"),
-		types.Name("Otilde"), types.Name("Odieresis"), types.Name("multiply"), types.Name("Oslash"), types.Name("Ugrave"), types.Name("Uacute"), types.Name("Ucircumflex"),
-		types.Name("Udieresis"), types.Name("Yacute"), types.Name("Thorn"), types.Name("germandbls"), types.Name("agrave"), types.Name("aacute"), types.Name("acircumflex"),
-		types.Name("atilde"), types.Name("adieresis"), types.Name("aring"), types.Name("ae"), types.Name("ccedilla"), types.Name("egrave"), types.Name("eacute"), types.Name("ecircumflex"),
-		types.Name("edieresis"), types.Name("igrave"), types.Name("iacute"), types.Name("icircumflex"), types.Name("idieresis"), types.Name("eth"), types.Name("ntilde"),
-		types.Name("ograve"), types.Name("oacute"), types.Name("ocircumflex"), types.Name("otilde"), types.Name("odieresis"), types.Name("divide"), types.Name("oslash"),
-		types.Name("ugrave"), types.Name("uacute"), types.Name("ucircumflex"), types.Name("udieresis"), types.Name("yacute"), types.Name("thorn"), types.Name("ydieresis"),
+		types.Name("Agrave"), types.Name("Aacute"), types.Name("Acircumflex"), types.Name("Atilde"),
+		types.Name("Adieresis"), types.Name("Aring"), types.Name("AE"),
+		types.Name("Ccedilla"), types.Name("Egrave"), types.Name("Eacute"), types.Name("Ecircumflex"),
+		types.Name("Edieresis"), types.Name("Igrave"), types.Name("Iacute"),
+		types.Name("Icircumflex"), types.Name("Idieresis"), types.Name("Eth"), types.Name("Ntilde"),
+		types.Name("Ograve"), types.Name("Oacute"), types.Name("Ocircumflex"),
+		types.Name("Otilde"), types.Name("Odieresis"), types.Name("multiply"), types.Name("Oslash"),
+		types.Name("Ugrave"), types.Name("Uacute"), types.Name("Ucircumflex"),
+		types.Name("Udieresis"), types.Name("Yacute"), types.Name("Thorn"), types.Name("germandbls"),
+		types.Name("agrave"), types.Name("aacute"), types.Name("acircumflex"),
+		types.Name("atilde"), types.Name("adieresis"), types.Name("aring"), types.Name("ae"), types.Name("ccedilla"),
+		types.Name("egrave"), types.Name("eacute"), types.Name("ecircumflex"),
+		types.Name("edieresis"), types.Name("igrave"), types.Name("iacute"), types.Name("icircumflex"),
+		types.Name("idieresis"), types.Name("eth"), types.Name("ntilde"),
+		types.Name("ograve"), types.Name("oacute"), types.Name("ocircumflex"), types.Name("otilde"),
+		types.Name("odieresis"), types.Name("divide"), types.Name("oslash"),
+		types.Name("ugrave"), types.Name("uacute"), types.Name("ucircumflex"), types.Name("udieresis"),
+		types.Name("yacute"), types.Name("thorn"), types.Name("ydieresis"),
 	}
 
 	d := types.Dict(
@@ -236,7 +255,9 @@ func coreFontDict(xRefTable *model.XRefTable, coreFontName string) (*types.Indir
 }
 
 // CIDSet computes a CIDSet for used glyphs and updates or returns a new object.
-func CIDSet(xRefTable *model.XRefTable, ttf font.TTFLight, fontName string, indRef *types.IndirectRef) (*types.IndirectRef, error) {
+func CIDSet(
+	xRefTable *model.XRefTable, ttf font.TTFLight, fontName string, indRef *types.IndirectRef,
+) (*types.IndirectRef, error) {
 	bb := make([]byte, ttf.GlyphCount/8+1)
 	usedGIDs, ok := xRefTable.UsedGIDs[fontName]
 	if ok {
@@ -292,7 +313,9 @@ func ttfFontDescriptorFlags(ttf font.TTFLight) uint32 {
 }
 
 // CIDFontFile returns a TrueType font file or subfont file for fontName.
-func CIDFontFile(xRefTable *model.XRefTable, ttf font.TTFLight, fontName string, subFont bool) (*types.IndirectRef, error) {
+func CIDFontFile(xRefTable *model.XRefTable, ttf font.TTFLight, fontName string, subFont bool) (
+	*types.IndirectRef, error,
+) {
 	if subFont {
 		return ttfSubFontFile(xRefTable, ttf, fontName, nil)
 	}
@@ -300,7 +323,9 @@ func CIDFontFile(xRefTable *model.XRefTable, ttf font.TTFLight, fontName string,
 }
 
 // CIDFontDescriptor returns a font descriptor describing the CIDFont’s default metrics other than its glyph widths.
-func CIDFontDescriptor(xRefTable *model.XRefTable, ttf font.TTFLight, fontName, baseFontName, fontLang string, embed bool) (*types.IndirectRef, error) {
+func CIDFontDescriptor(
+	xRefTable *model.XRefTable, ttf font.TTFLight, fontName, baseFontName, fontLang string, embed bool,
+) (*types.IndirectRef, error) {
 	var (
 		fontFile *types.IndirectRef
 		err      error
@@ -351,7 +376,9 @@ func CIDFontDescriptor(xRefTable *model.XRefTable, ttf font.TTFLight, fontName, 
 }
 
 // FontDescriptor returns a TrueType font descriptor describing font’s default metrics other than its glyph widths.
-func FontDescriptor(xRefTable *model.XRefTable, ttf font.TTFLight, fontName, fontLang string) (*types.IndirectRef, error) {
+func FontDescriptor(xRefTable *model.XRefTable, ttf font.TTFLight, fontName, fontLang string) (
+	*types.IndirectRef, error,
+) {
 	fontFile, err := ttfFontFile(xRefTable, ttf, fontName)
 	if err != nil {
 		return nil, err
@@ -522,7 +549,9 @@ func calcWidthArray(xRefTable *model.XRefTable, ttf font.TTFLight, fontName stri
 }
 
 // CIDWidths returns the value for W in a CIDFontDict.
-func CIDWidths(xRefTable *model.XRefTable, ttf font.TTFLight, fontName string, subFont bool, indRef *types.IndirectRef) (*types.IndirectRef, error) {
+func CIDWidths(
+	xRefTable *model.XRefTable, ttf font.TTFLight, fontName string, subFont bool, indRef *types.IndirectRef,
+) (*types.IndirectRef, error) {
 	a := calcWidthArray(xRefTable, ttf, fontName, subFont)
 	if len(a) == 0 {
 		return nil, nil
@@ -593,7 +622,9 @@ func bf(b *bytes.Buffer, ttf font.TTFLight, usedGIDs map[uint16]bool, subFont bo
 }
 
 // toUnicodeCMap returns a stream dict containing a CMap file that maps character codes to Unicode values (see 9.10).
-func toUnicodeCMap(xRefTable *model.XRefTable, ttf font.TTFLight, fontName string, subFont bool, indRef *types.IndirectRef) (*types.IndirectRef, error) {
+func toUnicodeCMap(
+	xRefTable *model.XRefTable, ttf font.TTFLight, fontName string, subFont bool, indRef *types.IndirectRef,
+) (*types.IndirectRef, error) {
 	// n beginbfchar
 	// srcCode dstString
 	// <003A>  <0037>                                            : 003a:0037
@@ -787,7 +818,9 @@ func subFontPrefix() string {
 }
 
 // CIDFontDict returns the descendant font dict with special encoding for Type0 fonts.
-func CIDFontDict(xRefTable *model.XRefTable, ttf font.TTFLight, fontName, baseFontName, lang string, parms *cjk) (*types.IndirectRef, error) {
+func CIDFontDict(
+	xRefTable *model.XRefTable, ttf font.TTFLight, fontName, baseFontName, lang string, parms *cjk,
+) (*types.IndirectRef, error) {
 	fdIndRef, err := CIDFontDescriptor(xRefTable, ttf, fontName, baseFontName, lang, parms == nil)
 	if err != nil {
 		return nil, err
@@ -863,7 +896,9 @@ func CIDFontDict(xRefTable *model.XRefTable, ttf font.TTFLight, fontName, baseFo
 	return xRefTable.IndRefForNewObject(d)
 }
 
-func type0FontDict(xRefTable *model.XRefTable, fontName, lang, script string, indRef *types.IndirectRef) (*types.IndirectRef, error) {
+func type0FontDict(
+	xRefTable *model.XRefTable, fontName, lang, script string, indRef *types.IndirectRef,
+) (*types.IndirectRef, error) {
 	font.UserFontMetricsLock.RLock()
 	ttf, ok := font.UserFontMetrics[fontName]
 	font.UserFontMetricsLock.RUnlock()
@@ -979,7 +1014,9 @@ func RTL(lang string) bool {
 }
 
 // EnsureFontDict ensures a font dict for fontName, lang, script.
-func EnsureFontDict(xRefTable *model.XRefTable, fontName, lang, script string, field bool, indRef *types.IndirectRef) (*types.IndirectRef, error) {
+func EnsureFontDict(
+	xRefTable *model.XRefTable, fontName, lang, script string, field bool, indRef *types.IndirectRef,
+) (*types.IndirectRef, error) {
 	if font.IsCoreFont(fontName) {
 		if indRef != nil {
 			return indRef, nil

@@ -20,12 +20,15 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/cli"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/api"
+	"github.com/JemZee04/pdfcpu/pkg/cli"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
 )
 
-func testNUp(t *testing.T, msg string, inFiles []string, outFile string, selectedPages []string, desc string, n int, isImg bool, conf *model.Configuration) {
+func testNUp(
+	t *testing.T, msg string, inFiles []string, outFile string, selectedPages []string, desc string, n int, isImg bool,
+	conf *model.Configuration,
+) {
 	t.Helper()
 
 	var (
@@ -64,25 +67,30 @@ func TestNUpCommand(t *testing.T) {
 		n             int
 		isImg         bool
 	}{
-		{"TestNUpFromPDF",
+		{
+			"TestNUpFromPDF",
 			[]string{filepath.Join(inDir, "Acroforms2.pdf")},
 			filepath.Join(outDir, "Acroforms2.pdf"),
 			nil,
 			"",
 			"points",
 			4,
-			false},
+			false,
+		},
 
-		{"TestNUpFromSingleImage",
+		{
+			"TestNUpFromSingleImage",
 			[]string{filepath.Join(resDir, "pdfchip3.png")},
 			filepath.Join(outDir, "out.pdf"),
 			nil,
 			"form:A3L",
 			"points",
 			9,
-			true},
+			true,
+		},
 
-		{"TestNUpFromImages",
+		{
+			"TestNUpFromImages",
 			[]string{
 				filepath.Join(resDir, "pdfchip3.png"),
 				filepath.Join(resDir, "demo.png"),
@@ -93,7 +101,8 @@ func TestNUpCommand(t *testing.T) {
 			"form:Tabloid, bo:off, ma:0, enforce:off",
 			"points",
 			6,
-			true},
+			true,
+		},
 	} {
 		conf := model.NewDefaultConfiguration()
 		conf.SetUnit(tt.unit)

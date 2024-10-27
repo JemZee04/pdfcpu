@@ -27,16 +27,16 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/format"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/filter"
+	"github.com/JemZee04/pdfcpu/pkg/font"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	pdffont "github.com/JemZee04/pdfcpu/pkg/pdfcpu/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/format"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/matrix"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -190,7 +190,10 @@ func parseFontName(s string, wm *model.Watermark) error {
 func parseScriptName(s string, wm *model.Watermark) error {
 	script := strings.ToUpper(s)
 	if !pdffont.SupportedScript(script) {
-		return errors.Errorf("pdfcpu: unsupported font script \"%s\" - Supported are: HANS, HANT, HIRA, KANA, JPAN, HANG, KORE \n", script)
+		return errors.Errorf(
+			"pdfcpu: unsupported font script \"%s\" - Supported are: HANS, HANT, HIRA, KANA, JPAN, HANG, KORE \n",
+			script,
+		)
 	}
 
 	wm.ScriptName = script
@@ -660,7 +663,9 @@ func setWatermarkType(mode int, s string, wm *model.Watermark) (err error) {
 	return err
 }
 
-func createPDFRes(ctx, otherCtx *model.Context, pageNrSrc, pageNrDest int, migrated map[int]int, wm *model.Watermark) error {
+func createPDFRes(
+	ctx, otherCtx *model.Context, pageNrSrc, pageNrDest int, migrated map[int]int, wm *model.Watermark,
+) error {
 	pdfRes := model.PdfResources{}
 	xRefTable := ctx.XRefTable
 	otherXRefTable := otherCtx.XRefTable
@@ -943,7 +948,9 @@ func formContent(w io.Writer, pageNr int, wm model.Watermark) error {
 	return nil
 }
 
-func setupTextDescriptor(wm model.Watermark, timestampFormat string, pageNr, pageCount int) (model.TextDescriptor, bool) {
+func setupTextDescriptor(wm model.Watermark, timestampFormat string, pageNr, pageCount int) (
+	model.TextDescriptor, bool,
+) {
 	// Set horizontal alignment.
 	var hAlign types.HAlignment
 	if wm.HAlign == nil {
@@ -991,7 +998,8 @@ func drawBoundingBox(b *bytes.Buffer, wm model.Watermark, bb *types.Rectangle) {
 		urx /= sc
 		ury /= sc
 	}
-	fmt.Fprintf(b, "[]0 d 2 w %.2f %.2f m %.2f %.2f l %.2f %.2f l %.2f %.2f l s ",
+	fmt.Fprintf(
+		b, "[]0 d 2 w %.2f %.2f m %.2f %.2f l %.2f %.2f l %.2f %.2f l s ",
 		bb.LL.X, bb.LL.Y,
 		urx, bb.LL.Y,
 		urx, ury,
@@ -999,7 +1007,9 @@ func drawBoundingBox(b *bytes.Buffer, wm model.Watermark, bb *types.Rectangle) {
 	)
 }
 
-func calcFormBoundingBox(xRefTable *model.XRefTable, w io.Writer, timestampFormat string, pageNr, pageCount int, wm *model.Watermark) bool {
+func calcFormBoundingBox(
+	xRefTable *model.XRefTable, w io.Writer, timestampFormat string, pageNr, pageCount int, wm *model.Watermark,
+) bool {
 	var unique bool
 	if wm.IsImage() || wm.IsPDF() {
 		wm.CalcBoundingBox(pageNr)
@@ -1174,7 +1184,9 @@ func insertPageContentsForWM(ctx *model.Context, pageDict types.Dict, wm *model.
 	return nil
 }
 
-func patchFirstContentStreamForWatermark(sd *types.StreamDict, gsID, xoID string, wm *model.Watermark, isLast bool) error {
+func patchFirstContentStreamForWatermark(
+	sd *types.StreamDict, gsID, xoID string, wm *model.Watermark, isLast bool,
+) error {
 	err := sd.Decode()
 	if err == filter.ErrUnsupportedFilter {
 		if log.InfoEnabled() {
@@ -1441,7 +1453,8 @@ func createResourcesForPageNr(
 	pageNr int,
 	fm map[string]types.IntSet,
 	ocgIndRef, extGStateIndRef *types.IndirectRef,
-	onTop bool, opacity float64) error {
+	onTop bool, opacity float64,
+) error {
 
 	wm.Ocg = ocgIndRef
 	wm.ExtGState = extGStateIndRef
@@ -1478,11 +1491,14 @@ func createResourcesForWMMap(
 	m map[int]*model.Watermark,
 	ocgIndRef, extGStateIndRef *types.IndirectRef,
 	onTop bool,
-	opacity float64) (map[string]types.IntSet, error) {
+	opacity float64,
+) (map[string]types.IntSet, error) {
 
 	fm := map[string]types.IntSet{}
 	for pageNr, wm := range m {
-		if err := createResourcesForPageNr(ctx, wm, pageNr, fm, ocgIndRef, extGStateIndRef, onTop, opacity); err != nil {
+		if err := createResourcesForPageNr(
+			ctx, wm, pageNr, fm, ocgIndRef, extGStateIndRef, onTop, opacity,
+		); err != nil {
 			return nil, err
 		}
 	}
@@ -1495,12 +1511,15 @@ func createResourcesForWMSliceMap(
 	m map[int][]*model.Watermark,
 	ocgIndRef, extGStateIndRef *types.IndirectRef,
 	onTop bool,
-	opacity float64) (map[string]types.IntSet, error) {
+	opacity float64,
+) (map[string]types.IntSet, error) {
 
 	fm := map[string]types.IntSet{}
 	for pageNr, wms := range m {
 		for _, wm := range wms {
-			if err := createResourcesForPageNr(ctx, wm, pageNr, fm, ocgIndRef, extGStateIndRef, onTop, opacity); err != nil {
+			if err := createResourcesForPageNr(
+				ctx, wm, pageNr, fm, ocgIndRef, extGStateIndRef, onTop, opacity,
+			); err != nil {
 				return nil, err
 			}
 		}
@@ -1769,7 +1788,9 @@ func removeArtifactsFromPage(ctx *model.Context, sd *types.StreamDict, resDict t
 	return true, removeForms(ctx, resDict, forms, i)
 }
 
-func locatePageContentAndResourceDict(ctx *model.Context, pageNr int) (types.Object, *types.IndirectRef, types.Dict, error) {
+func locatePageContentAndResourceDict(ctx *model.Context, pageNr int) (
+	types.Object, *types.IndirectRef, types.Dict, error,
+) {
 	consolidateRes := false
 	d, pageDictIndRef, _, err := ctx.PageDict(pageNr, consolidateRes)
 	if err != nil {
@@ -1794,7 +1815,9 @@ func locatePageContentAndResourceDict(ctx *model.Context, pageNr int) (types.Obj
 	return o, pageDictIndRef, resDict, nil
 }
 
-func removeArtifacts1(ctx *model.Context, o types.Object, entry *model.XRefTableEntry, resDict types.Dict, pageNr int) (bool, error) {
+func removeArtifacts1(
+	ctx *model.Context, o types.Object, entry *model.XRefTableEntry, resDict types.Dict, pageNr int,
+) (bool, error) {
 	found := false
 	switch o := o.(type) {
 
@@ -1893,7 +1916,9 @@ func removePageWatermark(ctx *model.Context, pageNr int) (bool, error) {
 			return false, err
 		}
 		objNr := pageDictIndRef.ObjectNumber.Value()
-		if _, err = RemoveAnnotationsFromPageDict(ctx, nil, []string{"pdfcpu"}, nil, d, objNr, pageNr, false); err != nil {
+		if _, err = RemoveAnnotationsFromPageDict(
+			ctx, nil, []string{"pdfcpu"}, nil, d, objNr, pageNr, false,
+		); err != nil {
 			return false, err
 		}
 	}

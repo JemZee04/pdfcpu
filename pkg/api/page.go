@@ -21,15 +21,18 @@ import (
 	"os"
 	"sort"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
 // InsertPages inserts a blank page before or after every page selected of rs and writes the result to w.
-func InsertPages(rs io.ReadSeeker, w io.Writer, selectedPages []string, before bool, pageConf *pdfcpu.PageConfiguration, conf *model.Configuration) error {
+func InsertPages(
+	rs io.ReadSeeker, w io.Writer, selectedPages []string, before bool, pageConf *pdfcpu.PageConfiguration,
+	conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: InsertPages: missing rs")
 	}
@@ -65,7 +68,10 @@ func InsertPages(rs io.ReadSeeker, w io.Writer, selectedPages []string, before b
 }
 
 // InsertPagesFile inserts a blank page before or after every inFile page selected and writes the result to w.
-func InsertPagesFile(inFile, outFile string, selectedPages []string, before bool, pageConf *pdfcpu.PageConfiguration, conf *model.Configuration) (err error) {
+func InsertPagesFile(
+	inFile, outFile string, selectedPages []string, before bool, pageConf *pdfcpu.PageConfiguration,
+	conf *model.Configuration,
+) (err error) {
 	var f1, f2 *os.File
 
 	if f1, err = os.Open(inFile); err != nil {

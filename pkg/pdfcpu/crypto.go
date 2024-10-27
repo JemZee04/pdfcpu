@@ -35,9 +35,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 
 	"golang.org/x/text/secure/precis"
@@ -757,7 +757,9 @@ func perms(p int) (list []string) {
 	list = append(list, fmt.Sprintf("permission bits: %012b (x%03X)", uint32(p)&0x0F3C, uint32(p)&0x0F3C))
 	list = append(list, fmt.Sprintf("Bit  3: %t (print(rev2), print quality(rev>=3))", p&0x0004 > 0))
 	list = append(list, fmt.Sprintf("Bit  4: %t (modify other than controlled by bits 6,9,11)", p&0x0008 > 0))
-	list = append(list, fmt.Sprintf("Bit  5: %t (extract(rev2), extract other than controlled by bit 10(rev>=3))", p&0x0010 > 0))
+	list = append(
+		list, fmt.Sprintf("Bit  5: %t (extract(rev2), extract other than controlled by bit 10(rev>=3))", p&0x0010 > 0),
+	)
 	list = append(list, fmt.Sprintf("Bit  6: %t (add or modify annotations)", p&0x0020 > 0))
 	list = append(list, fmt.Sprintf("Bit  9: %t (fill in form fields(rev>=3)", p&0x0100 > 0))
 	list = append(list, fmt.Sprintf("Bit 10: %t (extract(rev>=3))", p&0x0200 > 0))
@@ -1192,7 +1194,8 @@ func supportedEncryption(ctx *model.Context, d types.Dict) (*model.Enc, error) {
 			Perms: perms,
 			R:     r,
 			V:     *v,
-			Emd:   encMeta},
+			Emd:   encMeta,
+		},
 		nil
 }
 
@@ -1260,7 +1263,9 @@ func applyRC4CipherBytes(b []byte, objNr, genNr int, key []byte, needAES bool) (
 	return b, nil
 }
 
-func encrypt(m map[string]types.Object, k string, v types.Object, objNr, genNr int, key []byte, needAES bool, r int) error {
+func encrypt(
+	m map[string]types.Object, k string, v types.Object, objNr, genNr int, key []byte, needAES bool, r int,
+) error {
 	s, err := encryptDeepObject(v, objNr, genNr, key, needAES, r)
 	if err != nil {
 		return err
@@ -1297,7 +1302,9 @@ func encryptDict(d types.Dict, objNr, genNr int, key []byte, needAES bool, r int
 	return nil
 }
 
-func encryptStringLiteral(sl types.StringLiteral, objNr, genNr int, key []byte, needAES bool, r int) (*types.StringLiteral, error) {
+func encryptStringLiteral(
+	sl types.StringLiteral, objNr, genNr int, key []byte, needAES bool, r int,
+) (*types.StringLiteral, error) {
 	bb, err := types.Unescape(sl.Value())
 	if err != nil {
 		return nil, err
@@ -1318,7 +1325,9 @@ func encryptStringLiteral(sl types.StringLiteral, objNr, genNr int, key []byte, 
 	return &sl, nil
 }
 
-func decryptStringLiteral(sl types.StringLiteral, objNr, genNr int, key []byte, needAES bool, r int) (*types.StringLiteral, error) {
+func decryptStringLiteral(
+	sl types.StringLiteral, objNr, genNr int, key []byte, needAES bool, r int,
+) (*types.StringLiteral, error) {
 	bb, err := types.Unescape(sl.Value())
 	if err != nil {
 		return nil, err
@@ -1339,7 +1348,9 @@ func decryptStringLiteral(sl types.StringLiteral, objNr, genNr int, key []byte, 
 	return &sl, nil
 }
 
-func encryptHexLiteral(hl types.HexLiteral, objNr, genNr int, key []byte, needAES bool, r int) (*types.HexLiteral, error) {
+func encryptHexLiteral(hl types.HexLiteral, objNr, genNr int, key []byte, needAES bool, r int) (
+	*types.HexLiteral, error,
+) {
 	bb, err := hl.Bytes()
 	if err != nil {
 		return nil, err
@@ -1355,7 +1366,9 @@ func encryptHexLiteral(hl types.HexLiteral, objNr, genNr int, key []byte, needAE
 	return &hl, nil
 }
 
-func decryptHexLiteral(hl types.HexLiteral, objNr, genNr int, key []byte, needAES bool, r int) (*types.HexLiteral, error) {
+func decryptHexLiteral(hl types.HexLiteral, objNr, genNr int, key []byte, needAES bool, r int) (
+	*types.HexLiteral, error,
+) {
 	bb, err := hl.Bytes()
 	if err != nil {
 		return nil, err

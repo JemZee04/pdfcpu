@@ -18,8 +18,8 @@ limitations under the License.
 package cli
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/api"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
 )
 
 // Validate inFile against ISO-32000-1:2008.
@@ -170,7 +170,9 @@ func ListAttachments(cmd *Command) ([]string, error) {
 
 // AddAttachments embeds inFiles into a PDF context read from inFile and writes the result to outFile.
 func AddAttachments(cmd *Command) ([]string, error) {
-	return nil, api.AddAttachmentsFile(*cmd.InFile, *cmd.OutFile, cmd.InFiles, cmd.Mode == model.ADDATTACHMENTSPORTFOLIO, cmd.Conf)
+	return nil, api.AddAttachmentsFile(
+		*cmd.InFile, *cmd.OutFile, cmd.InFiles, cmd.Mode == model.ADDATTACHMENTSPORTFOLIO, cmd.Conf,
+	)
 }
 
 // RemoveAttachments deletes inFiles from a PDF context read from inFile and writes the result to outFile.
@@ -267,7 +269,9 @@ func ListAnnotations(cmd *Command) ([]string, error) {
 // RemoveAnnotations deletes annotations from inFile's page tree and writes the result to outFile.
 func RemoveAnnotations(cmd *Command) ([]string, error) {
 	incr := false // No incremental writing on cli.
-	return nil, api.RemoveAnnotationsFile(*cmd.InFile, *cmd.OutFile, cmd.PageSelection, cmd.StringVals, cmd.IntVals, cmd.Conf, incr)
+	return nil, api.RemoveAnnotationsFile(
+		*cmd.InFile, *cmd.OutFile, cmd.PageSelection, cmd.StringVals, cmd.IntVals, cmd.Conf, incr,
+	)
 }
 
 // ListImages returns inFiles embedded images.

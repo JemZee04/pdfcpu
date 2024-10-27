@@ -19,8 +19,8 @@ package validate
 import (
 	"net/url"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -127,7 +127,9 @@ func validateEmbeddedFileStreamDict(xRefTable *model.XRefTable, sd *types.Stream
 	dictName := "embeddedFileStreamDict"
 
 	// Type, optional, name
-	_, err := validateNameEntry(xRefTable, sd.Dict, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "EmbeddedFile" })
+	_, err := validateNameEntry(
+		xRefTable, sd.Dict, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "EmbeddedFile" },
+	)
 	if err != nil {
 		return err
 	}
@@ -243,7 +245,9 @@ func validateFileSpecDictEntriesEFAndRF(xRefTable *model.XRefTable, efDict, rfDi
 	for k, val := range rfDict {
 
 		if _, ok := efDict.Find(k); !ok {
-			return errors.Errorf("pdfcpu: validateFileSpecEntriesEFAndRF: rfDict entry=%s missing corresponding efDict entry\n", k)
+			return errors.Errorf(
+				"pdfcpu: validateFileSpecEntriesEFAndRF: rfDict entry=%s missing corresponding efDict entry\n", k,
+			)
 		}
 
 		// value must be related files array.
@@ -343,7 +347,9 @@ func validateFileSpecDict(xRefTable *model.XRefTable, d types.Dict) error {
 		validate = validateURLString
 	}
 
-	_, err = validateStringEntry(xRefTable, d, dictName, "F", requiredF(dosFound, macFound, unixFound), model.V10, validate)
+	_, err = validateStringEntry(
+		xRefTable, d, dictName, "F", requiredF(dosFound, macFound, unixFound), model.V10, validate,
+	)
 	if err != nil {
 		return err
 	}
@@ -359,7 +365,9 @@ func validateFileSpecDict(xRefTable *model.XRefTable, d types.Dict) error {
 	}
 
 	// ID, optional, array of strings
-	_, err = validateStringArrayEntry(xRefTable, d, dictName, "ID", OPTIONAL, model.V11, func(a types.Array) bool { return len(a) == 2 })
+	_, err = validateStringArrayEntry(
+		xRefTable, d, dictName, "ID", OPTIONAL, model.V11, func(a types.Array) bool { return len(a) == 2 },
+	)
 	if err != nil {
 		return err
 	}
@@ -444,7 +452,9 @@ func validateURLSpecification(xRefTable *model.XRefTable, o types.Object) (types
 	dictName := "urlSpec"
 
 	// FS, required, name
-	_, err = validateNameEntry(xRefTable, d, dictName, "FS", REQUIRED, model.V10, func(s string) bool { return s == "URL" })
+	_, err = validateNameEntry(
+		xRefTable, d, dictName, "FS", REQUIRED, model.V10, func(s string) bool { return s == "URL" },
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -455,7 +465,10 @@ func validateURLSpecification(xRefTable *model.XRefTable, o types.Object) (types
 	return o, err
 }
 
-func validateFileSpecEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) (types.Object, error) {
+func validateFileSpecEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) (types.Object, error) {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -470,7 +483,10 @@ func validateFileSpecEntry(xRefTable *model.XRefTable, d types.Dict, dictName st
 	return validateFileSpecification(xRefTable, o)
 }
 
-func validateURLSpecEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) (types.Object, error) {
+func validateURLSpecEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) (types.Object, error) {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {

@@ -17,12 +17,14 @@ limitations under the License.
 package validate
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
-func validatePageBoundaries(xRefTable *model.XRefTable, d types.Dict, dictName string, vp *model.ViewerPreferences) error {
+func validatePageBoundaries(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, vp *model.ViewerPreferences,
+) error {
 	validate := func(s string) bool {
 		return types.MemberOf(s, []string{"MediaBox", "CropBox", "BleedBox", "TrimBox", "ArtBox"})
 	}
@@ -62,7 +64,9 @@ func validatePageBoundaries(xRefTable *model.XRefTable, d types.Dict, dictName s
 	return nil
 }
 
-func validatePrintPageRange(xRefTable *model.XRefTable, d types.Dict, dictName string, vp *model.ViewerPreferences) error {
+func validatePrintPageRange(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, vp *model.ViewerPreferences,
+) error {
 	validate := func(arr types.Array) bool {
 		if len(arr) > 0 && len(arr)%2 > 0 {
 			return false
@@ -87,7 +91,9 @@ func validatePrintPageRange(xRefTable *model.XRefTable, d types.Dict, dictName s
 	return nil
 }
 
-func validateEnforcePrintScaling(xRefTable *model.XRefTable, d types.Dict, dictName string, vp *model.ViewerPreferences) error {
+func validateEnforcePrintScaling(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, vp *model.ViewerPreferences,
+) error {
 	validate := func(arr types.Array) bool {
 		if len(arr) != 1 {
 			return false
@@ -110,7 +116,9 @@ func validateEnforcePrintScaling(xRefTable *model.XRefTable, d types.Dict, dictN
 	return nil
 }
 
-func validatePrinterPreferences(xRefTable *model.XRefTable, d types.Dict, dictName string, vp *model.ViewerPreferences) error {
+func validatePrinterPreferences(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, vp *model.ViewerPreferences,
+) error {
 	sinceVersion := model.V16
 	if xRefTable.ValidationMode == model.ValidationRelaxed {
 		sinceVersion = model.V13
@@ -137,12 +145,16 @@ func validatePrinterPreferences(xRefTable *model.XRefTable, d types.Dict, dictNa
 		vp.Duplex = model.PaperHandlingFor(n.String())
 	}
 
-	vp.PickTrayByPDFSize, err = validateFlexBooleanEntry(xRefTable, d, dictName, "PickTrayByPDFSize", OPTIONAL, model.V17)
+	vp.PickTrayByPDFSize, err = validateFlexBooleanEntry(
+		xRefTable, d, dictName, "PickTrayByPDFSize", OPTIONAL, model.V17,
+	)
 	if err != nil {
 		return err
 	}
 
-	vp.NumCopies, err = validateIntegerEntry(xRefTable, d, dictName, "NumCopies", OPTIONAL, model.V17, func(i int) bool { return i >= 1 })
+	vp.NumCopies, err = validateIntegerEntry(
+		xRefTable, d, dictName, "NumCopies", OPTIONAL, model.V17, func(i int) bool { return i >= 1 },
+	)
 	if err != nil {
 		return err
 	}
@@ -154,7 +166,9 @@ func validatePrinterPreferences(xRefTable *model.XRefTable, d types.Dict, dictNa
 	return validateEnforcePrintScaling(xRefTable, d, dictName, vp)
 }
 
-func validateViewerPreferencesFlags(xRefTable *model.XRefTable, d types.Dict, dictName string, vp *model.ViewerPreferences) error {
+func validateViewerPreferencesFlags(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, vp *model.ViewerPreferences,
+) error {
 	var err error
 	vp.HideToolbar, err = validateFlexBooleanEntry(xRefTable, d, dictName, "HideToolbar", OPTIONAL, model.V10)
 	if err != nil {
@@ -185,7 +199,9 @@ func validateViewerPreferencesFlags(xRefTable *model.XRefTable, d types.Dict, di
 	if xRefTable.ValidationMode == model.ValidationRelaxed {
 		sinceVersion = model.V10
 	}
-	vp.DisplayDocTitle, err = validateFlexBooleanEntry(xRefTable, d, dictName, "DisplayDocTitle", OPTIONAL, sinceVersion)
+	vp.DisplayDocTitle, err = validateFlexBooleanEntry(
+		xRefTable, d, dictName, "DisplayDocTitle", OPTIONAL, sinceVersion,
+	)
 	if err != nil {
 		return err
 	}
@@ -193,7 +209,9 @@ func validateViewerPreferencesFlags(xRefTable *model.XRefTable, d types.Dict, di
 	return nil
 }
 
-func validateViewerPreferences(xRefTable *model.XRefTable, rootDict types.Dict, required bool, sinceVersion model.Version) error {
+func validateViewerPreferences(
+	xRefTable *model.XRefTable, rootDict types.Dict, required bool, sinceVersion model.Version,
+) error {
 	// => 12.2 Viewer Preferences
 
 	dictName := "rootDict"

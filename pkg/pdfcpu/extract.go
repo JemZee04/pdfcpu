@@ -22,10 +22,10 @@ import (
 	"io"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/filter"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -246,7 +246,8 @@ func imageStub(
 	resourceId, filters, lastFilter string,
 	decodeParms types.Dict,
 	thumb, imgMask bool,
-	objNr int) (*model.Image, error) {
+	objNr int,
+) (*model.Image, error) {
 
 	w, err := imageWidth(ctx, sd, objNr)
 	if err != nil {
@@ -395,7 +396,8 @@ func img(
 	sd *types.StreamDict,
 	thumb, imgMask bool,
 	resourceID, filters, lastFilter string,
-	objNr int) (*model.Image, error) {
+	objNr int,
+) (*model.Image, error) {
 
 	if sd.FilterPipeline == nil {
 		sd.Content = sd.Raw
@@ -422,7 +424,9 @@ func img(
 }
 
 // ExtractImage extracts an image from sd.
-func ExtractImage(ctx *model.Context, sd *types.StreamDict, thumb bool, resourceID string, objNr int, stub bool) (*model.Image, error) {
+func ExtractImage(
+	ctx *model.Context, sd *types.StreamDict, thumb bool, resourceID string, objNr int, stub bool,
+) (*model.Image, error) {
 	if sd == nil {
 		return nil, nil
 	}
@@ -521,7 +525,9 @@ func ExtractFont(ctx *model.Context, fontObject model.FontObject, objNr int) (*F
 
 	if d == nil {
 		if log.DebugEnabled() {
-			log.Debug.Printf("ExtractFont: ignoring obj#%d - no fontDescriptor available for font: %s\n", objNr, fontObject.FontName)
+			log.Debug.Printf(
+				"ExtractFont: ignoring obj#%d - no fontDescriptor available for font: %s\n", objNr, fontObject.FontName,
+			)
 		}
 		return nil, nil
 	}
@@ -529,7 +535,9 @@ func ExtractFont(ctx *model.Context, fontObject model.FontObject, objNr int) (*F
 	ir := fontDescriptorFontFileIndirectObjectRef(d)
 	if ir == nil {
 		if log.DebugEnabled() {
-			log.Debug.Printf("ExtractFont: ignoring obj#%d - no font file available for font: %s\n", objNr, fontObject.FontName)
+			log.Debug.Printf(
+				"ExtractFont: ignoring obj#%d - no font file available for font: %s\n", objNr, fontObject.FontName,
+			)
 		}
 		return nil, nil
 	}
@@ -564,7 +572,10 @@ func ExtractFont(ctx *model.Context, fontObject model.FontObject, objNr int) (*F
 
 	default:
 		if log.InfoEnabled() {
-			log.Info.Printf("extractFontData: ignoring obj#%d - unsupported fonttype %s -  font: %s\n", objNr, fontType, fontObject.FontName)
+			log.Info.Printf(
+				"extractFontData: ignoring obj#%d - unsupported fonttype %s -  font: %s\n", objNr, fontType,
+				fontObject.FontName,
+			)
 		}
 		return nil, nil
 	}

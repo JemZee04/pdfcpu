@@ -20,8 +20,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -224,7 +224,10 @@ func validateDARelaxed(s string) bool {
 	return true
 }
 
-func validateFormFieldDA(xRefTable *model.XRefTable, d types.Dict, dictName string, terminalNode bool, outFieldType *types.Name, requiresDA bool) (bool, error) {
+func validateFormFieldDA(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, terminalNode bool, outFieldType *types.Name,
+	requiresDA bool,
+) (bool, error) {
 	validate := validateDA
 	if xRefTable.ValidationMode == model.ValidationRelaxed {
 		validate = validateDARelaxed
@@ -250,13 +253,17 @@ func validateFormFieldDA(xRefTable *model.XRefTable, d types.Dict, dictName stri
 	return false, nil
 }
 
-func validateFormFieldDictEntries(xRefTable *model.XRefTable, d types.Dict, terminalNode bool, inFieldType *types.Name, requiresDA bool) (outFieldType *types.Name, hasDA bool, err error) {
+func validateFormFieldDictEntries(
+	xRefTable *model.XRefTable, d types.Dict, terminalNode bool, inFieldType *types.Name, requiresDA bool,
+) (outFieldType *types.Name, hasDA bool, err error) {
 
 	dictName := "formFieldDict"
 
 	// FT: name, Btn,Tx,Ch,Sig
 	validate := func(s string) bool { return types.MemberOf(s, []string{"Btn", "Tx", "Ch", "Sig"}) }
-	fieldType, err := validateNameEntry(xRefTable, d, dictName, "FT", terminalNode && inFieldType == nil, model.V10, validate)
+	fieldType, err := validateNameEntry(
+		xRefTable, d, dictName, "FT", terminalNode && inFieldType == nil, model.V10, validate,
+	)
 	if err != nil {
 		return nil, false, err
 	}
@@ -323,7 +330,9 @@ func validateFormFieldDictEntries(xRefTable *model.XRefTable, d types.Dict, term
 
 func validateFormFieldParts(xRefTable *model.XRefTable, d types.Dict, inFieldType *types.Name, requiresDA bool) error {
 	// dict represents a terminal field and must have Subtype "Widget"
-	if _, err := validateNameEntry(xRefTable, d, "formFieldDict", "Subtype", REQUIRED, model.V10, func(s string) bool { return s == "Widget" }); err != nil {
+	if _, err := validateNameEntry(
+		xRefTable, d, "formFieldDict", "Subtype", REQUIRED, model.V10, func(s string) bool { return s == "Widget" },
+	); err != nil {
 		d["Subtype"] = types.Name("Widget")
 	}
 
@@ -337,7 +346,9 @@ func validateFormFieldParts(xRefTable *model.XRefTable, d types.Dict, inFieldTyp
 	return err
 }
 
-func validateFormFieldKids(xRefTable *model.XRefTable, d types.Dict, o types.Object, inFieldType *types.Name, requiresDA bool) error {
+func validateFormFieldKids(
+	xRefTable *model.XRefTable, d types.Dict, o types.Object, inFieldType *types.Name, requiresDA bool,
+) error {
 	var err error
 	// dict represents a non terminal field.
 	if d.Subtype() != nil && *d.Subtype() == "Widget" {
@@ -347,7 +358,9 @@ func validateFormFieldKids(xRefTable *model.XRefTable, d types.Dict, o types.Obj
 	// Validate field entries.
 	var xInFieldType *types.Name
 	var hasDA bool
-	if xInFieldType, hasDA, err = validateFormFieldDictEntries(xRefTable, d, false, inFieldType, requiresDA); err != nil {
+	if xInFieldType, hasDA, err = validateFormFieldDictEntries(
+		xRefTable, d, false, inFieldType, requiresDA,
+	); err != nil {
 		return err
 	}
 	if requiresDA && hasDA {
@@ -380,7 +393,9 @@ func validateFormFieldKids(xRefTable *model.XRefTable, d types.Dict, o types.Obj
 	return nil
 }
 
-func validateFormFieldDict(xRefTable *model.XRefTable, ir types.IndirectRef, inFieldType *types.Name, requiresDA bool) error {
+func validateFormFieldDict(
+	xRefTable *model.XRefTable, ir types.IndirectRef, inFieldType *types.Name, requiresDA bool,
+) error {
 	d, err := xRefTable.DereferenceDict(ir)
 	if err != nil || d == nil {
 		return err
@@ -533,7 +548,9 @@ func validateFormEntryDR(xRefTable *model.XRefTable, d types.Dict) error {
 	return err
 }
 
-func validateFormEntries(xRefTable *model.XRefTable, d types.Dict, dictName string, requiresDA bool, sinceVersion model.Version) error {
+func validateFormEntries(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, requiresDA bool, sinceVersion model.Version,
+) error {
 	// NeedAppearances: optional, boolean
 	_, err := validateBooleanEntry(xRefTable, d, dictName, "NeedAppearances", OPTIONAL, model.V10, nil)
 	if err != nil {

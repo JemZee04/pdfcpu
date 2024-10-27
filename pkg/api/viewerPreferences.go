@@ -23,8 +23,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
 	"github.com/pkg/errors"
 )
 
@@ -134,7 +134,9 @@ func ListViewerPreferencesFileJSON(inFile string, all bool, conf *model.Configur
 		Header     pdfcpu.Header            `json:"header"`
 		ViewerPref *model.ViewerPreferences `json:"viewerPreferences"`
 	}{
-		Header:     pdfcpu.Header{Version: "pdfcpu " + model.VersionStr, Creation: time.Now().Format("2006-01-02 15:04:05 MST")},
+		Header: pdfcpu.Header{
+			Version: "pdfcpu " + model.VersionStr, Creation: time.Now().Format("2006-01-02 15:04:05 MST"),
+		},
 		ViewerPref: vp,
 	}
 
@@ -201,7 +203,9 @@ func SetViewerPreferences(rs io.ReadSeeker, w io.Writer, vp model.ViewerPreferen
 }
 
 // SetViewerPreferencesFromJSONBytes sets rs's viewer preferences corresponding to jsonBytes and writes the result to w.
-func SetViewerPreferencesFromJSONBytes(rs io.ReadSeeker, w io.Writer, jsonBytes []byte, conf *model.Configuration) error {
+func SetViewerPreferencesFromJSONBytes(
+	rs io.ReadSeeker, w io.Writer, jsonBytes []byte, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: SetViewerPreferencesFromJSONBytes: missing rs")
 	}
@@ -246,7 +250,9 @@ func SetViewerPreferencesFromJSONReader(rs io.ReadSeeker, w io.Writer, rd io.Rea
 }
 
 // SetViewerPreferencesFile sets inFile's viewer preferences and writes the result to outFile.
-func SetViewerPreferencesFile(inFile, outFile string, vp model.ViewerPreferences, conf *model.Configuration) (err error) {
+func SetViewerPreferencesFile(
+	inFile, outFile string, vp model.ViewerPreferences, conf *model.Configuration,
+) (err error) {
 	var f1, f2 *os.File
 
 	if f1, err = os.Open(inFile); err != nil {
@@ -284,7 +290,9 @@ func SetViewerPreferencesFile(inFile, outFile string, vp model.ViewerPreferences
 }
 
 // SetViewerPreferencesFileFromJSONBytes sets inFile's viewer preferences corresponding to jsonBytes and writes the result to outFile.
-func SetViewerPreferencesFileFromJSONBytes(inFile, outFile string, jsonBytes []byte, conf *model.Configuration) (err error) {
+func SetViewerPreferencesFileFromJSONBytes(
+	inFile, outFile string, jsonBytes []byte, conf *model.Configuration,
+) (err error) {
 	var f1, f2 *os.File
 
 	if f1, err = os.Open(inFile); err != nil {

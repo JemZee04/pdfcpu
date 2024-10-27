@@ -23,9 +23,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/font"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 const (
@@ -278,7 +278,8 @@ func ensureConfigFileAt(path string, override bool) error {
 	if err != nil || override {
 		f.Close()
 
-		s := fmt.Sprintf(`
+		s := fmt.Sprintf(
+			`
 #############################
 #   Default configuration   #
 #############################
@@ -291,7 +292,8 @@ version: %s
 
 `,
 			time.Now().Format("2006-01-02 15:04"),
-			VersionStr)
+			VersionStr,
+		)
 
 		bb := append([]byte(s), configFileBytes...)
 		if err := os.WriteFile(path, bb, os.ModePerm); err != nil {
@@ -428,32 +430,33 @@ func (c Configuration) String() string {
 	if len(c.Path) > 0 {
 		path = c.Path
 	}
-	return fmt.Sprintf("pdfcpu configuration:\n"+
-		"Path:                %s\n"+
-		"CreationDate:		  %s\n"+
-		"Version:             %s\n"+
-		"CheckFileNameExt:    %t\n"+
-		"Reader15:            %t\n"+
-		"DecodeAllStreams:    %t\n"+
-		"ValidationMode:      %s\n"+
-		"PostProcessValidate: %t\n"+
-		"ValidateLinks:       %t\n"+
-		"Eol:                 %s\n"+
-		"WriteObjectStream:   %t\n"+
-		"WriteXrefStream:     %t\n"+
-		"EncryptUsingAES:     %t\n"+
-		"EncryptKeyLength:    %d\n"+
-		"Permissions:         %d\n"+
-		"Unit :               %s\n"+
-		"TimestampFormat:	  %s\n"+
-		"DateFormat:		  %s\n"+
-		"Optimize %t\n"+
-		"OptimizeResourceDicts %t\n"+
-		"OptimizeDuplicateContentStreams %t\n"+
-		"CreateBookmarks %t\n"+
-		"NeedAppearances %t\n"+
-		"Offline %t\n"+
-		"Timeout %d\n",
+	return fmt.Sprintf(
+		"pdfcpu configuration:\n"+
+			"Path:                %s\n"+
+			"CreationDate:		  %s\n"+
+			"Version:             %s\n"+
+			"CheckFileNameExt:    %t\n"+
+			"Reader15:            %t\n"+
+			"DecodeAllStreams:    %t\n"+
+			"ValidationMode:      %s\n"+
+			"PostProcessValidate: %t\n"+
+			"ValidateLinks:       %t\n"+
+			"Eol:                 %s\n"+
+			"WriteObjectStream:   %t\n"+
+			"WriteXrefStream:     %t\n"+
+			"EncryptUsingAES:     %t\n"+
+			"EncryptKeyLength:    %d\n"+
+			"Permissions:         %d\n"+
+			"Unit :               %s\n"+
+			"TimestampFormat:	  %s\n"+
+			"DateFormat:		  %s\n"+
+			"Optimize %t\n"+
+			"OptimizeResourceDicts %t\n"+
+			"OptimizeDuplicateContentStreams %t\n"+
+			"CreateBookmarks %t\n"+
+			"NeedAppearances %t\n"+
+			"Offline %t\n"+
+			"Timeout %d\n",
 		path,
 		c.CreationDate,
 		c.Version,

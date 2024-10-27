@@ -22,12 +22,12 @@ import (
 	"math"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/format"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/format"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/matrix"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -692,7 +692,9 @@ func (t *Table) prepareColWidths(bWidth float64) []float64 {
 	return colWidths
 }
 
-func (t *Table) renderGrid(p *model.Page, colWidths []float64, bWidth float64, bCol *color.SimpleColor, r *types.Rectangle) {
+func (t *Table) renderGrid(
+	p *model.Page, colWidths []float64, bWidth float64, bCol *color.SimpleColor, r *types.Rectangle,
+) {
 	// Draw vertical lines.
 	x := r.LL.X + bWidth/2
 	for i := 1; i < t.Cols; i++ {
@@ -743,7 +745,10 @@ func (t *Table) calcTextDescriptorPadding(td *model.TextDescriptor, p *Padding) 
 	return nil
 }
 
-func (t *Table) renderValues(p *model.Page, pageNr int, fonts model.FontMap, colWidths []float64, td model.TextDescriptor, ll func(row, col int) (float64, float64)) error {
+func (t *Table) renderValues(
+	p *model.Page, pageNr int, fonts model.FontMap, colWidths []float64, td model.TextDescriptor,
+	ll func(row, col int) (float64, float64),
+) error {
 	pdf := t.pdf
 
 	f := t.Font
@@ -809,7 +814,10 @@ func (t *Table) renderValues(p *model.Page, pageNr int, fonts model.FontMap, col
 	return nil
 }
 
-func (t *Table) renderHeader(p *model.Page, pageNr int, fonts model.FontMap, colWidths []float64, td model.TextDescriptor, ll func(row, col int) (float64, float64)) error {
+func (t *Table) renderHeader(
+	p *model.Page, pageNr int, fonts model.FontMap, colWidths []float64, td model.TextDescriptor,
+	ll func(row, col int) (float64, float64),
+) error {
 	pdf := t.pdf
 	th := t.Header
 

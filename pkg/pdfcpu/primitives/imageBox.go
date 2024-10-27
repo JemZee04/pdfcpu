@@ -27,12 +27,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/matrix"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -220,7 +220,9 @@ func (ib *ImageBox) mergeIn(ib0 *ImageBox) {
 
 }
 
-func (ib *ImageBox) cachedImg(img model.ImageResource, pageImages model.ImageMap, pageNr int) (int, int, string, error) {
+func (ib *ImageBox) cachedImg(img model.ImageResource, pageImages model.ImageMap, pageNr int) (
+	int, int, string, error,
+) {
 	imgResIDs := ib.pdf.XObjectResIDs[pageNr]
 	img.Res.ID = "Im" + strconv.Itoa(len(pageImages))
 	if ib.pdf.Update() {
@@ -538,7 +540,8 @@ func (ib *ImageBox) calcDim(rSrc, r *types.Rectangle, bWidth, pTop, pBot, pLeft,
 func (ib *ImageBox) calcTransform(
 	mLeft, mBot, mRight, mTop,
 	pLeft, pBot, pRight, pTop,
-	bWidth float64, rSrc *types.Rectangle) (matrix.Matrix, float64, float64, float64, float64, *types.Rectangle) {
+	bWidth float64, rSrc *types.Rectangle,
+) (matrix.Matrix, float64, float64, float64, float64, *types.Rectangle) {
 
 	cBox := ib.dest
 	if ib.content != nil {
@@ -662,7 +665,9 @@ func (ib *ImageBox) render(p *model.Page, pageNr int, images model.ImageMap) err
 
 	if !missingImg {
 		// Render image
-		rDest := types.RectForWidthAndHeight(x+bWidth+pLeft, y+bWidth+pBot, ib.Width-2*bWidth-pLeft-pRight, ib.Height-2*bWidth-pTop-pBot)
+		rDest := types.RectForWidthAndHeight(
+			x+bWidth+pLeft, y+bWidth+pBot, ib.Width-2*bWidth-pLeft-pRight, ib.Height-2*bWidth-pTop-pBot,
+		)
 		sx, sy, dx, dy, _ := types.BestFitRectIntoRect(rSrc, rDest, false, false)
 		dx += rDest.LL.X
 		dy += rDest.LL.Y
@@ -671,7 +676,10 @@ func (ib *ImageBox) render(p *model.Page, pageNr int, images model.ImageMap) err
 		dy += sy/2 - cos*(sy/2) - sin*sx/2
 
 		m = matrix.CalcTransformMatrix(sx, sy, sin, cos, dx, dy)
-		fmt.Fprintf(p.Buf, "q %.5f %.5f %.5f %.5f %.5f %.5f cm /%s Do Q ", m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1], id)
+		fmt.Fprintf(
+			p.Buf, "q %.5f %.5f %.5f %.5f %.5f %.5f cm /%s Do Q ", m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1],
+			id,
+		)
 	}
 
 	return nil

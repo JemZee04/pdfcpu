@@ -17,8 +17,8 @@ limitations under the License.
 package validate
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -38,7 +38,9 @@ func validateShadingDictCommonEntries(xRefTable *model.XRefTable, dict types.Dic
 
 	dictName := "shadingDictCommonEntries"
 
-	shadingType, err := validateIntegerEntry(xRefTable, dict, dictName, "ShadingType", REQUIRED, model.V10, func(i int) bool { return i >= 1 && i <= 7 })
+	shadingType, err := validateIntegerEntry(
+		xRefTable, dict, dictName, "ShadingType", REQUIRED, model.V10, func(i int) bool { return i >= 1 && i <= 7 },
+	)
 	if err != nil {
 		return 0, err
 	}
@@ -67,12 +69,16 @@ func validateFunctionBasedShadingDict(xRefTable *model.XRefTable, dict types.Dic
 
 	dictName := "functionBasedShadingDict"
 
-	_, err := validateNumberArrayEntry(xRefTable, dict, dictName, "Domain", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 4 })
+	_, err := validateNumberArrayEntry(
+		xRefTable, dict, dictName, "Domain", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 4 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, dict, dictName, "Matrix", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 6 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, dict, dictName, "Matrix", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 6 },
+	)
 	if err != nil {
 		return err
 	}
@@ -84,12 +90,16 @@ func validateAxialShadingDict(xRefTable *model.XRefTable, dict types.Dict) error
 
 	dictName := "axialShadingDict"
 
-	_, err := validateNumberArrayEntry(xRefTable, dict, dictName, "Coords", REQUIRED, model.V10, func(a types.Array) bool { return len(a) == 4 })
+	_, err := validateNumberArrayEntry(
+		xRefTable, dict, dictName, "Coords", REQUIRED, model.V10, func(a types.Array) bool { return len(a) == 4 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, dict, dictName, "Domain", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, dict, dictName, "Domain", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 	if err != nil {
 		return err
 	}
@@ -99,7 +109,9 @@ func validateAxialShadingDict(xRefTable *model.XRefTable, dict types.Dict) error
 		return err
 	}
 
-	_, err = validateBooleanArrayEntry(xRefTable, dict, dictName, "Extend", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	_, err = validateBooleanArrayEntry(
+		xRefTable, dict, dictName, "Extend", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 
 	return err
 }
@@ -108,12 +120,16 @@ func validateRadialShadingDict(xRefTable *model.XRefTable, dict types.Dict) erro
 
 	dictName := "radialShadingDict"
 
-	_, err := validateNumberArrayEntry(xRefTable, dict, dictName, "Coords", REQUIRED, model.V10, func(a types.Array) bool { return len(a) == 6 })
+	_, err := validateNumberArrayEntry(
+		xRefTable, dict, dictName, "Coords", REQUIRED, model.V10, func(a types.Array) bool { return len(a) == 6 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, dict, dictName, "Domain", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, dict, dictName, "Domain", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 	if err != nil {
 		return err
 	}
@@ -123,7 +139,9 @@ func validateRadialShadingDict(xRefTable *model.XRefTable, dict types.Dict) erro
 		return err
 	}
 
-	_, err = validateBooleanArrayEntry(xRefTable, dict, dictName, "Extend", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	_, err = validateBooleanArrayEntry(
+		xRefTable, dict, dictName, "Extend", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 
 	return err
 }
@@ -158,12 +176,16 @@ func validateFreeFormGouroudShadedTriangleMeshesDict(xRefTable *model.XRefTable,
 
 	dictName := "freeFormGouraudShadedTriangleMeshesDict"
 
-	_, err := validateIntegerEntry(xRefTable, dict, dictName, "BitsPerCoordinate", REQUIRED, model.V10, validateBitsPerCoordinate)
+	_, err := validateIntegerEntry(
+		xRefTable, dict, dictName, "BitsPerCoordinate", REQUIRED, model.V10, validateBitsPerCoordinate,
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateIntegerEntry(xRefTable, dict, dictName, "BitsPerComponent", REQUIRED, model.V10, validateBitsPerComponent)
+	_, err = validateIntegerEntry(
+		xRefTable, dict, dictName, "BitsPerComponent", REQUIRED, model.V10, validateBitsPerComponent,
+	)
 	if err != nil {
 		return err
 	}
@@ -185,17 +207,23 @@ func validateLatticeFormGouraudShadedTriangleMeshesDict(xRefTable *model.XRefTab
 
 	dictName := "latticeFormGouraudShadedTriangleMeshesDict"
 
-	_, err := validateIntegerEntry(xRefTable, dict, dictName, "BitsPerCoordinate", REQUIRED, model.V10, validateBitsPerCoordinate)
+	_, err := validateIntegerEntry(
+		xRefTable, dict, dictName, "BitsPerCoordinate", REQUIRED, model.V10, validateBitsPerCoordinate,
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateIntegerEntry(xRefTable, dict, dictName, "BitsPerComponent", REQUIRED, model.V10, validateBitsPerComponent)
+	_, err = validateIntegerEntry(
+		xRefTable, dict, dictName, "BitsPerComponent", REQUIRED, model.V10, validateBitsPerComponent,
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateIntegerEntry(xRefTable, dict, dictName, "VerticesPerRow", REQUIRED, model.V10, func(i int) bool { return i >= 2 })
+	_, err = validateIntegerEntry(
+		xRefTable, dict, dictName, "VerticesPerRow", REQUIRED, model.V10, func(i int) bool { return i >= 2 },
+	)
 	if err != nil {
 		return err
 	}
@@ -212,12 +240,16 @@ func validateCoonsPatchMeshesDict(xRefTable *model.XRefTable, dict types.Dict) e
 
 	dictName := "coonsPatchMeshesDict"
 
-	_, err := validateIntegerEntry(xRefTable, dict, dictName, "BitsPerCoordinate", REQUIRED, model.V10, validateBitsPerCoordinate)
+	_, err := validateIntegerEntry(
+		xRefTable, dict, dictName, "BitsPerCoordinate", REQUIRED, model.V10, validateBitsPerCoordinate,
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateIntegerEntry(xRefTable, dict, dictName, "BitsPerComponent", REQUIRED, model.V10, validateBitsPerComponent)
+	_, err = validateIntegerEntry(
+		xRefTable, dict, dictName, "BitsPerComponent", REQUIRED, model.V10, validateBitsPerComponent,
+	)
 	if err != nil {
 		return err
 	}
@@ -239,12 +271,16 @@ func validateTensorProductPatchMeshesDict(xRefTable *model.XRefTable, dict types
 
 	dictName := "tensorProductPatchMeshesDict"
 
-	_, err := validateIntegerEntry(xRefTable, dict, dictName, "BitsPerCoordinate", REQUIRED, model.V10, validateBitsPerCoordinate)
+	_, err := validateIntegerEntry(
+		xRefTable, dict, dictName, "BitsPerCoordinate", REQUIRED, model.V10, validateBitsPerCoordinate,
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateIntegerEntry(xRefTable, dict, dictName, "BitsPerComponent", REQUIRED, model.V10, validateBitsPerComponent)
+	_, err = validateIntegerEntry(
+		xRefTable, dict, dictName, "BitsPerComponent", REQUIRED, model.V10, validateBitsPerComponent,
+	)
 	if err != nil {
 		return err
 	}

@@ -17,12 +17,15 @@ limitations under the License.
 package validate
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
-func validateEntryV(xRefTable *model.XRefTable, d types.Dict, dictName string, required bool, sinceVersion model.Version, pBeadIndRef *types.IndirectRef, objNumber int) error {
+func validateEntryV(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, required bool, sinceVersion model.Version,
+	pBeadIndRef *types.IndirectRef, objNumber int,
+) error {
 
 	previousBeadIndRef, err := validateIndRefEntry(xRefTable, d, dictName, "V", required, sinceVersion)
 	if err != nil {
@@ -30,13 +33,17 @@ func validateEntryV(xRefTable *model.XRefTable, d types.Dict, dictName string, r
 	}
 
 	if *previousBeadIndRef != *pBeadIndRef {
-		return errors.Errorf("pdfcpu: validateEntryV: obj#%d invalid entry V, corrupt previous Bead indirect reference", objNumber)
+		return errors.Errorf(
+			"pdfcpu: validateEntryV: obj#%d invalid entry V, corrupt previous Bead indirect reference", objNumber,
+		)
 	}
 
 	return nil
 }
 
-func validateBeadDict(xRefTable *model.XRefTable, beadIndRef, threadIndRef, pBeadIndRef, lBeadIndRef *types.IndirectRef) error {
+func validateBeadDict(
+	xRefTable *model.XRefTable, beadIndRef, threadIndRef, pBeadIndRef, lBeadIndRef *types.IndirectRef,
+) error {
 
 	objNumber := beadIndRef.ObjectNumber.Value()
 
@@ -52,7 +59,9 @@ func validateBeadDict(xRefTable *model.XRefTable, beadIndRef, threadIndRef, pBea
 	}
 
 	// Validate optional entry Type, must be "Bead".
-	_, err = validateNameEntry(xRefTable, d, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Bead" })
+	_, err = validateNameEntry(
+		xRefTable, d, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Bead" },
+	)
 	if err != nil {
 		return err
 	}
@@ -124,7 +133,9 @@ func validateFirstBeadDict(xRefTable *model.XRefTable, beadIndRef, threadIndRef 
 		return errors.New("pdfcpu: validateFirstBeadDict: missing dict")
 	}
 
-	_, err = validateNameEntry(xRefTable, d, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Bead" })
+	_, err = validateNameEntry(
+		xRefTable, d, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Bead" },
+	)
 	if err != nil {
 		return err
 	}
@@ -185,7 +196,9 @@ func validateThreadDict(xRefTable *model.XRefTable, o types.Object, sinceVersion
 		return err
 	}
 
-	_, err = validateNameEntry(xRefTable, d, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Thread" })
+	_, err = validateNameEntry(
+		xRefTable, d, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Thread" },
+	)
 	if err != nil {
 		return err
 	}

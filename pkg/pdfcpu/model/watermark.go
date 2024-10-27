@@ -21,10 +21,10 @@ import (
 	"io"
 	"math"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/matrix"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 const (
@@ -196,18 +196,19 @@ func (wm Watermark) String() string {
 		vp = (*wm.Vp).String()
 	}
 
-	return fmt.Sprintf("Watermark: <%s> is %son top, typ:%s\n"+
-		"%s %d points\n"+
-		"PDFpage#: %d\n"+
-		"scaling: %.1f %s\n"+
-		"color: %s\n"+
-		"rotation: %.1f\n"+
-		"diagonal: %d\n"+
-		"opacity: %.1f\n"+
-		"renderMode: %d\n"+
-		"bbox:%s\n"+
-		"vp:%s\n"+
-		"pageRotation: %d\n",
+	return fmt.Sprintf(
+		"Watermark: <%s> is %son top, typ:%s\n"+
+			"%s %d points\n"+
+			"PDFpage#: %d\n"+
+			"scaling: %.1f %s\n"+
+			"color: %s\n"+
+			"rotation: %.1f\n"+
+			"diagonal: %d\n"+
+			"opacity: %.1f\n"+
+			"renderMode: %d\n"+
+			"bbox:%s\n"+
+			"vp:%s\n"+
+			"pageRotation: %d\n",
 		t, s, wm.Typ(),
 		wm.FontName, wm.FontSize,
 		wm.PdfPageNrSrc,

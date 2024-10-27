@@ -24,14 +24,16 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
-func prepareForCut(rs io.ReadSeeker, selectedPages []string, conf *model.Configuration) (*model.Context, types.IntSet, error) {
+func prepareForCut(rs io.ReadSeeker, selectedPages []string, conf *model.Configuration) (
+	*model.Context, types.IntSet, error,
+) {
 	ctx, err := ReadValidateAndOptimize(rs, conf)
 	if err != nil {
 		return nil, nil, err
@@ -46,7 +48,9 @@ func prepareForCut(rs io.ReadSeeker, selectedPages []string, conf *model.Configu
 }
 
 // Poster applies cut for selected pages of rs and generates corresponding poster tiles in outDir.
-func Poster(rs io.ReadSeeker, outDir, fileName string, selectedPages []string, cut *model.Cut, conf *model.Configuration) error {
+func Poster(
+	rs io.ReadSeeker, outDir, fileName string, selectedPages []string, cut *model.Cut, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: Poster: missing rs")
 	}
@@ -105,7 +109,9 @@ func Poster(rs io.ReadSeeker, outDir, fileName string, selectedPages []string, c
 }
 
 // PosterFile applies cut for selected pages of inFile and generates corresponding poster tiles in outDir.
-func PosterFile(inFile, outDir, outFile string, selectedPages []string, cut *model.Cut, conf *model.Configuration) error {
+func PosterFile(
+	inFile, outDir, outFile string, selectedPages []string, cut *model.Cut, conf *model.Configuration,
+) error {
 	f, err := os.Open(inFile)
 	if err != nil {
 		return err
@@ -122,7 +128,9 @@ func PosterFile(inFile, outDir, outFile string, selectedPages []string, cut *mod
 }
 
 // NDown applies n & cutConf for selected pages of rs and writes results to outDir.
-func NDown(rs io.ReadSeeker, outDir, fileName string, selectedPages []string, n int, cut *model.Cut, conf *model.Configuration) error {
+func NDown(
+	rs io.ReadSeeker, outDir, fileName string, selectedPages []string, n int, cut *model.Cut, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu NDown: Please provide rs")
 	}
@@ -172,7 +180,9 @@ func NDown(rs io.ReadSeeker, outDir, fileName string, selectedPages []string, n 
 }
 
 // NDownFile applies n & cutConf for selected pages of inFile and writes results to outDir.
-func NDownFile(inFile, outDir, outFile string, selectedPages []string, n int, cut *model.Cut, conf *model.Configuration) error {
+func NDownFile(
+	inFile, outDir, outFile string, selectedPages []string, n int, cut *model.Cut, conf *model.Configuration,
+) error {
 	f, err := os.Open(inFile)
 	if err != nil {
 		return err
@@ -216,7 +226,9 @@ func validateCut(cut *model.Cut) error {
 }
 
 // Cut applies cutConf for selected pages of rs and writes results to outDir.
-func Cut(rs io.ReadSeeker, outDir, fileName string, selectedPages []string, cut *model.Cut, conf *model.Configuration) error {
+func Cut(
+	rs io.ReadSeeker, outDir, fileName string, selectedPages []string, cut *model.Cut, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: Cut: missing rs")
 	}

@@ -24,12 +24,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	pdffont "github.com/JemZee04/pdfcpu/pkg/pdfcpu/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -545,7 +545,9 @@ func (pdf *PDF) newPageFontID(indRef *types.IndirectRef, nextInd, pageNr int) st
 	return id
 }
 
-func (pdf *PDF) idForFontName(fontName, fontLang string, pageFonts, globalFonts model.FontMap, pageNr int) (string, error) {
+func (pdf *PDF) idForFontName(fontName, fontLang string, pageFonts, globalFonts model.FontMap, pageNr int) (
+	string, error,
+) {
 
 	// Used for textdescriptor configuration.
 
@@ -599,7 +601,9 @@ func (pdf *PDF) idForFontName(fontName, fontLang string, pageFonts, globalFonts 
 				if fontName == fo.FontName {
 					indRef = types.NewIndirectRef(objNr, 0)
 					if font.IsUserFont(fontName) {
-						if err := pdffont.IndRefsForUserfontUpdate(pdf.XRefTable, fo.FontDict, fontLang, &fr); err != nil {
+						if err := pdffont.IndRefsForUserfontUpdate(
+							pdf.XRefTable, fo.FontDict, fontLang, &fr,
+						); err != nil {
 							return "", err
 						}
 					}

@@ -19,8 +19,8 @@ package validate
 import (
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -58,7 +58,9 @@ func validateGoToRActionDict(xRefTable *model.XRefTable, d types.Dict, dictName 
 	return err
 }
 
-func validateTargetDictEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateTargetDictEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 
 	// table 202
 
@@ -70,7 +72,9 @@ func validateTargetDictEntry(xRefTable *model.XRefTable, d types.Dict, dictName,
 	dictName = "targetDict"
 
 	// R, required, name
-	_, err = validateNameEntry(xRefTable, d1, dictName, "R", REQUIRED, model.V10, func(s string) bool { return s == "P" || s == "C" })
+	_, err = validateNameEntry(
+		xRefTable, d1, dictName, "R", REQUIRED, model.V10, func(s string) bool { return s == "P" || s == "C" },
+	)
 	if err != nil {
 		return err
 	}
@@ -179,7 +183,9 @@ func validateLaunchActionDict(xRefTable *model.XRefTable, d types.Dict, dictName
 	return err
 }
 
-func validateDestinationThreadEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateDestinationThreadEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 
 	// The destination thread (table 205)
 
@@ -202,7 +208,9 @@ func validateDestinationThreadEntry(xRefTable *model.XRefTable, d types.Dict, di
 	return nil
 }
 
-func validateDestinationBeadEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateDestinationBeadEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 
 	// The bead in the destination thread (table 205)
 
@@ -280,7 +288,9 @@ func validateURIActionDict(xRefTable *model.XRefTable, d types.Dict, dictName st
 	return err
 }
 
-func validateSoundDictEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateSoundDictEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 
 	sd, err := validateStreamDictEntry(xRefTable, d, dictName, entryName, required, sinceVersion, nil)
 	if err != nil || sd == nil {
@@ -290,7 +300,9 @@ func validateSoundDictEntry(xRefTable *model.XRefTable, d types.Dict, dictName, 
 	dictName = "soundDict"
 
 	// Type, optional, name
-	_, err = validateNameEntry(xRefTable, sd.Dict, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "Sound" })
+	_, err = validateNameEntry(
+		xRefTable, sd.Dict, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "Sound" },
+	)
 	if err != nil {
 		return err
 	}
@@ -333,7 +345,9 @@ func validateSoundActionDict(xRefTable *model.XRefTable, d types.Dict, dictName 
 	}
 
 	// Volume, optional, number: -1.0 .. +1.0
-	_, err = validateNumberEntry(xRefTable, d, dictName, "Volume", OPTIONAL, model.V10, func(f float64) bool { return -1.0 <= f && f <= 1.0 })
+	_, err = validateNumberEntry(
+		xRefTable, d, dictName, "Volume", OPTIONAL, model.V10, func(f float64) bool { return -1.0 <= f && f <= 1.0 },
+	)
 	if err != nil {
 		return err
 	}
@@ -356,7 +370,9 @@ func validateSoundActionDict(xRefTable *model.XRefTable, d types.Dict, dictName 
 	return err
 }
 
-func validateMovieStartOrDurationEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateMovieStartOrDurationEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, sinceVersion)
 	if err != nil || o == nil {
@@ -427,13 +443,17 @@ func validateMovieActivationDict(xRefTable *model.XRefTable, d types.Dict) error
 	}
 
 	// FWScale, optional, array of 2 positive integers
-	_, err = validateIntegerArrayEntry(xRefTable, d, dictName, "FWScale", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	_, err = validateIntegerArrayEntry(
+		xRefTable, d, dictName, "FWScale", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 	if err != nil {
 		return err
 	}
 
 	// FWPosition, optional, array of 2 numbers [0.0 .. 1.0]
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "FWPosition", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "FWPosition", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 
 	return err
 }
@@ -467,7 +487,9 @@ func validateMovieActionDict(xRefTable *model.XRefTable, d types.Dict, dictName 
 		return errors.New("pdfcpu: validateMovieActionDict: missing required entry \"T\" or \"Annotation\"")
 	}
 
-	_, err = validateNameEntry(xRefTable, d, "annotDict", "Subtype", REQUIRED, model.V10, func(s string) bool { return s == "Movie" })
+	_, err = validateNameEntry(
+		xRefTable, d, "annotDict", "Subtype", REQUIRED, model.V10, func(s string) bool { return s == "Movie" },
+	)
 
 	return err
 }
@@ -566,7 +588,9 @@ func validateNamedActionDict(xRefTable *model.XRefTable, d types.Dict, dictName 
 		}
 
 		// Some known non standard named actions
-		if types.MemberOf(s, []string{"GoToPage", "GoBack", "GoForward", "Find", "Print", "SaveAs", "Quit", "FullScreen"}) {
+		if types.MemberOf(
+			s, []string{"GoToPage", "GoBack", "GoForward", "Find", "Print", "SaveAs", "Quit", "FullScreen"},
+		) {
 			return true
 		}
 
@@ -709,7 +733,9 @@ func validateRenditionActionDict(xRefTable *model.XRefTable, d types.Dict, dictN
 	// OP or JS need to be present.
 
 	// OP, integer
-	op, err := validateIntegerEntry(xRefTable, d, dictName, "OP", OPTIONAL, model.V15, func(i int) bool { return 0 <= i && i <= 4 })
+	op, err := validateIntegerEntry(
+		xRefTable, d, dictName, "OP", OPTIONAL, model.V15, func(i int) bool { return 0 <= i && i <= 4 },
+	)
 	if err != nil {
 		return err
 	}
@@ -746,7 +772,9 @@ func validateRenditionActionDict(xRefTable *model.XRefTable, d types.Dict, dictN
 		return err
 	}
 	if d1 != nil {
-		_, err = validateNameEntry(xRefTable, d1, dictName, "Subtype", REQUIRED, model.V10, func(s string) bool { return s == "Screen" })
+		_, err = validateNameEntry(
+			xRefTable, d1, dictName, "Subtype", REQUIRED, model.V10, func(s string) bool { return s == "Screen" },
+		)
 		if err != nil {
 			return err
 		}
@@ -838,7 +866,10 @@ func validateActionDict(xRefTable *model.XRefTable, d types.Dict) error {
 	if xRefTable.ValidationMode == model.ValidationRelaxed {
 		allowedTypes = []string{"A", "Action"}
 	}
-	_, err := validateNameEntry(xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return types.MemberOf(s, allowedTypes) })
+	_, err := validateNameEntry(
+		xRefTable, d, dictName, "Type", OPTIONAL, model.V10,
+		func(s string) bool { return types.MemberOf(s, allowedTypes) },
+	)
 	if err != nil {
 		return err
 	}
@@ -890,12 +921,17 @@ func validateActionDict(xRefTable *model.XRefTable, d types.Dict) error {
 	return nil
 }
 
-func validateRootAdditionalActions(xRefTable *model.XRefTable, rootDict types.Dict, required bool, sinceVersion model.Version) error {
+func validateRootAdditionalActions(
+	xRefTable *model.XRefTable, rootDict types.Dict, required bool, sinceVersion model.Version,
+) error {
 
 	return validateAdditionalActions(xRefTable, rootDict, "rootDict", "AA", required, sinceVersion, "root")
 }
 
-func validateAdditionalActions(xRefTable *model.XRefTable, dict types.Dict, dictName, entryName string, required bool, sinceVersion model.Version, source string) error {
+func validateAdditionalActions(
+	xRefTable *model.XRefTable, dict types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+	source string,
+) error {
 
 	d, err := validateDictEntry(xRefTable, dict, dictName, entryName, required, sinceVersion, nil)
 	if err != nil || d == nil {

@@ -22,8 +22,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
 	"github.com/pkg/errors"
 )
 
@@ -218,7 +218,9 @@ func RemoveAttachmentsFile(inFile, outFile string, files []string, conf *model.C
 }
 
 // ExtractAttachmentsRaw extracts embedded files from a PDF context read from rs.
-func ExtractAttachmentsRaw(rs io.ReadSeeker, outDir string, fileNames []string, conf *model.Configuration) ([]model.Attachment, error) {
+func ExtractAttachmentsRaw(
+	rs io.ReadSeeker, outDir string, fileNames []string, conf *model.Configuration,
+) ([]model.Attachment, error) {
 	if rs == nil {
 		return nil, errors.New("pdfcpu: ExtractAttachmentsRaw: missing rs")
 	}

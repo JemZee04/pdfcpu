@@ -24,9 +24,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -156,7 +156,9 @@ func nup4OutputPageNr(inputPageNr int, pageCount int, pageNumbers []int, nup *mo
 	return 0, false
 }
 
-func nup4BasicSideFoldOutputPageNr(positionNumber int, inputPageCount int, pageNumbers []int, nup *model.NUp) (int, bool) {
+func nup4BasicSideFoldOutputPageNr(positionNumber int, inputPageCount int, pageNumbers []int, nup *model.NUp) (
+	int, bool,
+) {
 	var p int
 	bookletSheetSideNumber := positionNumber / 4
 	bookletPageNumber := positionNumber / 8
@@ -196,7 +198,9 @@ func nup4BasicSideFoldOutputPageNr(positionNumber int, inputPageCount int, pageN
 	return pageNr, rotate
 }
 
-func nup4BasicTopFoldOutputPageNr(positionNumber int, inputPageCount int, pageNumbers []int, nup *model.NUp) (int, bool) {
+func nup4BasicTopFoldOutputPageNr(positionNumber int, inputPageCount int, pageNumbers []int, nup *model.NUp) (
+	int, bool,
+) {
 	var p int
 	bookletSheetSideNumber := positionNumber / 4
 	bookletSheetNumber := positionNumber / 8
@@ -234,7 +238,9 @@ func nup4BasicTopFoldOutputPageNr(positionNumber int, inputPageCount int, pageNu
 	return pageNr, rotate
 }
 
-func nup4AdvancedSideFoldOutputPageNr(inputPageNr int, inputPageCount int, pageNumbers []int, nup *model.NUp) (int, bool) {
+func nup4AdvancedSideFoldOutputPageNr(inputPageNr int, inputPageCount int, pageNumbers []int, nup *model.NUp) (
+	int, bool,
+) {
 	// (output page, input page) = [(1,n), (2,1), (3, n/2+1), (4, n/2-0), (5, 2), (6, n-1), (7, n/2-1), (8, n/2+2) ...]
 	bookletPageNumber := inputPageNr / 4
 	var p int
@@ -413,7 +419,9 @@ func GetBookletOrdering(pages types.IntSet, nup *model.NUp) []model.BookletPage 
 				stop = len(pageNumbers)
 				nPagesPerSignature = pageCount - start
 			}
-			bookletPages = append(bookletPages, getBookletPageOrdering(nup, pageNumbers[start:stop], nPagesPerSignature)...)
+			bookletPages = append(
+				bookletPages, getBookletPageOrdering(nup, pageNumbers[start:stop], nPagesPerSignature)...,
+			)
 		}
 		return bookletPages
 	}
@@ -457,7 +465,8 @@ func bookletPages(
 	selectedPages types.IntSet,
 	nup *model.NUp,
 	pagesDict types.Dict,
-	pagesIndRef *types.IndirectRef) error {
+	pagesIndRef *types.IndirectRef,
+) error {
 
 	var buf bytes.Buffer
 	formsResDict := types.NewDict()
@@ -494,7 +503,9 @@ func bookletPages(
 }
 
 // BookletFromImages creates a booklet version of the image sequence represented by fileNames.
-func BookletFromImages(ctx *model.Context, fileNames []string, nup *model.NUp, pagesDict types.Dict, pagesIndRef *types.IndirectRef) error {
+func BookletFromImages(
+	ctx *model.Context, fileNames []string, nup *model.NUp, pagesDict types.Dict, pagesIndRef *types.IndirectRef,
+) error {
 	// The order of images in fileNames corresponds to a desired booklet page sequence.
 	selectedPages := types.IntSet{}
 	for i := 1; i <= len(fileNames); i++ {

@@ -25,12 +25,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/filter"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	pdffont "github.com/JemZee04/pdfcpu/pkg/pdfcpu/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -426,7 +426,9 @@ func nUpImagePDFBytes(w io.Writer, imgWidth, imgHeight int, nup *model.NUp, form
 	}
 }
 
-func createNUpFormForImage(xRefTable *model.XRefTable, imgIndRef *types.IndirectRef, w, h, i int) (*types.IndirectRef, error) {
+func createNUpFormForImage(xRefTable *model.XRefTable, imgIndRef *types.IndirectRef, w, h, i int) (
+	*types.IndirectRef, error,
+) {
 	imgResID := fmt.Sprintf("Im%d", i)
 	bb := types.RectForDim(float64(w), float64(h))
 
@@ -469,7 +471,9 @@ func createNUpFormForImage(xRefTable *model.XRefTable, imgIndRef *types.Indirect
 }
 
 // NewNUpPageForImage creates a new page dict in xRefTable for given image filename and n-up conf.
-func NewNUpPageForImage(xRefTable *model.XRefTable, fileName string, parentIndRef *types.IndirectRef, nup *model.NUp) (*types.IndirectRef, error) {
+func NewNUpPageForImage(
+	xRefTable *model.XRefTable, fileName string, parentIndRef *types.IndirectRef, nup *model.NUp,
+) (*types.IndirectRef, error) {
 	f, err := os.Open(fileName)
 	if err != nil {
 		return nil, err
@@ -531,7 +535,9 @@ func NewNUpPageForImage(xRefTable *model.XRefTable, fileName string, parentIndRe
 }
 
 // NUpFromOneImage creates one page with instances of one image.
-func NUpFromOneImage(ctx *model.Context, fileName string, nup *model.NUp, pagesDict types.Dict, pagesIndRef *types.IndirectRef) error {
+func NUpFromOneImage(
+	ctx *model.Context, fileName string, nup *model.NUp, pagesDict types.Dict, pagesIndRef *types.IndirectRef,
+) error {
 	indRef, err := NewNUpPageForImage(ctx.XRefTable, fileName, pagesIndRef, nup)
 	if err != nil {
 		return err
@@ -550,7 +556,10 @@ func NUpFromOneImage(ctx *model.Context, fileName string, nup *model.NUp, pagesD
 	return nil
 }
 
-func wrapUpPage(ctx *model.Context, nup *model.NUp, d types.Dict, buf bytes.Buffer, pagesDict types.Dict, pagesIndRef *types.IndirectRef) error {
+func wrapUpPage(
+	ctx *model.Context, nup *model.NUp, d types.Dict, buf bytes.Buffer, pagesDict types.Dict,
+	pagesIndRef *types.IndirectRef,
+) error {
 	xRefTable := ctx.XRefTable
 
 	var fm model.FontMap
@@ -644,7 +653,8 @@ func nupPages(
 	selectedPages types.IntSet,
 	nup *model.NUp,
 	pagesDict types.Dict,
-	pagesIndRef *types.IndirectRef) error {
+	pagesIndRef *types.IndirectRef,
+) error {
 
 	var buf bytes.Buffer
 	formsResDict := types.NewDict()
@@ -690,7 +700,9 @@ func nupPages(
 }
 
 // NUpFromMultipleImages creates pages in NUp-style rendering each image once.
-func NUpFromMultipleImages(ctx *model.Context, fileNames []string, nup *model.NUp, pagesDict types.Dict, pagesIndRef *types.IndirectRef) error {
+func NUpFromMultipleImages(
+	ctx *model.Context, fileNames []string, nup *model.NUp, pagesDict types.Dict, pagesIndRef *types.IndirectRef,
+) error {
 	if nup.PageGrid {
 		nup.PageDim.Width *= nup.Grid.Width
 		nup.PageDim.Height *= nup.Grid.Height

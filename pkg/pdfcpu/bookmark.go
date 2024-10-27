@@ -24,10 +24,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -365,10 +365,12 @@ func bmDict(ctx *model.Context, bm Bookmark, parent types.IndirectRef) (types.Di
 		return nil, err
 	}
 
-	d := types.Dict(map[string]types.Object{
-		"Dest":   types.NewHexLiteral([]byte(bm.Title)),
-		"Title":  types.StringLiteral(*s),
-		"Parent": parent},
+	d := types.Dict(
+		map[string]types.Object{
+			"Dest":   types.NewHexLiteral([]byte(bm.Title)),
+			"Title":  types.StringLiteral(*s),
+			"Parent": parent,
+		},
 	)
 
 	m := model.NameMap{bm.Title: []types.Dict{d}}
@@ -387,7 +389,9 @@ func bmDict(ctx *model.Context, bm Bookmark, parent types.IndirectRef) (types.Di
 	return d, nil
 }
 
-func createOutlineItemDict(ctx *model.Context, bms []Bookmark, parent *types.IndirectRef, parentPageNr *int) (*types.IndirectRef, *types.IndirectRef, int, int, error) {
+func createOutlineItemDict(
+	ctx *model.Context, bms []Bookmark, parent *types.IndirectRef, parentPageNr *int,
+) (*types.IndirectRef, *types.IndirectRef, int, int, error) {
 	var (
 		first   *types.IndirectRef
 		irPrev  *types.IndirectRef

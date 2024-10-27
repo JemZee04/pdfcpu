@@ -21,7 +21,7 @@ import (
 	"compress/zlib"
 	"io"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/log"
 	"github.com/pkg/errors"
 )
 
@@ -291,14 +291,16 @@ func (f flate) decodePostProcess(r io.Reader, maxLen int64) (io.Reader, error) {
 
 	if !intMemberOf(
 		predictor,
-		[]int{PredictorTIFF,
+		[]int{
+			PredictorTIFF,
 			PredictorNone,
 			PredictorSub,
 			PredictorUp,
 			PredictorAverage,
 			PredictorPaeth,
 			PredictorOptimum,
-		}) {
+		},
+	) {
 		return nil, errors.Errorf("pdfcpu: filter FlateDecode: undefined \"Predictor\" %d", predictor)
 	}
 

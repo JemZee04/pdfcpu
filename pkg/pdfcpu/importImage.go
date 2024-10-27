@@ -23,11 +23,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/matrix"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -105,8 +105,10 @@ func (imp Import) String() string {
 		sc = "absolute"
 	}
 
-	return fmt.Sprintf("Import conf: %s %s, pos=%s, dx=%f.2, dy=%f.2, scaling: %.1f %s\n",
-		imp.PageSize, *imp.PageDim, imp.Pos, imp.Dx, imp.Dy, imp.Scale, sc)
+	return fmt.Sprintf(
+		"Import conf: %s %s, pos=%s, dx=%f.2, dy=%f.2, scaling: %.1f %s\n",
+		imp.PageSize, *imp.PageDim, imp.Pos, imp.Dx, imp.Dy, imp.Scale, sc,
+	)
 }
 
 func parsePageFormatImp(s string, imp *Import) (err error) {
@@ -323,12 +325,16 @@ func importImagePDFBytes(wr io.Writer, pageDim *types.Dim, imgWidth, imgHeight f
 	m[2][0] = ll.X + imp.Dx
 	m[2][1] = ll.Y + imp.Dy
 
-	fmt.Fprintf(wr, "q %.5f %.5f %.5f %.5f %.5f %.5f cm /Im0 Do Q",
-		m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1])
+	fmt.Fprintf(
+		wr, "q %.5f %.5f %.5f %.5f %.5f %.5f cm /Im0 Do Q",
+		m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1],
+	)
 }
 
 // NewPageForImage creates a new page dict in xRefTable for given image reader r.
-func NewPageForImage(xRefTable *model.XRefTable, r io.Reader, parentIndRef *types.IndirectRef, imp *Import) (*types.IndirectRef, error) {
+func NewPageForImage(
+	xRefTable *model.XRefTable, r io.Reader, parentIndRef *types.IndirectRef, imp *Import,
+) (*types.IndirectRef, error) {
 
 	// create image dict.
 	imgIndRef, w, h, err := model.CreateImageResource(xRefTable, r, imp.Gray, imp.Sepia)

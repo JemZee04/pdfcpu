@@ -31,12 +31,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/cli"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/validate"
+	"github.com/JemZee04/pdfcpu/pkg/api"
+	"github.com/JemZee04/pdfcpu/pkg/cli"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/validate"
 	"github.com/pkg/errors"
 )
 
@@ -228,23 +228,25 @@ func getBaseDir(path string) string {
 func expandWildcardsRec(s string, inFiles *[]string, conf *model.Configuration) error {
 	s = filepath.Clean(s)
 	wantsPdf := strings.HasSuffix(s, ".pdf")
-	return filepath.WalkDir(getBaseDir(s), func(path string, d os.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if d.IsDir() {
+	return filepath.WalkDir(
+		getBaseDir(s), func(path string, d os.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if d.IsDir() {
+				return nil
+			}
+			if ok := hasPDFExtension(path); ok {
+				*inFiles = append(*inFiles, path)
+				return nil
+			}
+			if !wantsPdf && conf.CheckFileNameExt {
+				fmt.Fprintf(os.Stderr, "%s needs extension \".pdf\".\n", path)
+				os.Exit(1)
+			}
 			return nil
-		}
-		if ok := hasPDFExtension(path); ok {
-			*inFiles = append(*inFiles, path)
-			return nil
-		}
-		if !wantsPdf && conf.CheckFileNameExt {
-			fmt.Fprintf(os.Stderr, "%s needs extension \".pdf\".\n", path)
-			os.Exit(1)
-		}
-		return nil
-	})
+		},
+	)
 }
 
 func expandWildcards(s string, inFiles *[]string, conf *model.Configuration) error {
@@ -419,7 +421,8 @@ func sortFiles(inFiles []string) {
 			i1, _ := strconv.Atoi(ssi[0])
 			i2, _ := strconv.Atoi(ssj[0])
 			return i1 < i2
-		})
+		},
+	)
 }
 
 func processArgsForMerge(conf *model.Configuration) ([]string, string) {
@@ -2664,7 +2667,10 @@ func processSetPageLayoutCommand(conf *model.Configuration) {
 	v := flag.Arg(1)
 
 	if !validate.DocumentPageLayout(v) {
-		fmt.Fprintln(os.Stderr, "invalid page layout, use one of: SinglePage, TwoColumnLeft, TwoColumnRight, TwoPageLeft, TwoPageRight")
+		fmt.Fprintln(
+			os.Stderr,
+			"invalid page layout, use one of: SinglePage, TwoColumnLeft, TwoColumnRight, TwoPageLeft, TwoPageRight",
+		)
 		os.Exit(1)
 	}
 
@@ -2711,7 +2717,10 @@ func processSetPageModeCommand(conf *model.Configuration) {
 	v := flag.Arg(1)
 
 	if !validate.DocumentPageMode(v) {
-		fmt.Fprintln(os.Stderr, "invalid page mode, use one of: UseNone, UseOutlines, UseThumbs, FullScreen, UseOC, UseAttachments")
+		fmt.Fprintln(
+			os.Stderr,
+			"invalid page mode, use one of: UseNone, UseOutlines, UseThumbs, FullScreen, UseOC, UseAttachments",
+		)
 		os.Exit(1)
 	}
 

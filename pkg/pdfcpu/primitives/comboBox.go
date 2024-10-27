@@ -21,11 +21,11 @@ import (
 	"fmt"
 	"unicode/utf8"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	pdffont "github.com/JemZee04/pdfcpu/pkg/pdfcpu/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -232,7 +232,9 @@ func (cb *ComboBox) validate() error {
 	return cb.validateTab()
 }
 
-func (cb *ComboBox) calcFontFromDA(ctx *model.Context, d types.Dict, fonts map[string]types.IndirectRef) (*types.IndirectRef, error) {
+func (cb *ComboBox) calcFontFromDA(
+	ctx *model.Context, d types.Dict, fonts map[string]types.IndirectRef,
+) (*types.IndirectRef, error) {
 
 	s := d.StringEntry("DA")
 	if s == nil {
@@ -368,8 +370,10 @@ func (cb *ComboBox) renderN(xRefTable *model.XRefTable) ([]byte, error) {
 			fmt.Fprintf(buf, "%.2f %.2f %.2f rg 0 0 %.2f %.2f re f ", bgCol.R, bgCol.G, bgCol.B, w, h)
 		}
 		if boCol != nil {
-			fmt.Fprintf(buf, "%.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s ",
-				boCol.R, boCol.G, boCol.B, boWidth, boWidth/2, boWidth/2, w-boWidth, h-boWidth)
+			fmt.Fprintf(
+				buf, "%.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s ",
+				boCol.R, boCol.G, boCol.B, boWidth, boWidth/2, boWidth/2, w-boWidth, h-boWidth,
+			)
 		}
 		fmt.Fprint(buf, "Q ")
 	}
@@ -404,15 +408,19 @@ func (cb *ComboBox) renderN(xRefTable *model.XRefTable) ([]byte, error) {
 	y := (cb.BoundingBox.Height()-font.LineHeight(f.Name, f.Size))/2 + font.Descent(f.Name, f.Size)
 
 	fmt.Fprintf(buf, "BT /%s %d Tf ", cb.fontID, f.Size)
-	fmt.Fprintf(buf, "%.2f %.2f %.2f RG %.2f %.2f %.2f rg %.2f %.2f Td (%s) Tj ET ",
+	fmt.Fprintf(
+		buf, "%.2f %.2f %.2f RG %.2f %.2f %.2f rg %.2f %.2f Td (%s) Tj ET ",
 		f.col.R, f.col.G, f.col.B,
-		f.col.R, f.col.G, f.col.B, x, y, s)
+		f.col.R, f.col.G, f.col.B, x, y, s,
+	)
 
 	fmt.Fprint(buf, "Q EMC ")
 
 	if boCol != nil && boWidth > 0 {
-		fmt.Fprintf(buf, "q %.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s Q ",
-			boCol.R, boCol.G, boCol.B, boWidth-1, boWidth/2, boWidth/2, w-boWidth, h-boWidth)
+		fmt.Fprintf(
+			buf, "q %.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s Q ",
+			boCol.R, boCol.G, boCol.B, boWidth-1, boWidth/2, boWidth/2, w-boWidth, h-boWidth,
+		)
 	}
 
 	return buf.Bytes(), nil
@@ -723,7 +731,8 @@ func NewComboBox(
 	ctx *model.Context,
 	d types.Dict,
 	v string,
-	fonts map[string]types.IndirectRef) (*ComboBox, *types.IndirectRef, error) {
+	fonts map[string]types.IndirectRef,
+) (*ComboBox, *types.IndirectRef, error) {
 
 	cb := &ComboBox{Value: v}
 
@@ -783,7 +792,9 @@ func renderComboBoxAP(ctx *model.Context, d types.Dict, v string, fonts map[stri
 	return nil
 }
 
-func refreshComboBoxAP(ctx *model.Context, d types.Dict, v string, fonts map[string]types.IndirectRef, irN *types.IndirectRef) error {
+func refreshComboBoxAP(
+	ctx *model.Context, d types.Dict, v string, fonts map[string]types.IndirectRef, irN *types.IndirectRef,
+) error {
 
 	cb, _, err := NewComboBox(ctx, d, v, fonts)
 	if err != nil {

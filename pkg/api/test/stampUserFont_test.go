@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
+	"github.com/JemZee04/pdfcpu/pkg/api"
 )
 
 func TestStampUserFont(t *testing.T) {
@@ -35,7 +35,10 @@ func TestStampUserFont(t *testing.T) {
 		if sample.rtl {
 			align, rtl = "r", "on"
 		}
-		desc := fmt.Sprintf("font:%s, rtl:%s, align:%s, scale:1.0 rel, rot:0, fillc:#000000, bgcol:#ab6f30, margin:10, border:10 round, opacity:.7", sample.fontName, rtl, align)
+		desc := fmt.Sprintf(
+			"font:%s, rtl:%s, align:%s, scale:1.0 rel, rot:0, fillc:#000000, bgcol:#ab6f30, margin:10, border:10 round, opacity:.7",
+			sample.fontName, rtl, align,
+		)
 		err := api.AddTextWatermarksFile(inFile, outFile, nil, true, sample.text, desc, nil)
 		if err != nil {
 			t.Fatalf("%s %s: %v\n", msg, outFile, err)

@@ -21,12 +21,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/matrix"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -69,10 +69,25 @@ func handleZoomOutBgColAndBorder(cropBox *types.Rectangle, bb *[]byte, zoom *mod
 		var buf bytes.Buffer
 
 		if zoom.BgColor != nil {
-			draw.FillRectNoBorder(&buf, types.RectForWidthAndHeight(cropBox.LL.X, cropBox.LL.Y, cropBox.Width(), zoom.VMargin), *zoom.BgColor)
-			draw.FillRectNoBorder(&buf, types.RectForWidthAndHeight(cropBox.LL.X, cropBox.Height()-zoom.VMargin, cropBox.Width(), zoom.VMargin), *zoom.BgColor)
-			draw.FillRectNoBorder(&buf, types.RectForWidthAndHeight(cropBox.LL.X, zoom.VMargin, zoom.HMargin, cropBox.Height()-2*zoom.VMargin), *zoom.BgColor)
-			draw.FillRectNoBorder(&buf, types.RectForWidthAndHeight(cropBox.Width()-zoom.HMargin, zoom.VMargin, zoom.HMargin, cropBox.Height()-2*zoom.VMargin), *zoom.BgColor)
+			draw.FillRectNoBorder(
+				&buf, types.RectForWidthAndHeight(cropBox.LL.X, cropBox.LL.Y, cropBox.Width(), zoom.VMargin),
+				*zoom.BgColor,
+			)
+			draw.FillRectNoBorder(
+				&buf,
+				types.RectForWidthAndHeight(cropBox.LL.X, cropBox.Height()-zoom.VMargin, cropBox.Width(), zoom.VMargin),
+				*zoom.BgColor,
+			)
+			draw.FillRectNoBorder(
+				&buf,
+				types.RectForWidthAndHeight(cropBox.LL.X, zoom.VMargin, zoom.HMargin, cropBox.Height()-2*zoom.VMargin),
+				*zoom.BgColor,
+			)
+			draw.FillRectNoBorder(
+				&buf, types.RectForWidthAndHeight(
+					cropBox.Width()-zoom.HMargin, zoom.VMargin, zoom.HMargin, cropBox.Height()-2*zoom.VMargin,
+				), *zoom.BgColor,
+			)
 		}
 
 		if zoom.Border {
@@ -80,7 +95,8 @@ func handleZoomOutBgColAndBorder(cropBox *types.Rectangle, bb *[]byte, zoom *mod
 				cropBox.LL.X+zoom.HMargin,
 				cropBox.LL.Y+zoom.VMargin,
 				cropBox.Width()-2*zoom.HMargin,
-				cropBox.Height()-2*zoom.VMargin)
+				cropBox.Height()-2*zoom.VMargin,
+			)
 			draw.DrawRect(&buf, r, 1, &color.Black, nil)
 		}
 
@@ -131,7 +147,9 @@ func zoomPage(ctx *model.Context, pageNr int, zoom *model.Zoom) error {
 	}
 
 	if inhPAttrs.Rotate != 0 {
-		bbInvRot := append([]byte(" q "), model.ContentBytesForPageRotation(inhPAttrs.Rotate, cropBox.Width(), cropBox.Height())...)
+		bbInvRot := append(
+			[]byte(" q "), model.ContentBytesForPageRotation(inhPAttrs.Rotate, cropBox.Width(), cropBox.Height())...,
+		)
 		bb = append(bbInvRot, bb...)
 		bb = append(bb, []byte(" Q")...)
 	}

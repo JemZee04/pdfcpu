@@ -26,11 +26,11 @@ import (
 	"os"
 	"strings"
 
+	"github.com/JemZee04/pdfcpu/pkg/filter"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/hhrutter/tiff"
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -307,7 +307,9 @@ func imageForCMYKWithSoftMask(im *PDFImage) image.Image {
 func renderDeviceCMYKToTIFF(im *PDFImage, resourceName string) (io.Reader, string, error) {
 	b := im.sd.Content
 	if log.DebugEnabled() {
-		log.Debug.Printf("renderDeviceCMYKToTIFF: CMYK objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b))
+		log.Debug.Printf(
+			"renderDeviceCMYKToTIFF: CMYK objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b),
+		)
 	}
 
 	var img image.Image
@@ -332,13 +334,17 @@ func scaleToBPC8(v uint8, bpc int) uint8 {
 func renderDeviceGrayToPNG(im *PDFImage, resourceName string) (io.Reader, string, error) {
 	b := im.sd.Content
 	if log.DebugEnabled() {
-		log.Debug.Printf("renderDeviceGrayToPNG: objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b))
+		log.Debug.Printf(
+			"renderDeviceGrayToPNG: objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b),
+		)
 	}
 
 	// Validate buflen.
 	// For streams not using compression there is a trailing 0x0A in addition to the imagebytes.
 	if len(b) < (im.bpc*im.w*im.h+7)/8 {
-		return nil, "", errors.Errorf("pdfcpu: renderDeviceGrayToPNG: objNr=%d corrupt image object %v\n", im.objNr, *im.sd)
+		return nil, "", errors.Errorf(
+			"pdfcpu: renderDeviceGrayToPNG: objNr=%d corrupt image object %v\n", im.objNr, *im.sd,
+		)
 	}
 
 	cvr := colValRange{0, 1}
@@ -381,7 +387,9 @@ func renderDeviceGrayToPNG(im *PDFImage, resourceName string) (io.Reader, string
 func renderDeviceRGBToPNG(im *PDFImage, resourceName string) (io.Reader, string, error) {
 	b := im.sd.Content
 	if log.DebugEnabled() {
-		log.Debug.Printf("renderDeviceRGBToPNG: objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b))
+		log.Debug.Printf(
+			"renderDeviceRGBToPNG: objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b),
+		)
 	}
 
 	// Validate buflen.
@@ -416,7 +424,9 @@ func renderDeviceRGBToPNG(im *PDFImage, resourceName string) (io.Reader, string,
 func renderCalRGBToPNG(im *PDFImage, resourceName string) (io.Reader, string, error) {
 	b := im.sd.Content
 	if log.DebugEnabled() {
-		log.Debug.Printf("renderCalRGBToPNG: objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b))
+		log.Debug.Printf(
+			"renderCalRGBToPNG: objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b),
+		)
 	}
 
 	if len(b) < (3*im.bpc*im.w*im.h+7)/8 {
@@ -445,7 +455,9 @@ func renderCalRGBToPNG(im *PDFImage, resourceName string) (io.Reader, string, er
 	return &buf, "png", nil
 }
 
-func renderICCBased(xRefTable *model.XRefTable, im *PDFImage, resourceName string, cs types.Array) (io.Reader, string, error) {
+func renderICCBased(xRefTable *model.XRefTable, im *PDFImage, resourceName string, cs types.Array) (
+	io.Reader, string, error,
+) {
 	//  Any ICC profile >= ICC.1:2004:10 is sufficient for any PDF version <= 1.7
 	//  If the embedded ICC profile version is newer than the one used by the Reader, substitute with Alternate color space.
 
@@ -454,14 +466,18 @@ func renderICCBased(xRefTable *model.XRefTable, im *PDFImage, resourceName strin
 	b := im.sd.Content
 
 	if log.DebugEnabled() {
-		log.Debug.Printf("renderICCBasedToPNGFile: objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b))
+		log.Debug.Printf(
+			"renderICCBasedToPNGFile: objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b),
+		)
 	}
 
 	// 1,3 or 4 color components.
 	n := *iccProfileStream.IntEntry("N")
 
 	if !types.IntMemberOf(n, []int{1, 3, 4}) {
-		return nil, "", errors.Errorf("pdfcpu: renderICCBasedToPNGFile: objNr=%d, N must be 1,3 or 4, got:%d\n", im.objNr, n)
+		return nil, "", errors.Errorf(
+			"pdfcpu: renderICCBasedToPNGFile: objNr=%d, N must be 1,3 or 4, got:%d\n", im.objNr, n,
+		)
 	}
 
 	// TODO: Transform linear XYZ to RGB according to ICC profile.
@@ -494,13 +510,17 @@ func renderICCBased(xRefTable *model.XRefTable, im *PDFImage, resourceName strin
 func renderIndexedGrayToPNG(im *PDFImage, resourceName string, lookup []byte) (io.Reader, string, error) {
 	b := im.sd.Content
 	if log.DebugEnabled() {
-		log.Debug.Printf("renderIndexedGrayToPNG: objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b))
+		log.Debug.Printf(
+			"renderIndexedGrayToPNG: objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b),
+		)
 	}
 
 	// Validate buflen.
 	// For streams not using compression there is a trailing 0x0A in addition to the imagebytes.
 	if len(b) < (im.bpc*im.w*im.h+7)/8 {
-		return nil, "", errors.Errorf("pdfcpu: renderIndexedGrayToPNG: objNr=%d corrupt image object %v\n", im.objNr, *im.sd)
+		return nil, "", errors.Errorf(
+			"pdfcpu: renderIndexedGrayToPNG: objNr=%d corrupt image object %v\n", im.objNr, *im.sd,
+		)
 	}
 
 	cvr := colValRange{0, 1}
@@ -645,24 +665,32 @@ func renderIndexedCMYKToTIFF(im *PDFImage, resourceName string, lookup []byte) (
 	return &buf, "tif", nil
 }
 
-func renderIndexedNameCS(im *PDFImage, resourceName string, cs types.Name, maxInd int, lookup []byte) (io.Reader, string, error) {
+func renderIndexedNameCS(im *PDFImage, resourceName string, cs types.Name, maxInd int, lookup []byte) (
+	io.Reader, string, error,
+) {
 	switch cs {
 
 	case model.DeviceGrayCS:
 		if len(lookup) < 1*(maxInd+1) {
-			return nil, "", errors.Errorf("pdfcpu: renderIndexedNameCS: objNr=%d, corrupt DeviceGray lookup table\n", im.objNr)
+			return nil, "", errors.Errorf(
+				"pdfcpu: renderIndexedNameCS: objNr=%d, corrupt DeviceGray lookup table\n", im.objNr,
+			)
 		}
 		return renderIndexedGrayToPNG(im, resourceName, lookup)
 
 	case model.DeviceRGBCS:
 		if len(lookup) < 3*(maxInd+1) {
-			return nil, "", errors.Errorf("pdfcpu: renderIndexedNameCS: objNr=%d, corrupt DeviceRGB lookup table\n", im.objNr)
+			return nil, "", errors.Errorf(
+				"pdfcpu: renderIndexedNameCS: objNr=%d, corrupt DeviceRGB lookup table\n", im.objNr,
+			)
 		}
 		return renderIndexedRGBToPNG(im, resourceName, lookup)
 
 	case model.DeviceCMYKCS:
 		if len(lookup) < 4*(maxInd+1) {
-			return nil, "", errors.Errorf("pdfcpu: renderIndexedNameCS: objNr=%d, corrupt DeviceCMYK lookup table\n", im.objNr)
+			return nil, "", errors.Errorf(
+				"pdfcpu: renderIndexedNameCS: objNr=%d, corrupt DeviceCMYK lookup table\n", im.objNr,
+			)
 		}
 		return renderIndexedCMYKToTIFF(im, resourceName, lookup)
 	}
@@ -674,7 +702,9 @@ func renderIndexedNameCS(im *PDFImage, resourceName string, cs types.Name, maxIn
 	return nil, "", nil
 }
 
-func renderIndexedArrayCS(xRefTable *model.XRefTable, im *PDFImage, resourceName string, csa types.Array, maxInd int, lookup []byte) (io.Reader, string, error) {
+func renderIndexedArrayCS(
+	xRefTable *model.XRefTable, im *PDFImage, resourceName string, csa types.Array, maxInd int, lookup []byte,
+) (io.Reader, string, error) {
 	b := im.sd.Content
 
 	cs, _ := csa[0].(types.Name)
@@ -696,12 +726,16 @@ func renderIndexedArrayCS(xRefTable *model.XRefTable, im *PDFImage, resourceName
 		// 1,3 or 4 color components.
 		n := *iccProfileStream.IntEntry("N")
 		if !types.IntMemberOf(n, []int{1, 3, 4}) {
-			return nil, "", errors.Errorf("pdfcpu: renderIndexedArrayCS: objNr=%d, N must be 1,3 or 4, got:%d\n", im.objNr, n)
+			return nil, "", errors.Errorf(
+				"pdfcpu: renderIndexedArrayCS: objNr=%d, N must be 1,3 or 4, got:%d\n", im.objNr, n,
+			)
 		}
 
 		// Validate the lookup table.
 		if len(lookup) < n*(maxInd+1) {
-			return nil, "", errors.Errorf("pdfcpu: renderIndexedArrayCS: objNr=%d, corrupt ICCBased lookup table\n", im.objNr)
+			return nil, "", errors.Errorf(
+				"pdfcpu: renderIndexedArrayCS: objNr=%d, corrupt ICCBased lookup table\n", im.objNr,
+			)
 		}
 
 		// TODO: Transform linear XYZ to RGB according to ICC profile.
@@ -734,7 +768,10 @@ func renderIndexedArrayCS(xRefTable *model.XRefTable, im *PDFImage, resourceName
 		case 4:
 			// CMYK
 			if log.DebugEnabled() {
-				log.Debug.Printf("renderIndexedArrayCS: CMYK objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc, len(b))
+				log.Debug.Printf(
+					"renderIndexedArrayCS: CMYK objNr=%d w=%d h=%d bpc=%d buflen=%d\n", im.objNr, im.w, im.h, im.bpc,
+					len(b),
+				)
 			}
 			return renderIndexedCMYKToTIFF(im, resourceName, lookup)
 		}
@@ -747,7 +784,9 @@ func renderIndexedArrayCS(xRefTable *model.XRefTable, im *PDFImage, resourceName
 	return nil, "", nil
 }
 
-func renderIndexed(xRefTable *model.XRefTable, im *PDFImage, resourceName string, cs types.Array) (io.Reader, string, error) {
+func renderIndexed(xRefTable *model.XRefTable, im *PDFImage, resourceName string, cs types.Array) (
+	io.Reader, string, error,
+) {
 	// Identify the base color space.
 	baseCS, _ := xRefTable.Dereference(cs[1])
 
@@ -762,13 +801,18 @@ func renderIndexed(xRefTable *model.XRefTable, im *PDFImage, resourceName string
 	}
 
 	if lookup == nil {
-		return nil, "", errors.Errorf("pdfcpu: renderIndexed: objNr=%d IndexedCS with corrupt lookup table %s\n", im.objNr, cs)
+		return nil, "", errors.Errorf(
+			"pdfcpu: renderIndexed: objNr=%d IndexedCS with corrupt lookup table %s\n", im.objNr, cs,
+		)
 	}
 
 	b := im.sd.Content
 
 	if log.DebugEnabled() {
-		log.Debug.Printf("renderIndexed: objNr=%d w=%d h=%d bpc=%d buflen=%d maxInd=%d\n", im.objNr, im.w, im.h, im.bpc, len(b), maxInd)
+		log.Debug.Printf(
+			"renderIndexed: objNr=%d w=%d h=%d bpc=%d buflen=%d maxInd=%d\n", im.objNr, im.w, im.h, im.bpc, len(b),
+			maxInd,
+		)
 	}
 
 	// Validate buflen.
@@ -789,7 +833,9 @@ func renderIndexed(xRefTable *model.XRefTable, im *PDFImage, resourceName string
 	return nil, "", nil
 }
 
-func renderDeviceN(xRefTable *model.XRefTable, im *PDFImage, resourceName string, cs types.Array) (io.Reader, string, error) {
+func renderDeviceN(xRefTable *model.XRefTable, im *PDFImage, resourceName string, cs types.Array) (
+	io.Reader, string, error,
+) {
 	if im.comp <= 4 {
 		switch im.comp {
 		case 1:
@@ -828,7 +874,9 @@ func renderDeviceN(xRefTable *model.XRefTable, im *PDFImage, resourceName string
 	return nil, "", nil
 }
 
-func renderImage(xRefTable *model.XRefTable, sd *types.StreamDict, thumb bool, resourceName string, objNr int) (io.Reader, string, error) {
+func renderImage(
+	xRefTable *model.XRefTable, sd *types.StreamDict, thumb bool, resourceName string, objNr int,
+) (io.Reader, string, error) {
 	// If color space is CMYK then write .tif else write .png
 
 	pdfImage, err := pdfImage(xRefTable, sd, thumb, objNr)
@@ -932,7 +980,9 @@ func renderCMYKToPng(im *PDFImage, resourceName string) (io.Reader, string, erro
 	return &buf, "png", nil
 }
 
-func renderDCTToPNG(xRefTable *model.XRefTable, sd *types.StreamDict, thumb bool, resourceName string, objNr int) (io.Reader, string, error) {
+func renderDCTToPNG(
+	xRefTable *model.XRefTable, sd *types.StreamDict, thumb bool, resourceName string, objNr int,
+) (io.Reader, string, error) {
 	im, err := pdfImage(xRefTable, sd, thumb, objNr)
 	if err != nil {
 		return nil, "", err
@@ -942,7 +992,9 @@ func renderDCTToPNG(xRefTable *model.XRefTable, sd *types.StreamDict, thumb bool
 }
 
 // RenderImage returns a reader for a decoded image stream.
-func RenderImage(xRefTable *model.XRefTable, sd *types.StreamDict, thumb bool, resourceName string, objNr int) (io.Reader, string, error) {
+func RenderImage(
+	xRefTable *model.XRefTable, sd *types.StreamDict, thumb bool, resourceName string, objNr int,
+) (io.Reader, string, error) {
 	// Image compression is the last filter in the pipeline.
 
 	if len(sd.FilterPipeline) == 0 {
@@ -982,7 +1034,9 @@ func WriteReader(path string, r io.Reader) error {
 }
 
 // WriteImage writes a PDF image object to disk.
-func WriteImage(xRefTable *model.XRefTable, fileName string, sd *types.StreamDict, thumb bool, objNr int) (string, error) {
+func WriteImage(xRefTable *model.XRefTable, fileName string, sd *types.StreamDict, thumb bool, objNr int) (
+	string, error,
+) {
 	r, _, err := RenderImage(xRefTable, sd, thumb, fileName, objNr)
 	if err != nil {
 		return "", err

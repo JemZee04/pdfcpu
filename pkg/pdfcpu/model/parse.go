@@ -24,8 +24,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 var (
@@ -1094,7 +1094,8 @@ func ObjectStreamDict(sd *types.StreamDict) (*types.ObjectStreamDict, error) {
 		StreamDict:     *sd,
 		ObjCount:       *sd.N(),
 		FirstObjOffset: *sd.First(),
-		ObjArray:       nil}
+		ObjArray:       nil,
+	}
 
 	return &osd, nil
 }

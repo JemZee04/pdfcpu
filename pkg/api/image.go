@@ -23,8 +23,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
 	"github.com/pkg/errors"
 )
 
@@ -55,7 +55,9 @@ func Images(rs io.ReadSeeker, selectedPages []string, conf *model.Configuration)
 }
 
 // UpdateImages replaces the XObject identified by objNr or (pageNr and resourceId).
-func UpdateImages(rs io.ReadSeeker, rd io.Reader, w io.Writer, objNr, pageNr int, id string, conf *model.Configuration) error {
+func UpdateImages(
+	rs io.ReadSeeker, rd io.Reader, w io.Writer, objNr, pageNr int, id string, conf *model.Configuration,
+) error {
 
 	if rs == nil {
 		return errors.New("pdfcpu: UpdateImages: missing rs")
@@ -103,7 +105,9 @@ func ensurePageNrAndId(pageNr *int, id *string, imageFile string) (err error) {
 	ss := strings.Split(s, "_")
 
 	if len(ss) < 3 {
-		return errors.Errorf("pdfcpu: invalid image filename:%s - must conform to output filename of \"pdfcpu extract\"", imageFile)
+		return errors.Errorf(
+			"pdfcpu: invalid image filename:%s - must conform to output filename of \"pdfcpu extract\"", imageFile,
+		)
 	}
 
 	*id = ss[len(ss)-1]
@@ -117,7 +121,9 @@ func ensurePageNrAndId(pageNr *int, id *string, imageFile string) (err error) {
 }
 
 // UpdateImagesFile replaces the XObject identified by objNr or (pageNr and resourceId).
-func UpdateImagesFile(inFile, imageFile, outFile string, objNr, pageNr int, id string, conf *model.Configuration) (err error) {
+func UpdateImagesFile(
+	inFile, imageFile, outFile string, objNr, pageNr int, id string, conf *model.Configuration,
+) (err error) {
 
 	if objNr < 1 {
 		if err = ensurePageNrAndId(&pageNr, &id, imageFile); err != nil {

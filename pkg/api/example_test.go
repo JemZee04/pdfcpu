@@ -17,8 +17,8 @@ limitations under the License.
 package api
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 func ExampleValidateFile() {
@@ -130,7 +130,9 @@ func ExampleAddWatermarksFile() {
 	// Stamp all odd pages of in.pdf in red "Confidential" in 48 point Courier
 	// using a rotation angle of 45 degrees and an absolute scalefactor of 1.0.
 	onTop = true
-	wm, _ = TextWatermark("Confidential", "font:Courier, points:48, col: 1 0 0, rot:45, scale:1 abs, ", onTop, update, types.POINTS)
+	wm, _ = TextWatermark(
+		"Confidential", "font:Courier, points:48, col: 1 0 0, rot:45, scale:1 abs, ", onTop, update, types.POINTS,
+	)
 	AddWatermarksFile("in.pdf", "", []string{"odd"}, wm, nil)
 
 	// Add image stamps to in.pdf using absolute scaling and a negative rotation of 90 degrees.

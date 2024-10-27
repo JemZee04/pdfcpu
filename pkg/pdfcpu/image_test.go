@@ -27,9 +27,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/filter"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -243,7 +243,8 @@ func read1BPCDeviceGrayFlateStreamDump(xRefTable *model.XRefTable, fileName stri
 			},
 		),
 		Raw:            buf,
-		FilterPipeline: []types.PDFFilter{{Name: filter.Flate, DecodeParms: nil}}}
+		FilterPipeline: []types.PDFFilter{{Name: filter.Flate, DecodeParms: nil}},
+	}
 
 	sd.InsertName("Filter", filter.Flate)
 
@@ -337,7 +338,8 @@ func read8BPCDeviceCMYKFlateStreamDump(xRefTable *model.XRefTable, fileName stri
 			},
 		),
 		Raw:            buf,
-		FilterPipeline: []types.PDFFilter{{Name: filter.Flate, DecodeParms: decodeParms}}}
+		FilterPipeline: []types.PDFFilter{{Name: filter.Flate, DecodeParms: decodeParms}},
+	}
 
 	sd.InsertName("Filter", filter.Flate)
 

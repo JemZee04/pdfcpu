@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -144,10 +144,12 @@ const (
 )
 
 func borderStyleDict(width float64, style BorderStyle) types.Dict {
-	d := types.Dict(map[string]types.Object{
-		"Type": types.Name("Border"),
-		"W":    types.Float(width),
-	})
+	d := types.Dict(
+		map[string]types.Object{
+			"Type": types.Name("Border"),
+			"W":    types.Float(width),
+		},
+	)
 
 	var s string
 
@@ -175,10 +177,12 @@ func borderEffectDict(cloudyBorder bool, intensity int) types.Dict {
 		s = "C"
 	}
 
-	return types.Dict(map[string]types.Object{
-		"S": types.Name(s),
-		"I": types.Integer(intensity),
-	})
+	return types.Dict(
+		map[string]types.Object{
+			"S": types.Name(s),
+			"I": types.Integer(intensity),
+		},
+	)
 }
 
 func borderArray(rx, ry, width float64) types.Array {
@@ -264,7 +268,8 @@ func NewAnnotation(
 	col *color.SimpleColor,
 	borderRadX float64,
 	borderRadY float64,
-	borderWidth float64) Annotation {
+	borderWidth float64,
+) Annotation {
 
 	return Annotation{
 		SubType:          typ,
@@ -291,7 +296,8 @@ func NewAnnotationForRawType(
 	col *color.SimpleColor,
 	borderRadX float64,
 	borderRadY float64,
-	borderWidth float64) Annotation {
+	borderWidth float64,
+) Annotation {
 	return NewAnnotation(AnnotTypes[typ], rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth)
 }
 
@@ -321,11 +327,13 @@ func (ann Annotation) TypeString() string {
 }
 
 func (ann Annotation) RenderDict(xRefTable *XRefTable, pageIndRef *types.IndirectRef) (types.Dict, error) {
-	d := types.Dict(map[string]types.Object{
-		"Type":    types.Name("Annot"),
-		"Subtype": types.Name(ann.TypeString()),
-		"Rect":    ann.Rect.Array(),
-	})
+	d := types.Dict(
+		map[string]types.Object{
+			"Type":    types.Name("Annot"),
+			"Subtype": types.Name(ann.TypeString()),
+			"Rect":    ann.Rect.Array(),
+		},
+	)
 
 	if pageIndRef != nil {
 		d["P"] = *pageIndRef
@@ -347,7 +355,9 @@ func (ann Annotation) RenderDict(xRefTable *XRefTable, pageIndRef *types.Indirec
 	if ann.ModificationDate != "" {
 		_, ok := types.DateTime(ann.ModificationDate, xRefTable.ValidationMode == ValidationRelaxed)
 		if !ok {
-			return nil, errors.Errorf("pdfcpu: annotation renderDict - validateDateEntry: <%s> invalid date", ann.ModificationDate)
+			return nil, errors.Errorf(
+				"pdfcpu: annotation renderDict - validateDateEntry: <%s> invalid date", ann.ModificationDate,
+			)
 		}
 		modDate = ann.ModificationDate
 	}
@@ -387,7 +397,8 @@ func NewPopupAnnotation(
 	borderWidth float64,
 
 	parentIndRef *types.IndirectRef,
-	displayOpen bool) PopupAnnotation {
+	displayOpen bool,
+) PopupAnnotation {
 
 	ann := NewAnnotation(AnnPopup, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth)
 
@@ -446,7 +457,8 @@ func NewLinkAnnotation(
 	quad types.QuadPoints,
 	border bool,
 	borderWidth float64,
-	borderStyle BorderStyle) LinkAnnotation {
+	borderStyle BorderStyle,
+) LinkAnnotation {
 
 	ann := NewAnnotation(AnnLink, rect, contents, id, modDate, f, borderCol, 0, 0, 0)
 
@@ -500,11 +512,13 @@ func (ann LinkAnnotation) RenderDict(xRefTable *XRefTable, pageIndRef *types.Ind
 		}
 		d["Dest"] = dest.Array(*indRef)
 	} else {
-		actionDict := types.Dict(map[string]types.Object{
-			"Type": types.Name("Action"),
-			"S":    types.Name("URI"),
-			"URI":  types.StringLiteral(ann.URI),
-		})
+		actionDict := types.Dict(
+			map[string]types.Object{
+				"Type": types.Name("Action"),
+				"S":    types.Name("URI"),
+				"URI":  types.StringLiteral(ann.URI),
+			},
+		)
 		d["A"] = actionDict
 	}
 
@@ -551,7 +565,8 @@ func NewMarkupAnnotation(
 	title string,
 	popupIndRef *types.IndirectRef,
 	ca *float64,
-	rc, subject string) MarkupAnnotation {
+	rc, subject string,
+) MarkupAnnotation {
 
 	ann := NewAnnotation(subType, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth)
 
@@ -562,7 +577,8 @@ func NewMarkupAnnotation(
 		CA:           ca,
 		RC:           rc,
 		CreationDate: types.DateString(time.Now()),
-		Subj:         subject}
+		Subj:         subject,
+	}
 }
 
 // ContentString returns a string representation of ann's content.
@@ -640,9 +656,13 @@ func NewTextAnnotation(
 	borderWidth float64,
 
 	displayOpen bool,
-	name string) TextAnnotation {
+	name string,
+) TextAnnotation {
 
-	ma := NewMarkupAnnotation(AnnText, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef, ca, rc, subject)
+	ma := NewMarkupAnnotation(
+		AnnText, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef, ca, rc,
+		subject,
+	)
 
 	return TextAnnotation{
 		MarkupAnnotation: ma,
@@ -738,13 +758,16 @@ func NewFreeTextAnnotation(
 	borderWidth float64,
 	borderStyle BorderStyle,
 	cloudyBorder bool,
-	cloudyBorderIntensity int) FreeTextAnnotation {
+	cloudyBorderIntensity int,
+) FreeTextAnnotation {
 
 	// validate required DA, DS
 
 	// validate callOutline: 2 or 3 points => array of 4 or 6 numbers.
 
-	ma := NewMarkupAnnotation(AnnFreeText, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject)
+	ma := NewMarkupAnnotation(
+		AnnFreeText, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject,
+	)
 
 	if cloudyBorderIntensity < 0 || cloudyBorderIntensity > 2 {
 		cloudyBorderIntensity = 0
@@ -914,9 +937,12 @@ func NewLineAnnotation(
 	captionOffsetY float64,
 	fillCol *color.SimpleColor,
 	borderWidth float64,
-	borderStyle BorderStyle) LineAnnotation {
+	borderStyle BorderStyle,
+) LineAnnotation {
 
-	ma := NewMarkupAnnotation(AnnLine, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject)
+	ma := NewMarkupAnnotation(
+		AnnLine, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject,
+	)
 
 	lineIntent := ""
 	if intent != nil {
@@ -1053,9 +1079,12 @@ func NewSquareAnnotation(
 	borderWidth float64,
 	borderStyle BorderStyle,
 	cloudyBorder bool,
-	cloudyBorderIntensity int) SquareAnnotation {
+	cloudyBorderIntensity int,
+) SquareAnnotation {
 
-	ma := NewMarkupAnnotation(AnnSquare, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject)
+	ma := NewMarkupAnnotation(
+		AnnSquare, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject,
+	)
 
 	if cloudyBorderIntensity < 0 || cloudyBorderIntensity > 2 {
 		cloudyBorderIntensity = 0
@@ -1131,9 +1160,12 @@ func NewCircleAnnotation(
 	borderWidth float64,
 	borderStyle BorderStyle,
 	cloudyBorder bool,
-	cloudyBorderIntensity int) CircleAnnotation {
+	cloudyBorderIntensity int,
+) CircleAnnotation {
 
-	ma := NewMarkupAnnotation(AnnCircle, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject)
+	ma := NewMarkupAnnotation(
+		AnnCircle, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject,
+	)
 
 	if cloudyBorderIntensity < 0 || cloudyBorderIntensity > 2 {
 		cloudyBorderIntensity = 0
@@ -1234,9 +1266,12 @@ func NewPolygonAnnotation(
 	borderWidth float64,
 	borderStyle BorderStyle,
 	cloudyBorder bool,
-	cloudyBorderIntensity int) PolygonAnnotation {
+	cloudyBorderIntensity int,
+) PolygonAnnotation {
 
-	ma := NewMarkupAnnotation(AnnPolygon, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject)
+	ma := NewMarkupAnnotation(
+		AnnPolygon, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject,
+	)
 
 	polygonIntent := ""
 	if intent != nil {
@@ -1354,9 +1389,12 @@ func NewPolyLineAnnotation(
 	borderWidth float64,
 	borderStyle BorderStyle,
 	beginLineEndingStyle *LineEndingStyle,
-	endLineEndingStyle *LineEndingStyle) PolyLineAnnotation {
+	endLineEndingStyle *LineEndingStyle,
+) PolyLineAnnotation {
 
-	ma := NewMarkupAnnotation(AnnPolyLine, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject)
+	ma := NewMarkupAnnotation(
+		AnnPolyLine, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject,
+	)
 
 	polyLineIntent := ""
 	if intent != nil {
@@ -1447,9 +1485,13 @@ func NewTextMarkupAnnotation(
 	ca *float64,
 	rc, subject string,
 
-	quad types.QuadPoints) TextMarkupAnnotation {
+	quad types.QuadPoints,
+) TextMarkupAnnotation {
 
-	ma := NewMarkupAnnotation(subType, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef, ca, rc, subject)
+	ma := NewMarkupAnnotation(
+		subType, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef, ca, rc,
+		subject,
+	)
 
 	return TextMarkupAnnotation{
 		MarkupAnnotation: ma,
@@ -1488,10 +1530,14 @@ func NewHighlightAnnotation(
 	ca *float64,
 	rc, subject string,
 
-	quad types.QuadPoints) HighlightAnnotation {
+	quad types.QuadPoints,
+) HighlightAnnotation {
 
 	return HighlightAnnotation{
-		NewTextMarkupAnnotation(AnnHighLight, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef, ca, rc, subject, quad),
+		NewTextMarkupAnnotation(
+			AnnHighLight, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef,
+			ca, rc, subject, quad,
+		),
 	}
 }
 
@@ -1513,10 +1559,14 @@ func NewUnderlineAnnotation(
 	ca *float64,
 	rc, subject string,
 
-	quad types.QuadPoints) UnderlineAnnotation {
+	quad types.QuadPoints,
+) UnderlineAnnotation {
 
 	return UnderlineAnnotation{
-		NewTextMarkupAnnotation(AnnUnderline, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef, ca, rc, subject, quad),
+		NewTextMarkupAnnotation(
+			AnnUnderline, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef,
+			ca, rc, subject, quad,
+		),
 	}
 }
 
@@ -1538,10 +1588,14 @@ func NewSquigglyAnnotation(
 	ca *float64,
 	rc, subject string,
 
-	quad types.QuadPoints) SquigglyAnnotation {
+	quad types.QuadPoints,
+) SquigglyAnnotation {
 
 	return SquigglyAnnotation{
-		NewTextMarkupAnnotation(AnnSquiggly, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef, ca, rc, subject, quad),
+		NewTextMarkupAnnotation(
+			AnnSquiggly, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef,
+			ca, rc, subject, quad,
+		),
 	}
 }
 
@@ -1563,10 +1617,14 @@ func NewStrikeOutAnnotation(
 	ca *float64,
 	rc, subject string,
 
-	quad types.QuadPoints) StrikeOutAnnotation {
+	quad types.QuadPoints,
+) StrikeOutAnnotation {
 
 	return StrikeOutAnnotation{
-		NewTextMarkupAnnotation(AnnStrikeOut, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef, ca, rc, subject, quad),
+		NewTextMarkupAnnotation(
+			AnnStrikeOut, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef,
+			ca, rc, subject, quad,
+		),
 	}
 }
 
@@ -1591,9 +1649,13 @@ func NewCaretAnnotation(
 	rc, subject string,
 
 	rd *types.Rectangle,
-	paragraph bool) CaretAnnotation {
+	paragraph bool,
+) CaretAnnotation {
 
-	ma := NewMarkupAnnotation(AnnCaret, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef, ca, rc, subject)
+	ma := NewMarkupAnnotation(
+		AnnCaret, rect, contents, id, modDate, f, col, borderRadX, borderRadY, borderWidth, title, popupIndRef, ca, rc,
+		subject,
+	)
 
 	return CaretAnnotation{
 		MarkupAnnotation: ma,
@@ -1642,7 +1704,8 @@ func NewInkAnnotation(
 
 	ink []InkPath,
 	borderWidth float64,
-	borderStyle BorderStyle) InkAnnotation {
+	borderStyle BorderStyle,
+) InkAnnotation {
 
 	ma := NewMarkupAnnotation(AnnInk, rect, contents, id, modDate, f, col, 0, 0, 0, title, popupIndRef, ca, rc, subject)
 

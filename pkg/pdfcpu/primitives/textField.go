@@ -23,12 +23,12 @@ import (
 
 	"unicode/utf8"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/format"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	pdffont "github.com/JemZee04/pdfcpu/pkg/pdfcpu/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/format"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -224,7 +224,9 @@ func (tf *TextField) validate() error {
 	return tf.validateTab()
 }
 
-func (tf *TextField) calcFontFromDA(ctx *model.Context, d types.Dict, needUTF8 bool, fonts map[string]types.IndirectRef) (*types.IndirectRef, error) {
+func (tf *TextField) calcFontFromDA(
+	ctx *model.Context, d types.Dict, needUTF8 bool, fonts map[string]types.IndirectRef,
+) (*types.IndirectRef, error) {
 	s := d.StringEntry("DA")
 	if s == nil {
 		s = ctx.Form.StringEntry("DA")
@@ -377,8 +379,10 @@ func (tf *TextField) renderBackground(w io.Writer, bgCol, boCol *color.SimpleCol
 			fmt.Fprintf(w, "%.2f %.2f %.2f rg 0 0 %.2f %.2f re f ", bgCol.R, bgCol.G, bgCol.B, width, height)
 		}
 		if boCol != nil && boWidth > 0 {
-			fmt.Fprintf(w, "%.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s ",
-				boCol.R, boCol.G, boCol.B, boWidth, boWidth/2, boWidth/2, width-boWidth, height-boWidth)
+			fmt.Fprintf(
+				w, "%.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s ",
+				boCol.R, boCol.G, boCol.B, boWidth, boWidth/2, boWidth/2, width-boWidth, height-boWidth,
+			)
 		}
 		fmt.Fprint(w, "Q ")
 	}
@@ -403,10 +407,12 @@ func (tf *TextField) renderLines(xRefTable *model.XRefTable, boWidth, lh, w, y f
 		}
 		fmt.Fprint(buf, "BT ")
 		if i == 0 {
-			fmt.Fprintf(buf, "/%s %d Tf %.2f %.2f %.2f RG %.2f %.2f %.2f rg ",
+			fmt.Fprintf(
+				buf, "/%s %d Tf %.2f %.2f %.2f RG %.2f %.2f %.2f rg ",
 				tf.fontID, f.Size,
 				f.col.R, f.col.G, f.col.B,
-				f.col.R, f.col.G, f.col.B)
+				f.col.R, f.col.G, f.col.B,
+			)
 		}
 		fmt.Fprintf(buf, "%.2f %.2f Td (%s) Tj ET ", x, y, s)
 		y -= lh
@@ -458,8 +464,10 @@ func (tf *TextField) renderN(xRefTable *model.XRefTable) ([]byte, error) {
 	fmt.Fprint(buf, "EMC ")
 
 	if boCol != nil && boWidth > 0 {
-		fmt.Fprintf(buf, "q %.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s Q ",
-			boCol.R, boCol.G, boCol.B, boWidth-1, boWidth/2, boWidth/2, w-boWidth, h-boWidth)
+		fmt.Fprintf(
+			buf, "q %.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s Q ",
+			boCol.R, boCol.G, boCol.B, boWidth-1, boWidth/2, boWidth/2, w-boWidth, h-boWidth,
+		)
 	}
 
 	return buf.Bytes(), nil
@@ -890,7 +898,8 @@ func NewTextField(
 	v string,
 	multiLine bool,
 	fontIndRef *types.IndirectRef,
-	fonts map[string]types.IndirectRef) (*TextField, *types.IndirectRef, error) {
+	fonts map[string]types.IndirectRef,
+) (*TextField, *types.IndirectRef, error) {
 
 	tf := &TextField{Value: v, Multiline: multiLine}
 
@@ -929,7 +938,9 @@ func NewTextField(
 	return tf, fontIndRef, nil
 }
 
-func renderTextFieldAP(ctx *model.Context, d types.Dict, v string, multiLine bool, fonts map[string]types.IndirectRef) error {
+func renderTextFieldAP(
+	ctx *model.Context, d types.Dict, v string, multiLine bool, fonts map[string]types.IndirectRef,
+) error {
 	if ap := d.DictEntry("AP"); ap != nil {
 		if err := ctx.DeleteObject(ap); err != nil {
 			return err
@@ -956,7 +967,9 @@ func renderTextFieldAP(ctx *model.Context, d types.Dict, v string, multiLine boo
 	return nil
 }
 
-func fontAttrs(ctx *model.Context, fd types.Dict, fontID, text string, fonts map[string]types.IndirectRef) (string, string, string, *types.IndirectRef, error) {
+func fontAttrs(ctx *model.Context, fd types.Dict, fontID, text string, fonts map[string]types.IndirectRef) (
+	string, string, string, *types.IndirectRef, error,
+) {
 	var prefix, name, lang string
 	var err error
 
@@ -1002,7 +1015,9 @@ func fontAttrs(ctx *model.Context, fd types.Dict, fontID, text string, fonts map
 	return fontID, name, lang, fontIndRef, nil
 }
 
-func EnsureTextFieldAP(ctx *model.Context, d types.Dict, text string, multiLine bool, fonts map[string]types.IndirectRef) error {
+func EnsureTextFieldAP(
+	ctx *model.Context, d types.Dict, text string, multiLine bool, fonts map[string]types.IndirectRef,
+) error {
 	ap := d.DictEntry("AP")
 	if ap == nil {
 		return renderTextFieldAP(ctx, d, text, multiLine, fonts)

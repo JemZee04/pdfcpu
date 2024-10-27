@@ -30,7 +30,7 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/log"
 	"github.com/pkg/errors"
 )
 
@@ -66,7 +66,8 @@ type ttf struct {
 }
 
 func (fd ttf) String() string {
-	return fmt.Sprintf(`
+	return fmt.Sprintf(
+		`
  PostscriptName = %s
       Protected = %t
      UnitsPerEm = %d
@@ -820,8 +821,10 @@ func glyphOffsets(gid int, locaFull, glyfsFull *table, numGlyphs, indexToLocForm
 	return offFrom, offThru
 }
 
-func resolveCompoundGlyph(fontName string, bb []byte, usedGIDs map[uint16]bool,
-	locaFull, glyfsFull *table, numGlyphs, indexToLocFormat int) error {
+func resolveCompoundGlyph(
+	fontName string, bb []byte, usedGIDs map[uint16]bool,
+	locaFull, glyfsFull *table, numGlyphs, indexToLocFormat int,
+) error {
 	last := false
 	for off := 10; !last; {
 		flags := binary.BigEndian.Uint16(bb[off:])
@@ -867,14 +870,18 @@ func resolveCompoundGlyph(fontName string, bb []byte, usedGIDs map[uint16]bool,
 			continue
 		}
 
-		if err := resolveCompoundGlyph(fontName, cbb, usedGIDs, locaFull, glyfsFull, numGlyphs, indexToLocFormat); err != nil {
+		if err := resolveCompoundGlyph(
+			fontName, cbb, usedGIDs, locaFull, glyfsFull, numGlyphs, indexToLocFormat,
+		); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func resolveCompoundGlyphs(fontName string, usedGIDs map[uint16]bool, locaFull, glyfsFull *table, numGlyphs, indexToLocFormat int) error {
+func resolveCompoundGlyphs(
+	fontName string, usedGIDs map[uint16]bool, locaFull, glyfsFull *table, numGlyphs, indexToLocFormat int,
+) error {
 	gids := make([]uint16, len(usedGIDs))
 	for k := range usedGIDs {
 		gids = append(gids, k)
@@ -892,7 +899,9 @@ func resolveCompoundGlyphs(fontName string, usedGIDs map[uint16]bool, locaFull, 
 			// simple
 			continue
 		}
-		if err := resolveCompoundGlyph(fontName, bb, usedGIDs, locaFull, glyfsFull, numGlyphs, indexToLocFormat); err != nil {
+		if err := resolveCompoundGlyph(
+			fontName, bb, usedGIDs, locaFull, glyfsFull, numGlyphs, indexToLocFormat,
+		); err != nil {
 			return err
 		}
 	}

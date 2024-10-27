@@ -20,7 +20,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -175,7 +175,9 @@ func (xRefTable *XRefTable) DereferenceNumber(o types.Object) (float64, error) {
 }
 
 // DereferenceName resolves and validates a name object, which may be an indirect reference.
-func (xRefTable *XRefTable) DereferenceName(o types.Object, sinceVersion Version, validate func(string) bool) (n types.Name, err error) {
+func (xRefTable *XRefTable) DereferenceName(
+	o types.Object, sinceVersion Version, validate func(string) bool,
+) (n types.Name, err error) {
 
 	o, err = xRefTable.Dereference(o)
 	if err != nil || o == nil {
@@ -201,7 +203,9 @@ func (xRefTable *XRefTable) DereferenceName(o types.Object, sinceVersion Version
 }
 
 // DereferenceStringLiteral resolves and validates a string literal object, which may be an indirect reference.
-func (xRefTable *XRefTable) DereferenceStringLiteral(o types.Object, sinceVersion Version, validate func(string) bool) (s types.StringLiteral, err error) {
+func (xRefTable *XRefTable) DereferenceStringLiteral(
+	o types.Object, sinceVersion Version, validate func(string) bool,
+) (s types.StringLiteral, err error) {
 
 	o, err = xRefTable.Dereference(o)
 	if err != nil || o == nil {
@@ -233,7 +237,9 @@ func (xRefTable *XRefTable) DereferenceStringLiteral(o types.Object, sinceVersio
 }
 
 // DereferenceStringOrHexLiteral resolves and validates a string or hex literal object, which may be an indirect reference.
-func (xRefTable *XRefTable) DereferenceStringOrHexLiteral(obj types.Object, sinceVersion Version, validate func(string) bool) (s string, err error) {
+func (xRefTable *XRefTable) DereferenceStringOrHexLiteral(
+	obj types.Object, sinceVersion Version, validate func(string) bool,
+) (s string, err error) {
 
 	o, err := xRefTable.Dereference(obj)
 	if err != nil || o == nil {

@@ -17,8 +17,8 @@ limitations under the License.
 package validate
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -27,7 +27,12 @@ func validateDeviceColorSpaceName(s string) bool {
 }
 
 func validateAllColorSpaceNamesExceptPattern(s string) bool {
-	return types.MemberOf(s, []string{model.DeviceGrayCS, model.DeviceRGBCS, model.DeviceCMYKCS, model.CalGrayCS, model.CalRGBCS, model.LabCS, model.ICCBasedCS, model.IndexedCS, model.SeparationCS, model.DeviceNCS})
+	return types.MemberOf(
+		s, []string{
+			model.DeviceGrayCS, model.DeviceRGBCS, model.DeviceCMYKCS, model.CalGrayCS, model.CalRGBCS, model.LabCS,
+			model.ICCBasedCS, model.IndexedCS, model.SeparationCS, model.DeviceNCS,
+		},
+	)
 }
 
 func validateCalGrayColorSpace(xRefTable *model.XRefTable, a types.Array, sinceVersion model.Version) error {
@@ -49,12 +54,16 @@ func validateCalGrayColorSpace(xRefTable *model.XRefTable, a types.Array, sinceV
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "WhitePoint", REQUIRED, sinceVersion, func(a types.Array) bool { return len(a) == 3 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "WhitePoint", REQUIRED, sinceVersion, func(a types.Array) bool { return len(a) == 3 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "BlackPoint", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 3 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "BlackPoint", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 3 },
+	)
 	if err != nil {
 		return err
 	}
@@ -82,22 +91,30 @@ func validateCalRGBColorSpace(xRefTable *model.XRefTable, a types.Array, sinceVe
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "WhitePoint", REQUIRED, sinceVersion, func(a types.Array) bool { return len(a) == 3 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "WhitePoint", REQUIRED, sinceVersion, func(a types.Array) bool { return len(a) == 3 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "BlackPoint", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 3 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "BlackPoint", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 3 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "Gamma", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 3 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "Gamma", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 3 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "Matrix", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 9 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "Matrix", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 9 },
+	)
 
 	return err
 }
@@ -120,22 +137,30 @@ func validateLabColorSpace(xRefTable *model.XRefTable, a types.Array, sinceVersi
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "WhitePoint", REQUIRED, sinceVersion, func(a types.Array) bool { return len(a) == 3 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "WhitePoint", REQUIRED, sinceVersion, func(a types.Array) bool { return len(a) == 3 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "BlackPoint", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 3 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "BlackPoint", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 3 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "Range", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 4 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "Range", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 4 },
+	)
 
 	return err
 }
 
-func validateAlternateColorSpaceEntryForICC(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, excludePatternCS bool) error {
+func validateAlternateColorSpaceEntryForICC(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, excludePatternCS bool,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, model.V10)
 	if err != nil || o == nil {
@@ -153,7 +178,9 @@ func validateAlternateColorSpaceEntryForICC(xRefTable *model.XRefTable, d types.
 		err = validateColorSpaceArray(xRefTable, o, excludePatternCS)
 
 	default:
-		err = errors.Errorf("pdfcpu: validateAlternateColorSpaceEntryForICC: dict=%s corrupt entry \"%s\"\n", dictName, entryName)
+		err = errors.Errorf(
+			"pdfcpu: validateAlternateColorSpaceEntryForICC: dict=%s corrupt entry \"%s\"\n", dictName, entryName,
+		)
 
 	}
 
@@ -205,7 +232,10 @@ func validateICCBasedColorSpace(xRefTable *model.XRefTable, a types.Array, since
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, sd.Dict, dictName, "Range", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 2*N.Value() })
+	_, err = validateNumberArrayEntry(
+		xRefTable, sd.Dict, dictName, "Range", OPTIONAL, sinceVersion,
+		func(a types.Array) bool { return len(a) == 2*N.Value() },
+	)
 	if err != nil {
 		return err
 	}
@@ -214,7 +244,9 @@ func validateICCBasedColorSpace(xRefTable *model.XRefTable, a types.Array, since
 	return validateMetadata(xRefTable, sd.Dict, OPTIONAL, model.V14)
 }
 
-func validateIndexedColorSpaceLookuptable(xRefTable *model.XRefTable, o types.Object, sinceVersion model.Version) error {
+func validateIndexedColorSpaceLookuptable(
+	xRefTable *model.XRefTable, o types.Object, sinceVersion model.Version,
+) error {
 
 	o, err := xRefTable.Dereference(o)
 	if err != nil || o == nil {
@@ -422,7 +454,10 @@ func validateDeviceNColorSpaceAttributesDict(xRefTable *model.XRefTable, o types
 		sinceVersion = model.V13
 	}
 
-	_, err = validateNameEntry(xRefTable, d, dictName, "Subtype", OPTIONAL, sinceVersion, func(s string) bool { return s == "DeviceN" || s == "NChannel" })
+	_, err = validateNameEntry(
+		xRefTable, d, dictName, "Subtype", OPTIONAL, sinceVersion,
+		func(s string) bool { return s == "DeviceN" || s == "NChannel" },
+	)
 	if err != nil {
 		return err
 	}
@@ -635,7 +670,9 @@ func validateColorSpace(xRefTable *model.XRefTable, o types.Object, excludePatte
 	return err
 }
 
-func validateColorSpaceEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, excludePatternCS bool) error {
+func validateColorSpaceEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, excludePatternCS bool,
+) error {
 
 	o, err := validateEntry(xRefTable, d, dictName, entryName, required, model.V10)
 	if err != nil || o == nil {

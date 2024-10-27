@@ -17,8 +17,8 @@ limitations under the License.
 package validate
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -32,12 +32,16 @@ func validateTilingPatternDict(xRefTable *model.XRefTable, sd *types.StreamDict,
 		return err
 	}
 
-	_, err = validateNameEntry(xRefTable, sd.Dict, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Pattern" })
+	_, err = validateNameEntry(
+		xRefTable, sd.Dict, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Pattern" },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateIntegerEntry(xRefTable, sd.Dict, dictName, "PatternType", REQUIRED, sinceVersion, func(i int) bool { return i == 1 })
+	_, err = validateIntegerEntry(
+		xRefTable, sd.Dict, dictName, "PatternType", REQUIRED, sinceVersion, func(i int) bool { return i == 1 },
+	)
 	if err != nil {
 		return err
 	}
@@ -57,17 +61,23 @@ func validateTilingPatternDict(xRefTable *model.XRefTable, sd *types.StreamDict,
 		return err
 	}
 
-	_, err = validateNumberEntry(xRefTable, sd.Dict, dictName, "XStep", REQUIRED, sinceVersion, func(f float64) bool { return f != 0 })
+	_, err = validateNumberEntry(
+		xRefTable, sd.Dict, dictName, "XStep", REQUIRED, sinceVersion, func(f float64) bool { return f != 0 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberEntry(xRefTable, sd.Dict, dictName, "YStep", REQUIRED, sinceVersion, func(f float64) bool { return f != 0 })
+	_, err = validateNumberEntry(
+		xRefTable, sd.Dict, dictName, "YStep", REQUIRED, sinceVersion, func(f float64) bool { return f != 0 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, sd.Dict, dictName, "Matrix", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 6 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, sd.Dict, dictName, "Matrix", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 6 },
+	)
 	if err != nil {
 		return err
 	}
@@ -91,17 +101,23 @@ func validateShadingPatternDict(xRefTable *model.XRefTable, d types.Dict, sinceV
 		return err
 	}
 
-	_, err = validateNameEntry(xRefTable, d, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Pattern" })
+	_, err = validateNameEntry(
+		xRefTable, d, dictName, "Type", OPTIONAL, sinceVersion, func(s string) bool { return s == "Pattern" },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateIntegerEntry(xRefTable, d, dictName, "PatternType", REQUIRED, sinceVersion, func(i int) bool { return i == 2 })
+	_, err = validateIntegerEntry(
+		xRefTable, d, dictName, "PatternType", REQUIRED, sinceVersion, func(i int) bool { return i == 2 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "Matrix", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 6 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "Matrix", OPTIONAL, sinceVersion, func(a types.Array) bool { return len(a) == 6 },
+	)
 	if err != nil {
 		return err
 	}

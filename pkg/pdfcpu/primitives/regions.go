@@ -19,8 +19,8 @@ package primitives
 import (
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -115,7 +115,9 @@ func (r *Regions) render(p *model.Page, pageNr int, fonts model.FontMap, images 
 		// Calc divider.
 		dx := r.mediaBox.Width() * r.Divider.Pos
 		r.Divider.p.X, r.Divider.p.Y = types.NormalizeCoord(dx, 0, r.mediaBox, r.page.pdf.origin, true)
-		r.Divider.q.X, r.Divider.q.Y = types.NormalizeCoord(dx, r.mediaBox.Height(), r.mediaBox, r.page.pdf.origin, true)
+		r.Divider.q.X, r.Divider.q.Y = types.NormalizeCoord(
+			dx, r.mediaBox.Height(), r.mediaBox, r.page.pdf.origin, true,
+		)
 
 		// Render left region.
 		r.Left.mediaBox = r.mediaBox.CroppedCopy(0)

@@ -24,9 +24,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/primitives"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/primitives"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -272,7 +272,9 @@ func resolveOption(s string, opts []string, explicit bool) (string, error) {
 	return n, nil
 }
 
-func extractRadioButtonGroup(xRefTable *model.XRefTable, page int, d types.Dict, id, name string, locked bool) (*RadioButtonGroup, error) {
+func extractRadioButtonGroup(
+	xRefTable *model.XRefTable, page int, d types.Dict, id, name string, locked bool,
+) (*RadioButtonGroup, error) {
 
 	rbg := &RadioButtonGroup{Pages: []int{page}, ID: id, Name: name, Locked: locked}
 
@@ -319,7 +321,9 @@ func extractCheckBox(page int, d types.Dict, id, name string, locked bool) (*Che
 	return cb, nil
 }
 
-func extractComboBox(xRefTable *model.XRefTable, page int, d types.Dict, id, name string, locked bool) (*ComboBox, error) {
+func extractComboBox(xRefTable *model.XRefTable, page int, d types.Dict, id, name string, locked bool) (
+	*ComboBox, error,
+) {
 
 	cb := &ComboBox{Pages: []int{page}, ID: id, Name: name, Locked: locked}
 
@@ -407,7 +411,9 @@ func extractDateFormat(d types.Dict) (*primitives.DateFormat, error) {
 	return nil, nil
 }
 
-func extractDateField(page int, d types.Dict, id, name string, df *primitives.DateFormat, locked bool) (*DateField, error) {
+func extractDateField(page int, d types.Dict, id, name string, df *primitives.DateFormat, locked bool) (
+	*DateField, error,
+) {
 
 	dfield := &DateField{Pages: []int{page}, ID: id, Name: name, Format: df.Ext, Locked: locked}
 
@@ -467,7 +473,9 @@ func extractTextField(page int, d types.Dict, id, name string, ff *int, locked b
 	return tf, nil
 }
 
-func extractListBox(xRefTable *model.XRefTable, page int, d types.Dict, id, name string, locked, multi bool) (*ListBox, error) {
+func extractListBox(xRefTable *model.XRefTable, page int, d types.Dict, id, name string, locked, multi bool) (
+	*ListBox, error,
+) {
 
 	lb := &ListBox{Pages: []int{page}, ID: id, Name: name, Locked: locked, Multi: multi}
 
@@ -564,7 +572,8 @@ func exportBtn(
 	d types.Dict,
 	id, name string,
 	locked bool,
-	ok *bool) error {
+	ok *bool,
+) error {
 
 	if len(d.ArrayEntry("Kids")) > 1 {
 
@@ -609,7 +618,8 @@ func exportCh(
 	d types.Dict,
 	id, name string,
 	locked bool,
-	ok *bool) error {
+	ok *bool,
+) error {
 
 	ff := d.IntEntry("Ff")
 	if ff == nil {
@@ -659,7 +669,8 @@ func exportTx(
 	id, name string,
 	ff *int,
 	locked bool,
-	ok *bool) error {
+	ok *bool,
+) error {
 
 	df, err := extractDateFormat(d)
 	if err != nil {

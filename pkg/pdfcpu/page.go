@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -133,7 +133,8 @@ func addPages(
 	pagesIndRef types.IndirectRef,
 	pagesDict types.Dict,
 	fieldsSrc, fieldsDest *types.Array,
-	migrated map[int]int) error {
+	migrated map[int]int,
+) error {
 
 	// Used by collect, extractPages, split
 
@@ -239,7 +240,9 @@ func AddPages(ctxSrc, ctxDest *model.Context, pageNrs []int, usePgCache bool) er
 
 	migrated := map[int]int{}
 
-	if err := addPages(ctxSrc, ctxDest, pageNrs, usePgCache, *pagesIndRef, pagesDict, &fieldsSrc, &fieldsDest, migrated); err != nil {
+	if err := addPages(
+		ctxSrc, ctxDest, pageNrs, usePgCache, *pagesIndRef, pagesDict, &fieldsSrc, &fieldsDest, migrated,
+	); err != nil {
 		return err
 	}
 

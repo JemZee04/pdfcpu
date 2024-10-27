@@ -19,9 +19,9 @@ package pdfcpu
 import (
 	"fmt"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -348,10 +348,12 @@ func rootDicts(ctxSrc, ctxDest *model.Context) (types.Dict, types.Dict, error) {
 
 func mergeInFields(ctxDest *model.Context, arrFieldsSrc, arrFieldsDest types.Array, dDest types.Dict) error {
 	parentDict :=
-		types.Dict(map[string]types.Object{
-			"Kids": arrFieldsSrc,
-			"T":    types.StringLiteral(fmt.Sprintf("%d", len(arrFieldsDest))),
-		})
+		types.Dict(
+			map[string]types.Object{
+				"Kids": arrFieldsSrc,
+				"T":    types.StringLiteral(fmt.Sprintf("%d", len(arrFieldsDest))),
+			},
+		)
 
 	ir, err := ctxDest.IndRefForNewObject(parentDict)
 	if err != nil {
@@ -432,7 +434,9 @@ func mergeNames(ctxSrc, ctxDest *model.Context) error {
 	for id, namesSrc := range ctxSrc.Names {
 		if namesDest, ok := ctxDest.Names[id]; ok {
 			// Merge src tree into dest tree including collision detection.
-			if err := namesDest.AddTree(ctxDest.XRefTable, namesSrc, ctxSrc.NameRefs[id], []string{"D", "Dest"}); err != nil {
+			if err := namesDest.AddTree(
+				ctxDest.XRefTable, namesSrc, ctxSrc.NameRefs[id], []string{"D", "Dest"},
+			); err != nil {
 				return err
 			}
 			continue
@@ -646,8 +650,14 @@ func patchNameTree(n *model.Node, lookup map[int]int) error {
 
 func patchSourceObjectNumbers(ctxSrc, ctxDest *model.Context) {
 	if log.DebugEnabled() {
-		log.Debug.Printf("patchSourceObjectNumbers:  ctxSrc: xRefTableSize:%d trailer.Size:%d - %s\n", len(ctxSrc.Table), *ctxSrc.Size, ctxSrc.Read.FileName)
-		log.Debug.Printf("patchSourceObjectNumbers: ctxDest: xRefTableSize:%d trailer.Size:%d - %s\n", len(ctxDest.Table), *ctxDest.Size, ctxDest.Read.FileName)
+		log.Debug.Printf(
+			"patchSourceObjectNumbers:  ctxSrc: xRefTableSize:%d trailer.Size:%d - %s\n", len(ctxSrc.Table),
+			*ctxSrc.Size, ctxSrc.Read.FileName,
+		)
+		log.Debug.Printf(
+			"patchSourceObjectNumbers: ctxDest: xRefTableSize:%d trailer.Size:%d - %s\n", len(ctxDest.Table),
+			*ctxDest.Size, ctxDest.Read.FileName,
+		)
 	}
 
 	// Patch source xref tables obj numbers which are essentially the keys.

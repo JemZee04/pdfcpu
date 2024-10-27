@@ -24,8 +24,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 // Context represents an environment for processing PDF files.
@@ -88,7 +88,9 @@ func (ctx *Context) String() string {
 
 	var logStr []string
 
-	logStr = append(logStr, "*************************************************************************************************\n")
+	logStr = append(
+		logStr, "*************************************************************************************************\n",
+	)
 	logStr = append(logStr, fmt.Sprintf("HeaderVersion: %s\n", ctx.HeaderVersion))
 
 	if ctx.RootVersion != nil {
@@ -248,8 +250,14 @@ func (rc *ReadContext) LogStats(optimized bool) {
 
 	log.Stats.Println("Original:")
 	log.Stats.Printf("File size            : %s (%d bytes)\n", types.ByteSize(rc.FileSize), rc.FileSize)
-	log.Stats.Printf("Total binary data    : %s (%d bytes) %4.1f%%\n", types.ByteSize(rc.BinaryTotalSize), rc.BinaryTotalSize, float32(rc.BinaryTotalSize)/float32(rc.FileSize)*100)
-	log.Stats.Printf("Total other data     : %s (%d bytes) %4.1f%%\n\n", types.ByteSize(textSize), textSize, float32(textSize)/float32(rc.FileSize)*100)
+	log.Stats.Printf(
+		"Total binary data    : %s (%d bytes) %4.1f%%\n", types.ByteSize(rc.BinaryTotalSize), rc.BinaryTotalSize,
+		float32(rc.BinaryTotalSize)/float32(rc.FileSize)*100,
+	)
+	log.Stats.Printf(
+		"Total other data     : %s (%d bytes) %4.1f%%\n\n", types.ByteSize(textSize), textSize,
+		float32(textSize)/float32(rc.FileSize)*100,
+	)
 
 	// Only when optimizing we get details about resource data usage.
 	if optimized {
@@ -264,9 +272,18 @@ func (rc *ReadContext) LogStats(optimized bool) {
 		binaryOtherSize := rc.BinaryTotalSize - binaryImageSize - binaryFontSize
 
 		log.Stats.Println("Breakup of binary data:")
-		log.Stats.Printf("images               : %s (%d bytes) %4.1f%%\n", types.ByteSize(binaryImageSize), binaryImageSize, float32(binaryImageSize)/float32(rc.BinaryTotalSize)*100)
-		log.Stats.Printf("fonts                : %s (%d bytes) %4.1f%%\n", types.ByteSize(binaryFontSize), binaryFontSize, float32(binaryFontSize)/float32(rc.BinaryTotalSize)*100)
-		log.Stats.Printf("other                : %s (%d bytes) %4.1f%%\n\n", types.ByteSize(binaryOtherSize), binaryOtherSize, float32(binaryOtherSize)/float32(rc.BinaryTotalSize)*100)
+		log.Stats.Printf(
+			"images               : %s (%d bytes) %4.1f%%\n", types.ByteSize(binaryImageSize), binaryImageSize,
+			float32(binaryImageSize)/float32(rc.BinaryTotalSize)*100,
+		)
+		log.Stats.Printf(
+			"fonts                : %s (%d bytes) %4.1f%%\n", types.ByteSize(binaryFontSize), binaryFontSize,
+			float32(binaryFontSize)/float32(rc.BinaryTotalSize)*100,
+		)
+		log.Stats.Printf(
+			"other                : %s (%d bytes) %4.1f%%\n\n", types.ByteSize(binaryOtherSize), binaryOtherSize,
+			float32(binaryOtherSize)/float32(rc.BinaryTotalSize)*100,
+		)
 	}
 }
 
@@ -620,13 +637,28 @@ func (wc *WriteContext) LogStats() {
 
 	log.Stats.Println("Optimized:")
 	log.Stats.Printf("File size            : %s (%d bytes)\n", types.ByteSize(fileSize), fileSize)
-	log.Stats.Printf("Total binary data    : %s (%d bytes) %4.1f%%\n", types.ByteSize(binaryTotalSize), binaryTotalSize, float32(binaryTotalSize)/float32(fileSize)*100)
-	log.Stats.Printf("Total other data     : %s (%d bytes) %4.1f%%\n\n", types.ByteSize(textSize), textSize, float32(textSize)/float32(fileSize)*100)
+	log.Stats.Printf(
+		"Total binary data    : %s (%d bytes) %4.1f%%\n", types.ByteSize(binaryTotalSize), binaryTotalSize,
+		float32(binaryTotalSize)/float32(fileSize)*100,
+	)
+	log.Stats.Printf(
+		"Total other data     : %s (%d bytes) %4.1f%%\n\n", types.ByteSize(textSize), textSize,
+		float32(textSize)/float32(fileSize)*100,
+	)
 
 	log.Stats.Println("Breakup of binary data:")
-	log.Stats.Printf("images               : %s (%d bytes) %4.1f%%\n", types.ByteSize(binaryImageSize), binaryImageSize, float32(binaryImageSize)/float32(binaryTotalSize)*100)
-	log.Stats.Printf("fonts                : %s (%d bytes) %4.1f%%\n", types.ByteSize(binaryFontSize), binaryFontSize, float32(binaryFontSize)/float32(binaryTotalSize)*100)
-	log.Stats.Printf("other                : %s (%d bytes) %4.1f%%\n\n", types.ByteSize(binaryOtherSize), binaryOtherSize, float32(binaryOtherSize)/float32(binaryTotalSize)*100)
+	log.Stats.Printf(
+		"images               : %s (%d bytes) %4.1f%%\n", types.ByteSize(binaryImageSize), binaryImageSize,
+		float32(binaryImageSize)/float32(binaryTotalSize)*100,
+	)
+	log.Stats.Printf(
+		"fonts                : %s (%d bytes) %4.1f%%\n", types.ByteSize(binaryFontSize), binaryFontSize,
+		float32(binaryFontSize)/float32(binaryTotalSize)*100,
+	)
+	log.Stats.Printf(
+		"other                : %s (%d bytes) %4.1f%%\n\n", types.ByteSize(binaryOtherSize), binaryOtherSize,
+		float32(binaryOtherSize)/float32(binaryTotalSize)*100,
+	)
 }
 
 // WriteEol writes an end of line sequence.

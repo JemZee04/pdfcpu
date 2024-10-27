@@ -22,11 +22,11 @@ import (
 	"io"
 	"unicode/utf8"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	pdffont "github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	pdffont "github.com/JemZee04/pdfcpu/pkg/pdfcpu/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -302,7 +302,9 @@ func (lb *ListBox) validate() error {
 	return lb.validateTab()
 }
 
-func (lb *ListBox) calcFontFromDA(ctx *model.Context, d types.Dict, fonts map[string]types.IndirectRef) (*types.IndirectRef, error) {
+func (lb *ListBox) calcFontFromDA(
+	ctx *model.Context, d types.Dict, fonts map[string]types.IndirectRef,
+) (*types.IndirectRef, error) {
 
 	s := d.StringEntry("DA")
 	if s == nil {
@@ -435,11 +437,15 @@ func (lb *ListBox) labelPos(labelHeight, w, g float64) (float64, float64) {
 	return x, y
 }
 
-func selectItem(w io.Writer, i int, width, height float64, fontName string, fontSize int, boWidth float64, col color.SimpleColor) {
+func selectItem(
+	w io.Writer, i int, width, height float64, fontName string, fontSize int, boWidth float64, col color.SimpleColor,
+) {
 	lh := font.LineHeight(fontName, fontSize)
-	fmt.Fprintf(w, "%.2f %.2f %.2f rg 1 %.2f %.2f %.2f re f ",
+	fmt.Fprintf(
+		w, "%.2f %.2f %.2f rg 1 %.2f %.2f %.2f re f ",
 		col.R, col.G, col.B,
-		height-boWidth-float64(i+1)*lh, width-2, lh)
+		height-boWidth-float64(i+1)*lh, width-2, lh,
+	)
 }
 
 func (lb *ListBox) renderN(xRefTable *model.XRefTable) ([]byte, error) {
@@ -454,8 +460,10 @@ func (lb *ListBox) renderN(xRefTable *model.XRefTable) ([]byte, error) {
 			fmt.Fprintf(buf, "%.2f %.2f %.2f rg 0 0 %.2f %.2f re f ", bgCol.R, bgCol.G, bgCol.B, w, h)
 		}
 		if boCol != nil {
-			fmt.Fprintf(buf, "%.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s ",
-				boCol.R, boCol.G, boCol.B, boWidth, boWidth/2, boWidth/2, w-boWidth, h-boWidth)
+			fmt.Fprintf(
+				buf, "%.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s ",
+				boCol.R, boCol.G, boCol.B, boWidth, boWidth/2, boWidth/2, w-boWidth, h-boWidth,
+			)
 		}
 		fmt.Fprint(buf, "Q ")
 	}
@@ -497,10 +505,12 @@ func (lb *ListBox) renderN(xRefTable *model.XRefTable) ([]byte, error) {
 		}
 		fmt.Fprint(buf, "BT ")
 		if i == 0 {
-			fmt.Fprintf(buf, "/%s %d Tf %.2f %.2f %.2f RG %.2f %.2f %.2f rg ",
+			fmt.Fprintf(
+				buf, "/%s %d Tf %.2f %.2f %.2f RG %.2f %.2f %.2f rg ",
 				lb.fontID, f.Size,
 				f.col.R, f.col.G, f.col.B,
-				f.col.R, f.col.G, f.col.B)
+				f.col.R, f.col.G, f.col.B,
+			)
 		}
 		fmt.Fprintf(buf, "%.2f %.2f Td (%s) Tj ET ", x, h0-float64(i+1)*lh, s)
 	}
@@ -508,8 +518,10 @@ func (lb *ListBox) renderN(xRefTable *model.XRefTable) ([]byte, error) {
 	fmt.Fprint(buf, "Q EMC ")
 
 	if boCol != nil {
-		fmt.Fprintf(buf, "q %.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s Q ",
-			boCol.R, boCol.G, boCol.B, boWidth, boWidth/2, boWidth/2, w-boWidth, h-boWidth)
+		fmt.Fprintf(
+			buf, "q %.2f %.2f %.2f RG %.2f w %.2f %.2f %.2f %.2f re s Q ",
+			boCol.R, boCol.G, boCol.B, boWidth, boWidth/2, boWidth/2, w-boWidth, h-boWidth,
+		)
 	}
 
 	return buf.Bytes(), nil
@@ -874,7 +886,8 @@ func NewListBox(
 	d types.Dict,
 	opts []string,
 	ind types.Array,
-	fonts map[string]types.IndirectRef) (*ListBox, *types.IndirectRef, error) {
+	fonts map[string]types.IndirectRef,
+) (*ListBox, *types.IndirectRef, error) {
 
 	lb := &ListBox{Options: opts, Ind: ind}
 
@@ -917,7 +930,8 @@ func NewForm(
 	bb []byte,
 	fontID string,
 	fontIndRef *types.IndirectRef,
-	boundingBox *types.Rectangle) (*types.IndirectRef, error) {
+	boundingBox *types.Rectangle,
+) (*types.IndirectRef, error) {
 
 	sd, err := xRefTable.NewStreamDictForBuf(bb)
 	if err != nil {
@@ -965,7 +979,9 @@ func updateForm(xRefTable *model.XRefTable, bb []byte, indRef *types.IndirectRef
 	return nil
 }
 
-func renderListBoxAP(ctx *model.Context, d types.Dict, opts []string, ind types.Array, fonts map[string]types.IndirectRef) error {
+func renderListBoxAP(
+	ctx *model.Context, d types.Dict, opts []string, ind types.Array, fonts map[string]types.IndirectRef,
+) error {
 
 	lb, fontIndRef, err := NewListBox(ctx, d, opts, ind, fonts)
 	if err != nil {
@@ -987,7 +1003,10 @@ func renderListBoxAP(ctx *model.Context, d types.Dict, opts []string, ind types.
 	return nil
 }
 
-func refreshListBoxAP(ctx *model.Context, d types.Dict, opts []string, ind types.Array, fonts map[string]types.IndirectRef, irN *types.IndirectRef) error {
+func refreshListBoxAP(
+	ctx *model.Context, d types.Dict, opts []string, ind types.Array, fonts map[string]types.IndirectRef,
+	irN *types.IndirectRef,
+) error {
 
 	lb, _, err := NewListBox(ctx, d, opts, ind, fonts)
 	if err != nil {
@@ -1002,7 +1021,9 @@ func refreshListBoxAP(ctx *model.Context, d types.Dict, opts []string, ind types
 	return updateForm(ctx.XRefTable, bb, irN)
 }
 
-func EnsureListBoxAP(ctx *model.Context, d types.Dict, opts []string, ind types.Array, fonts map[string]types.IndirectRef) error {
+func EnsureListBoxAP(
+	ctx *model.Context, d types.Dict, opts []string, ind types.Array, fonts map[string]types.IndirectRef,
+) error {
 
 	apd := d.DictEntry("AP")
 	if apd == nil {

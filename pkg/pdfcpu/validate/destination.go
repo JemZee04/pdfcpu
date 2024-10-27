@@ -17,8 +17,8 @@ limitations under the License.
 package validate
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -39,11 +39,17 @@ func validateDestinationArrayFirstElement(xRefTable *model.XRefTable, a types.Ar
 
 	case types.Dict:
 		if o.Type() == nil || (o.Type() != nil && (*o.Type() != "Page" && *o.Type() != "Pages")) {
-			err = errors.Errorf("pdfcpu: validateDestinationArrayFirstElement: first element must be a pageDict indRef or an integer: %v (%T)", o, o)
+			err = errors.Errorf(
+				"pdfcpu: validateDestinationArrayFirstElement: first element must be a pageDict indRef or an integer: %v (%T)",
+				o, o,
+			)
 		}
 
 	default:
-		err = errors.Errorf("pdfcpu: validateDestinationArrayFirstElement: first element must be a pageDict indRef or an integer: %v (%T)", o, o)
+		err = errors.Errorf(
+			"pdfcpu: validateDestinationArrayFirstElement: first element must be a pageDict indRef or an integer: %v (%T)",
+			o, o,
+		)
 	}
 
 	return o, err
@@ -160,7 +166,10 @@ func validateDestination(xRefTable *model.XRefTable, o types.Object, forAction b
 	return "", err
 }
 
-func validateActionDestinationEntry(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateActionDestinationEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	// see 12.3.2
 

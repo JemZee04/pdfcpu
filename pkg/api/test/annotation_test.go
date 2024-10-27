@@ -21,11 +21,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/api"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 var textAnn model.AnnotationRenderer = model.NewTextAnnotation(
@@ -44,7 +44,8 @@ var textAnn model.AnnotationRenderer = model.NewTextAnnotation(
 	0,                                   // borderRadY
 	2,                                   // borderWidth
 	false,                               // displayOpen
-	"Comment")                           // name
+	"Comment",
+) // name
 
 var textAnnCJK model.AnnotationRenderer = model.NewTextAnnotation(
 	*types.NewRectangle(0, 100, 100, 200), // rect
@@ -62,7 +63,8 @@ var textAnnCJK model.AnnotationRenderer = model.NewTextAnnotation(
 	0,                                     // borderRadY
 	2,                                     // borderWidth
 	true,                                  // displayOpen
-	"Comment")                             // name
+	"Comment",
+) // name
 
 var freeTextAnn model.AnnotationRenderer = model.NewFreeTextAnnotation(
 	*types.NewRectangle(200, 300, 400, 500), // rect
@@ -99,7 +101,8 @@ line 3`,
 	0,             // borderWidth
 	model.BSSolid, // borderStyle
 	false,         // cloudyBorder
-	0)             // cloudyBorderIntensity
+	0,
+) // cloudyBorderIntensity
 
 var linkAnn model.AnnotationRenderer = model.NewLinkAnnotation(
 	*types.NewRectangle(200, 0, 300, 100), // rect
@@ -991,7 +994,8 @@ func TestPolygonAnnotation(t *testing.T) {
 		5,              // borderWidth
 		model.BSDashed, // borderStyle
 		true,           // cloudyBorder
-		2)              // cloudyBorderIntensity
+		2,
+	) // cloudyBorderIntensity
 
 	// Add Polygon annotation.
 	if err := api.AddAnnotationsFile(inFile, outFile, nil, polygonAnn, nil, false); err != nil {
@@ -1036,7 +1040,8 @@ func TestLineAnnotation(t *testing.T) {
 		0,                                     // caption offset Y
 		nil,                                   // fillCol
 		1,                                     // borderWidth
-		model.BSSolid)                         // borderStyle
+		model.BSSolid,
+	) // borderStyle
 
 	// Add line annotation.
 	if err := api.AddAnnotationsFile(inFile, outFile, nil, lineAnn, nil, false); err != nil {
@@ -1068,7 +1073,8 @@ func TestCaretAnnotation(t *testing.T) {
 		"",                                    // rc
 		"",                                    // subject
 		types.NewRectangle(20, 20, 20, 20),    // RD
-		true)                                  // paragraph symbol
+		true,
+	) // paragraph symbol
 
 	// Add line annotation.
 	if err := api.AddAnnotationsFile(inFile, outFile, nil, caretAnn, nil, false); err != nil {

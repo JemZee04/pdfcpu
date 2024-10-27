@@ -24,11 +24,11 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/pdfcpu/pdfcpu/pkg/font"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/font"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/matrix"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 // TextDescriptor contains all attributes needed for rendering a text column in PDF user space.
@@ -214,8 +214,10 @@ func PrepBytes(xRefTable *XRefTable, s, fontName string, embed, rtl, fillFont bo
 
 func writeStringToBuf(xRefTable *XRefTable, w io.Writer, s string, x, y float64, td TextDescriptor) {
 	s = PrepBytes(xRefTable, s, td.FontName, td.Embed, td.RTL, false)
-	fmt.Fprintf(w, "BT 0 Tw %.2f %.2f %.2f RG %.2f %.2f %.2f rg %.2f %.2f Td %d Tr (%s) Tj ET ",
-		td.StrokeCol.R, td.StrokeCol.G, td.StrokeCol.B, td.FillCol.R, td.FillCol.G, td.FillCol.B, x, y, td.RMode, s)
+	fmt.Fprintf(
+		w, "BT 0 Tw %.2f %.2f %.2f RG %.2f %.2f %.2f rg %.2f %.2f Td %d Tr (%s) Tj ET ",
+		td.StrokeCol.R, td.StrokeCol.G, td.StrokeCol.B, td.FillCol.R, td.FillCol.G, td.FillCol.B, x, y, td.RMode, s,
+	)
 }
 
 func setFont(w io.Writer, fontID string, fontSize float32) {
@@ -250,7 +252,10 @@ func horAdjustBoundingBoxForLines(r, box *types.Rectangle, dx, dy float64, x, y 
 	}
 }
 
-func prepJustifiedLine(xRefTable *XRefTable, lines *[]string, strbuf []string, strWidth, w float64, fontSize int, fontName string, embed, rtl bool) {
+func prepJustifiedLine(
+	xRefTable *XRefTable, lines *[]string, strbuf []string, strWidth, w float64, fontSize int, fontName string,
+	embed, rtl bool,
+) {
 	blank := PrepBytes(xRefTable, " ", fontName, embed, true, false)
 	var sb strings.Builder
 	sb.WriteString("[")
@@ -274,7 +279,8 @@ func prepJustifiedLine(xRefTable *XRefTable, lines *[]string, strbuf []string, s
 func newPrepJustifiedString(
 	xRefTable *XRefTable,
 	fontName string,
-	fontSize int) func(lines *[]string, s string, w float64, fontName string, fontSize *int, lastline, parIndent, cjk, rtl bool) int {
+	fontSize int,
+) func(lines *[]string, s string, w float64, fontName string, fontSize *int, lastline, parIndent, cjk, rtl bool) int {
 
 	// Not yet rendered content.
 	strbuf := []string{}
@@ -290,7 +296,9 @@ func newPrepJustifiedString(
 
 	blankWidth := font.TextWidth(" ", fontName, fontSize)
 
-	return func(lines *[]string, s string, w float64, fontName string, fontSize *int, lastline, parIndent, embed, rtl bool) int {
+	return func(
+		lines *[]string, s string, w float64, fontName string, fontSize *int, lastline, parIndent, embed, rtl bool,
+	) int {
 
 		if len(s) == 0 {
 			if len(strbuf) > 0 {
@@ -360,7 +368,8 @@ func preRenderJustifiedText(
 	x, y, width float64,
 	td TextDescriptor,
 	mLeft, mRight, borderWidth float64,
-	fontSize *int) float64 {
+	fontSize *int,
+) float64 {
 
 	var ww float64
 	if !td.ScaleAbs {
@@ -390,9 +399,11 @@ func preRenderJustifiedText(
 	return ww
 }
 
-func scaleFontSize(r *types.Rectangle, lines []string, scaleAbs bool,
+func scaleFontSize(
+	r *types.Rectangle, lines []string, scaleAbs bool,
 	scale, width, x, y, mLeft, mRight, borderWidth float64,
-	fontName string, fontSize *int) {
+	fontName string, fontSize *int,
+) {
 	if scaleAbs {
 		*fontSize = int(float64(*fontSize) * scale)
 	} else {
@@ -405,9 +416,11 @@ func scaleFontSize(r *types.Rectangle, lines []string, scaleAbs bool,
 	}
 }
 
-func horizontalWrapUp(box *types.Rectangle, maxLine string, hAlign types.HAlignment,
+func horizontalWrapUp(
+	box *types.Rectangle, maxLine string, hAlign types.HAlignment,
 	x *float64, width, ww, mLeft, mRight, borderWidth float64,
-	fontName string, fontSize *int) {
+	fontName string, fontSize *int,
+) {
 	switch hAlign {
 	case types.AlignLeft:
 		box.Translate(mLeft+borderWidth, 0)
@@ -447,13 +460,15 @@ func horizontalWrapUp(box *types.Rectangle, maxLine string, hAlign types.HAlignm
 	}
 }
 
-func createBoundingBoxForColumn(xRefTable *XRefTable, r *types.Rectangle, x, y *float64,
+func createBoundingBoxForColumn(
+	xRefTable *XRefTable, r *types.Rectangle, x, y *float64,
 	width float64,
 	td TextDescriptor,
 	dx, dy float64,
 	mTop, mBot, mLeft, mRight float64,
 	borderWidth float64,
-	fontSize *int, lines *[]string) *types.Rectangle {
+	fontSize *int, lines *[]string,
+) *types.Rectangle {
 
 	var ww float64
 	if td.HAlign == types.AlignJustify {
@@ -461,7 +476,9 @@ func createBoundingBoxForColumn(xRefTable *XRefTable, r *types.Rectangle, x, y *
 	}
 
 	if td.HAlign != types.AlignJustify {
-		scaleFontSize(r, *lines, td.ScaleAbs, td.Scale, width, *x, *y, mLeft, mRight, borderWidth, td.FontName, fontSize)
+		scaleFontSize(
+			r, *lines, td.ScaleAbs, td.Scale, width, *x, *y, mLeft, mRight, borderWidth, td.FontName, fontSize,
+		)
 	}
 
 	// Apply vertical alignment.
@@ -492,9 +509,13 @@ func createBoundingBoxForColumn(xRefTable *XRefTable, r *types.Rectangle, x, y *
 	return box
 }
 
-func flushJustifiedStringToBuf(w io.Writer, s string, x, y float64, strokeCol, fillCol color.SimpleColor, rm draw.RenderMode) {
-	fmt.Fprintf(w, "BT 0 Tw %.2f %.2f %.2f RG %.2f %.2f %.2f rg %.2f %.2f Td %d Tr %s ET ",
-		strokeCol.R, strokeCol.G, strokeCol.B, fillCol.R, fillCol.G, fillCol.B, x, y, rm, s)
+func flushJustifiedStringToBuf(
+	w io.Writer, s string, x, y float64, strokeCol, fillCol color.SimpleColor, rm draw.RenderMode,
+) {
+	fmt.Fprintf(
+		w, "BT 0 Tw %.2f %.2f %.2f RG %.2f %.2f %.2f rg %.2f %.2f Td %d Tr %s ET ",
+		strokeCol.R, strokeCol.G, strokeCol.B, fillCol.R, fillCol.G, fillCol.B, x, y, rm, s,
+	)
 }
 
 func scaleXForRegion(x float64, mediaBox, region *types.Rectangle) float64 {
@@ -505,7 +526,9 @@ func scaleYForRegion(y float64, mediaBox, region *types.Rectangle) float64 {
 	return y / mediaBox.Width() * region.Width()
 }
 
-func DrawMargins(w io.Writer, c color.SimpleColor, colBB *types.Rectangle, borderWidth, mLeft, mRight, mTop, mBot float64) {
+func DrawMargins(
+	w io.Writer, c color.SimpleColor, colBB *types.Rectangle, borderWidth, mLeft, mRight, mTop, mBot float64,
+) {
 	if mLeft <= 0 && mRight <= 0 && mTop <= 0 && mBot <= 0 {
 		return
 	}
@@ -513,29 +536,39 @@ func DrawMargins(w io.Writer, c color.SimpleColor, colBB *types.Rectangle, borde
 	var r *types.Rectangle
 
 	if mBot > 0 {
-		r = types.RectForWidthAndHeight(colBB.LL.X+borderWidth, colBB.LL.Y+borderWidth, colBB.Width()-2*borderWidth, mBot)
+		r = types.RectForWidthAndHeight(
+			colBB.LL.X+borderWidth, colBB.LL.Y+borderWidth, colBB.Width()-2*borderWidth, mBot,
+		)
 		draw.FillRectNoBorder(w, r, c)
 	}
 
 	if mTop > 0 {
-		r = types.RectForWidthAndHeight(colBB.LL.X+borderWidth, colBB.UR.Y-borderWidth-mTop, colBB.Width()-2*borderWidth, mTop)
+		r = types.RectForWidthAndHeight(
+			colBB.LL.X+borderWidth, colBB.UR.Y-borderWidth-mTop, colBB.Width()-2*borderWidth, mTop,
+		)
 		draw.FillRectNoBorder(w, r, c)
 	}
 
 	if mLeft > 0 {
-		r = types.RectForWidthAndHeight(colBB.LL.X+borderWidth, colBB.LL.Y+borderWidth+mBot, mLeft, colBB.Height()-2*borderWidth-mTop-mBot)
+		r = types.RectForWidthAndHeight(
+			colBB.LL.X+borderWidth, colBB.LL.Y+borderWidth+mBot, mLeft, colBB.Height()-2*borderWidth-mTop-mBot,
+		)
 		draw.FillRectNoBorder(w, r, c)
 	}
 
 	if mRight > 0 {
-		r = types.RectForWidthAndHeight(colBB.UR.X-borderWidth-mRight, colBB.LL.Y+borderWidth+mBot, mRight, colBB.Height()-2*borderWidth-mTop-mBot)
+		r = types.RectForWidthAndHeight(
+			colBB.UR.X-borderWidth-mRight, colBB.LL.Y+borderWidth+mBot, mRight, colBB.Height()-2*borderWidth-mTop-mBot,
+		)
 		draw.FillRectNoBorder(w, r, c)
 	}
 
 }
 
 func renderBackgroundAndBorder(w io.Writer, td TextDescriptor, borderWidth float64, colBB *types.Rectangle) {
-	r := types.RectForWidthAndHeight(colBB.LL.X+borderWidth/2, colBB.LL.Y+borderWidth/2, colBB.Width()-borderWidth, colBB.Height()-borderWidth)
+	r := types.RectForWidthAndHeight(
+		colBB.LL.X+borderWidth/2, colBB.LL.Y+borderWidth/2, colBB.Width()-borderWidth, colBB.Height()-borderWidth,
+	)
 	if td.ShowBackground {
 		c := td.BackgroundCol
 		if td.ShowBorder {
@@ -630,7 +663,9 @@ func SplitMultilineStr(s string) []string {
 // WriteColumn writes a text column using s at position x/y using a certain font, fontsize and a desired horizontal and vertical alignment.
 // Enforce a desired column width by supplying a width > 0 (especially useful for justified text).
 // It returns the bounding box of this column.
-func WriteColumn(xRefTable *XRefTable, w io.Writer, mediaBox, region *types.Rectangle, td TextDescriptor, width float64) *types.Rectangle {
+func WriteColumn(
+	xRefTable *XRefTable, w io.Writer, mediaBox, region *types.Rectangle, td TextDescriptor, width float64,
+) *types.Rectangle {
 	x, y, dx, dy := td.X, td.Y, td.Dx, td.Dy
 	mTop, mBot, mLeft, mRight := td.MTop, td.MBot, td.MLeft, td.MRight
 	s, fontSize, borderWidth := td.Text, td.FontSize, td.BorderWidth
@@ -686,8 +721,10 @@ func WriteColumn(xRefTable *XRefTable, w io.Writer, mediaBox, region *types.Rect
 	}
 
 	// Create bounding box and prerender content stream bytes for justified text.
-	colBB := createBoundingBoxForColumn(xRefTable,
-		r, &x, &y, width, td, dx, dy, mTop, mBot, mLeft, mRight, borderWidth, &fontSize, &lines)
+	colBB := createBoundingBoxForColumn(
+		xRefTable,
+		r, &x, &y, width, td, dx, dy, mTop, mBot, mLeft, mRight, borderWidth, &fontSize, &lines,
+	)
 
 	fmt.Fprint(w, "q ")
 
@@ -727,12 +764,16 @@ func WriteColumn(xRefTable *XRefTable, w io.Writer, mediaBox, region *types.Rect
 
 // WriteMultiLine writes s at position x/y using a certain font, fontsize and a desired horizontal and vertical alignment.
 // It returns the bounding box of this text column.
-func WriteMultiLine(xRefTable *XRefTable, w io.Writer, mediaBox, region *types.Rectangle, td TextDescriptor) *types.Rectangle {
+func WriteMultiLine(
+	xRefTable *XRefTable, w io.Writer, mediaBox, region *types.Rectangle, td TextDescriptor,
+) *types.Rectangle {
 	return WriteColumn(xRefTable, w, mediaBox, region, td, 0)
 }
 
 // AnchorPosAndAlign calculates position and alignment for an anchored rectangle r.
-func AnchorPosAndAlign(a types.Anchor, r *types.Rectangle) (x, y float64, hAlign types.HAlignment, vAlign types.VAlignment) {
+func AnchorPosAndAlign(a types.Anchor, r *types.Rectangle) (
+	x, y float64, hAlign types.HAlignment, vAlign types.VAlignment,
+) {
 	switch a {
 	case types.TopLeft:
 		x, y, hAlign, vAlign = 0, r.Height(), types.AlignLeft, types.AlignTop
@@ -757,7 +798,9 @@ func AnchorPosAndAlign(a types.Anchor, r *types.Rectangle) (x, y float64, hAlign
 }
 
 // WriteMultiLineAnchored writes multiple lines with anchored position and returns its bounding box.
-func WriteMultiLineAnchored(xRefTable *XRefTable, w io.Writer, mediaBox, region *types.Rectangle, td TextDescriptor, a types.Anchor) *types.Rectangle {
+func WriteMultiLineAnchored(
+	xRefTable *XRefTable, w io.Writer, mediaBox, region *types.Rectangle, td TextDescriptor, a types.Anchor,
+) *types.Rectangle {
 	r := mediaBox
 	if region != nil {
 		r = region
@@ -767,7 +810,10 @@ func WriteMultiLineAnchored(xRefTable *XRefTable, w io.Writer, mediaBox, region 
 }
 
 // WriteColumnAnchored writes a justified text column with anchored position and returns its bounding box.
-func WriteColumnAnchored(xRefTable *XRefTable, w io.Writer, mediaBox, region *types.Rectangle, td TextDescriptor, a types.Anchor, width float64) *types.Rectangle {
+func WriteColumnAnchored(
+	xRefTable *XRefTable, w io.Writer, mediaBox, region *types.Rectangle, td TextDescriptor, a types.Anchor,
+	width float64,
+) *types.Rectangle {
 	r := mediaBox
 	if region != nil {
 		r = region

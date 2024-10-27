@@ -17,9 +17,9 @@ limitations under the License.
 package pdfcpu
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -49,7 +49,9 @@ func writePageDict(ctx *model.Context, indRef *types.IndirectRef, pageDict types
 	}
 
 	if log.WriteEnabled() {
-		log.Write.Printf("writePageDict: logical pageNr=%d object #%d gets writeoffset: %d\n", pageNr, objNr, ctx.Write.Offset)
+		log.Write.Printf(
+			"writePageDict: logical pageNr=%d object #%d gets writeoffset: %d\n", pageNr, objNr, ctx.Write.Offset,
+		)
 	}
 
 	dictName := "pageDict"
@@ -239,7 +241,9 @@ func writePageEntries(ctx *model.Context, d types.Dict, dictName string) error {
 	return nil
 }
 
-func writePagesDict(ctx *model.Context, indRef *types.IndirectRef, pageNr *int) (skip bool, writtenPages int, err error) {
+func writePagesDict(ctx *model.Context, indRef *types.IndirectRef, pageNr *int) (
+	skip bool, writtenPages int, err error,
+) {
 	if log.WriteEnabled() {
 		log.Write.Printf("writePagesDict: begin pageNr=%d\n", *pageNr)
 	}

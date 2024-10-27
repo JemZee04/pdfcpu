@@ -23,8 +23,8 @@ import (
 	"sort"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -104,7 +104,9 @@ func (xRefTable *XRefTable) NewFileSpecDictForAttachment(a Attachment) (types.Di
 	return xRefTable.NewFileSpecDict(a.ID, a.ID, a.Desc, *sd)
 }
 
-func fileSpecStreamDictInfo(xRefTable *XRefTable, id string, o types.Object, decode bool) (*types.StreamDict, string, string, *time.Time, error) {
+func fileSpecStreamDictInfo(xRefTable *XRefTable, id string, o types.Object, decode bool) (
+	*types.StreamDict, string, string, *time.Time, error,
+) {
 	d, err := xRefTable.DereferenceDict(o)
 	if err != nil {
 		return nil, "", "", nil, err

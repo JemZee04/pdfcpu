@@ -21,8 +21,8 @@ import (
 	"io"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 // RenderMode represents the text rendering mode (see 9.3.6)
@@ -61,7 +61,9 @@ func DrawLineSimple(w io.Writer, xp, yp, xq, yq float64) {
 }
 
 // DrawLine draws the path from P to Q using lineWidth, strokeColor and style.
-func DrawLine(w io.Writer, xp, yp, xq, yq float64, lineWidth float64, strokeColor *color.SimpleColor, style *types.LineJoinStyle) {
+func DrawLine(
+	w io.Writer, xp, yp, xq, yq float64, lineWidth float64, strokeColor *color.SimpleColor, style *types.LineJoinStyle,
+) {
 	fmt.Fprintf(w, "q ")
 	SetLineWidth(w, lineWidth)
 	if strokeColor != nil {
@@ -80,7 +82,9 @@ func DrawRectSimple(w io.Writer, r *types.Rectangle) {
 }
 
 // DrawRect strokes a rectangular path for r using lineWidth, strokeColor and style.
-func DrawRect(w io.Writer, r *types.Rectangle, lineWidth float64, strokeColor *color.SimpleColor, style *types.LineJoinStyle) {
+func DrawRect(
+	w io.Writer, r *types.Rectangle, lineWidth float64, strokeColor *color.SimpleColor, style *types.LineJoinStyle,
+) {
 	fmt.Fprintf(w, "q ")
 	SetLineWidth(w, lineWidth)
 	if strokeColor != nil {
@@ -94,7 +98,10 @@ func DrawRect(w io.Writer, r *types.Rectangle, lineWidth float64, strokeColor *c
 }
 
 // FillRect fills a rectangular path for r using lineWidth, strokeCol, fillCol and style.
-func FillRect(w io.Writer, r *types.Rectangle, lineWidth float64, strokeCol *color.SimpleColor, fillCol color.SimpleColor, style *types.LineJoinStyle) {
+func FillRect(
+	w io.Writer, r *types.Rectangle, lineWidth float64, strokeCol *color.SimpleColor, fillCol color.SimpleColor,
+	style *types.LineJoinStyle,
+) {
 	fmt.Fprintf(w, "q ")
 	SetLineWidth(w, lineWidth)
 	c := fillCol
@@ -124,7 +131,9 @@ func DrawCircle(w io.Writer, x, y, r float64, strokeCol color.SimpleColor, fillC
 		fmt.Fprintf(w, "f Q ")
 	}
 
-	fmt.Fprintf(w, "q %.2f %.2f %.2f RG 1 0 0 1 %.2f %.2f cm %.2f 0 m ", strokeCol.R, strokeCol.G, strokeCol.B, x, y, r1)
+	fmt.Fprintf(
+		w, "q %.2f %.2f %.2f RG 1 0 0 1 %.2f %.2f cm %.2f 0 m ", strokeCol.R, strokeCol.G, strokeCol.B, x, y, r1,
+	)
 	fmt.Fprintf(w, "%.3f %.3f %.3f %.3f %.3f %.3f c ", r1, f*r1, f*r1, r1, 0., r1)
 	fmt.Fprintf(w, "%.3f %.3f %.3f %.3f %.3f %.3f c ", -f*r1, r1, -r1, f*r1, -r1, 0.)
 	fmt.Fprintf(w, "%.3f %.3f %.3f %.3f %.3f %.3f c ", -r1, -f*r1, -f*r1, -r1, .0, -r1)

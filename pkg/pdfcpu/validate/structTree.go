@@ -19,8 +19,8 @@ package validate
 import (
 	"strconv"
 
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -120,7 +120,10 @@ func validateStructElementKArrayElement(xRefTable *model.XRefTable, o types.Obje
 			return validateObjectReferenceDict(xRefTable, o)
 		}
 
-		return errors.Errorf("validateStructElementKArrayElement: invalid dictType %s (should be \"StructElem\" or \"OBJR\" or \"MCR\")\n", *dictType)
+		return errors.Errorf(
+			"validateStructElementKArrayElement: invalid dictType %s (should be \"StructElem\" or \"OBJR\" or \"MCR\")\n",
+			*dictType,
+		)
 
 	}
 
@@ -209,7 +212,10 @@ func validateStructElementDictEntryK(xRefTable *model.XRefTable, o types.Object)
 			break
 		}
 
-		return errors.Errorf("pdfcpu: validateStructElementDictEntryK: invalid dictType %s (should be \"StructElem\" or \"OBJR\" or \"MCR\")\n", *dictType)
+		return errors.Errorf(
+			"pdfcpu: validateStructElementDictEntryK: invalid dictType %s (should be \"StructElem\" or \"OBJR\" or \"MCR\")\n",
+			*dictType,
+		)
 
 	case types.Array:
 
@@ -232,7 +238,9 @@ func processStructElementDictPgEntry(xRefTable *model.XRefTable, ir types.Indire
 
 	o, err := xRefTable.Dereference(ir)
 	if err != nil {
-		return errors.Errorf("pdfcpu: processStructElementDictPgEntry: Pg obj:#%d gen:%d unknown\n", ir.ObjectNumber, ir.GenerationNumber)
+		return errors.Errorf(
+			"pdfcpu: processStructElementDictPgEntry: Pg obj:#%d gen:%d unknown\n", ir.ObjectNumber, ir.GenerationNumber,
+		)
 	}
 
 	//logInfoWriter.Printf("known object for Pg: %v %s\n", obj, obj)
@@ -507,7 +515,10 @@ func validateStructTreeRootDictEntryKArray(xRefTable *model.XRefTable, a types.A
 				break
 			}
 
-			return errors.Errorf("pdfcpu: validateStructTreeRootDictEntryKArray: invalid dictType %s (should be \"StructElem\")\n", *dictType)
+			return errors.Errorf(
+				"pdfcpu: validateStructTreeRootDictEntryKArray: invalid dictType %s (should be \"StructElem\")\n",
+				*dictType,
+			)
 
 		default:
 			return errors.New("pdfcpu: validateStructTreeRootDictEntryKArray: unsupported PDF object")
@@ -542,7 +553,9 @@ func validateStructTreeRootDictEntryK(xRefTable *model.XRefTable, o types.Object
 			break
 		}
 
-		return errors.Errorf("validateStructTreeRootDictEntryK: invalid dictType %s (should be \"StructElem\")\n", *dictType)
+		return errors.Errorf(
+			"validateStructTreeRootDictEntryK: invalid dictType %s (should be \"StructElem\")\n", *dictType,
+		)
 
 	case types.Array:
 
@@ -694,7 +707,9 @@ func validateStructTreeRootDict(xRefTable *model.XRefTable, d types.Dict) error 
 	return err
 }
 
-func validateStructTree(xRefTable *model.XRefTable, rootDict types.Dict, required bool, sinceVersion model.Version) error {
+func validateStructTree(
+	xRefTable *model.XRefTable, rootDict types.Dict, required bool, sinceVersion model.Version,
+) error {
 
 	// 14.7.2 Structure Hierarchy
 

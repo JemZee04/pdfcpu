@@ -22,8 +22,8 @@ import (
 
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/api"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 func testPageSelectionSyntaxOk(t *testing.T, s string) {
@@ -45,8 +45,10 @@ func testPageSelectionSyntaxFail(t *testing.T, s string) {
 // Test the pageSelection string.
 // This is used to select specific pages for extraction and trimming.
 func TestPageSelectionSyntax(t *testing.T) {
-	psOk := []string{"1", "!1", "n1", "1-", "!1-", "n1-", "-5", "!-5", "n-5", "3-5", "!3-5", "n3-5",
-		"1,2,3", "!-5,10-15,30-", "1-,n4", "odd", "even", " 1"}
+	psOk := []string{
+		"1", "!1", "n1", "1-", "!1-", "n1-", "-5", "!-5", "n-5", "3-5", "!3-5", "n3-5",
+		"1,2,3", "!-5,10-15,30-", "1-,n4", "odd", "even", " 1",
+	}
 
 	for _, s := range psOk {
 		testPageSelectionSyntaxOk(t, s)

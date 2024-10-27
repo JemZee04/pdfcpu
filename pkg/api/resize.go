@@ -20,14 +20,16 @@ import (
 	"io"
 	"os"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
 	"github.com/pkg/errors"
 )
 
 // Resize applies resizeConf for selected pages of rs and writes result to w.
-func Resize(rs io.ReadSeeker, w io.Writer, selectedPages []string, resize *model.Resize, conf *model.Configuration) error {
+func Resize(
+	rs io.ReadSeeker, w io.Writer, selectedPages []string, resize *model.Resize, conf *model.Configuration,
+) error {
 	if rs == nil {
 		return errors.New("pdfcpu: Resize: missing rs")
 	}
@@ -55,7 +57,9 @@ func Resize(rs io.ReadSeeker, w io.Writer, selectedPages []string, resize *model
 }
 
 // ResizeFile applies resizeConf for selected pages of inFile and writes result to outFile.
-func ResizeFile(inFile, outFile string, selectedPages []string, resize *model.Resize, conf *model.Configuration) (err error) {
+func ResizeFile(
+	inFile, outFile string, selectedPages []string, resize *model.Resize, conf *model.Configuration,
+) (err error) {
 	if log.CLIEnabled() {
 		log.CLI.Printf("resizing %s\n", inFile)
 	}

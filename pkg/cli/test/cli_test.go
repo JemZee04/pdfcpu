@@ -23,11 +23,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/cli"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/api"
+	"github.com/JemZee04/pdfcpu/pkg/cli"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 )
 
 var inDir, outDir, resDir, fontDir, samplesDir string
@@ -166,7 +166,8 @@ func TestUnknownCommand(t *testing.T) {
 	cmd := &cli.Command{
 		Mode:   99,
 		InFile: &inFile,
-		Conf:   conf}
+		Conf:   conf,
+	}
 
 	if _, err := cli.Process(cmd); err == nil {
 		t.Fatalf("%s: %v\n", msg, err)

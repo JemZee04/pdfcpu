@@ -17,10 +17,10 @@
 package primitives
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/color"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -921,7 +921,8 @@ func (c *Content) BorderRect() *types.Rectangle {
 			c.mediaBox.LL.X+mLeft+borderWidth/2,
 			c.mediaBox.LL.Y+mBottom+borderWidth/2,
 			c.mediaBox.Width()-mLeft-mRight-borderWidth,
-			c.mediaBox.Height()-mTop-mBottom-borderWidth)
+			c.mediaBox.Height()-mTop-mBottom-borderWidth,
+		)
 
 	}
 

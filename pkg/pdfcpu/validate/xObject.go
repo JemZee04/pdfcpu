@@ -17,9 +17,9 @@ limitations under the License.
 package validate
 
 import (
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/filter"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -79,7 +79,9 @@ func validateReferenceDict(xRefTable *model.XRefTable, d types.Dict) error {
 	}
 
 	// ID, string array, optional
-	_, err = validateStringArrayEntry(xRefTable, d, dictName, "ID", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	_, err = validateStringArrayEntry(
+		xRefTable, d, dictName, "ID", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 
 	return err
 }
@@ -87,13 +89,17 @@ func validateReferenceDict(xRefTable *model.XRefTable, d types.Dict) error {
 func validateOPIDictV13Part1(xRefTable *model.XRefTable, d types.Dict, dictName string) error {
 
 	// Type, optional, name
-	_, err := validateNameEntry(xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "OPI" })
+	_, err := validateNameEntry(
+		xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "OPI" },
+	)
 	if err != nil {
 		return err
 	}
 
 	// Version, required, number
-	_, err = validateNumberEntry(xRefTable, d, dictName, "Version", REQUIRED, model.V10, func(f float64) bool { return f == 1.3 })
+	_, err = validateNumberEntry(
+		xRefTable, d, dictName, "Version", REQUIRED, model.V10, func(f float64) bool { return f == 1.3 },
+	)
 	if err != nil {
 		return err
 	}
@@ -117,7 +123,9 @@ func validateOPIDictV13Part1(xRefTable *model.XRefTable, d types.Dict, dictName 
 	}
 
 	// Size, required, array of integers, len 2
-	_, err = validateIntegerArrayEntry(xRefTable, d, dictName, "Size", REQUIRED, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	_, err = validateIntegerArrayEntry(
+		xRefTable, d, dictName, "Size", REQUIRED, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 	if err != nil {
 		return err
 	}
@@ -136,7 +144,9 @@ func validateOPIDictV13Part1(xRefTable *model.XRefTable, d types.Dict, dictName 
 	}
 
 	// Position, required, array of numbers, len 8
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "Position", REQUIRED, model.V10, func(a types.Array) bool { return len(a) == 8 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "Position", REQUIRED, model.V10, func(a types.Array) bool { return len(a) == 8 },
+	)
 
 	return err
 }
@@ -144,19 +154,26 @@ func validateOPIDictV13Part1(xRefTable *model.XRefTable, d types.Dict, dictName 
 func validateOPIDictV13Part2(xRefTable *model.XRefTable, d types.Dict, dictName string) error {
 
 	// Resolution, optional, array of numbers, len 2
-	_, err := validateNumberArrayEntry(xRefTable, d, dictName, "Resolution", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	_, err := validateNumberArrayEntry(
+		xRefTable, d, dictName, "Resolution", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 	if err != nil {
 		return err
 	}
 
 	// ColorType, optional, name
-	_, err = validateNameEntry(xRefTable, d, dictName, "ColorType", OPTIONAL, model.V10, func(s string) bool { return s == "Process" || s == "Spot" || s == "Separation" })
+	_, err = validateNameEntry(
+		xRefTable, d, dictName, "ColorType", OPTIONAL, model.V10,
+		func(s string) bool { return s == "Process" || s == "Spot" || s == "Separation" },
+	)
 	if err != nil {
 		return err
 	}
 
 	// Color, optional, array, len 5
-	_, err = validateArrayEntry(xRefTable, d, dictName, "Color", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 5 })
+	_, err = validateArrayEntry(
+		xRefTable, d, dictName, "Color", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 5 },
+	)
 	if err != nil {
 		return err
 	}
@@ -174,7 +191,9 @@ func validateOPIDictV13Part2(xRefTable *model.XRefTable, d types.Dict, dictName 
 	}
 
 	// ImageType, optional, array of integers, len 2
-	_, err = validateIntegerArrayEntry(xRefTable, d, dictName, "ImageType", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	_, err = validateIntegerArrayEntry(
+		xRefTable, d, dictName, "ImageType", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 	if err != nil {
 		return err
 	}
@@ -242,12 +261,16 @@ func validateOPIDictV20(xRefTable *model.XRefTable, d types.Dict) error {
 
 	dictName := "opiDictV20"
 
-	_, err := validateNameEntry(xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "OPI" })
+	_, err := validateNameEntry(
+		xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "OPI" },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateNumberEntry(xRefTable, d, dictName, "Version", REQUIRED, model.V10, func(f float64) bool { return f == 2.0 })
+	_, err = validateNumberEntry(
+		xRefTable, d, dictName, "Version", REQUIRED, model.V10, func(f float64) bool { return f == 2.0 },
+	)
 	if err != nil {
 		return err
 	}
@@ -267,7 +290,9 @@ func validateOPIDictV20(xRefTable *model.XRefTable, d types.Dict) error {
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, d, dictName, "Size", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, d, dictName, "Size", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 },
+	)
 	if err != nil {
 		return err
 	}
@@ -289,12 +314,18 @@ func validateOPIDictV20(xRefTable *model.XRefTable, d types.Dict) error {
 		}
 	}
 
-	_, err = validateIntegerArrayEntry(xRefTable, d, dictName, "IncludedImageDimensions", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 2 })
+	_, err = validateIntegerArrayEntry(
+		xRefTable, d, dictName, "IncludedImageDimensions", OPTIONAL, model.V10,
+		func(a types.Array) bool { return len(a) == 2 },
+	)
 	if err != nil {
 		return err
 	}
 
-	_, err = validateIntegerEntry(xRefTable, d, dictName, "IncludedImageQuality", OPTIONAL, model.V10, func(i int) bool { return i >= 1 && i <= 3 })
+	_, err = validateIntegerEntry(
+		xRefTable, d, dictName, "IncludedImageQuality", OPTIONAL, model.V10,
+		func(i int) bool { return i >= 1 && i <= 3 },
+	)
 
 	return err
 }
@@ -348,7 +379,9 @@ func validateMaskStreamDict(xRefTable *model.XRefTable, sd *types.StreamDict) er
 	return validateImageStreamDict(xRefTable, sd, isNoAlternateImageStreamDict)
 }
 
-func validateMaskEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateMaskEntry(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 
 	// stream ("explicit masking", another Image XObject) or array of colors ("color key masking")
 
@@ -377,7 +410,10 @@ func validateMaskEntry(xRefTable *model.XRefTable, d types.Dict, dictName, entry
 	return nil
 }
 
-func validateAlternateImageStreamDicts(xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool, sinceVersion model.Version) error {
+func validateAlternateImageStreamDicts(
+	xRefTable *model.XRefTable, d types.Dict, dictName string, entryName string, required bool,
+	sinceVersion model.Version,
+) error {
 
 	a, err := validateArrayEntry(xRefTable, d, dictName, entryName, required, sinceVersion, nil)
 	if err != nil {
@@ -385,7 +421,9 @@ func validateAlternateImageStreamDicts(xRefTable *model.XRefTable, d types.Dict,
 	}
 	if a == nil {
 		if required {
-			return errors.Errorf("pdfcpu: validateAlternateImageStreamDicts: dict=%s required entry \"%s\" missing.", dictName, entryName)
+			return errors.Errorf(
+				"pdfcpu: validateAlternateImageStreamDicts: dict=%s required entry \"%s\" missing.", dictName, entryName,
+			)
 		}
 		return nil
 	}
@@ -410,7 +448,9 @@ func validateAlternateImageStreamDicts(xRefTable *model.XRefTable, d types.Dict,
 	return nil
 }
 
-func validateImageStreamDictPart1(xRefTable *model.XRefTable, sd *types.StreamDict, dictName string) (isImageMask bool, err error) {
+func validateImageStreamDictPart1(xRefTable *model.XRefTable, sd *types.StreamDict, dictName string) (
+	isImageMask bool, err error,
+) {
 
 	// Width, integer, required
 	_, err = validateIntegerEntry(xRefTable, sd.Dict, dictName, "Width", REQUIRED, model.V10, nil)
@@ -455,7 +495,9 @@ func validateImageStreamDictPart1(xRefTable *model.XRefTable, sd *types.StreamDi
 	return isImageMask, nil
 }
 
-func validateImageStreamDictPart2(xRefTable *model.XRefTable, sd *types.StreamDict, dictName string, isImageMask, isAlternate bool) error {
+func validateImageStreamDictPart2(
+	xRefTable *model.XRefTable, sd *types.StreamDict, dictName string, isImageMask, isAlternate bool,
+) error {
 
 	// BitsPerComponent, integer
 	required := REQUIRED
@@ -543,7 +585,9 @@ func validateImageStreamDict(xRefTable *model.XRefTable, sd *types.StreamDict, i
 	}
 
 	// SMaskInData, integer, optional
-	_, err = validateIntegerEntry(xRefTable, sd.Dict, dictName, "SMaskInData", OPTIONAL, model.V10, func(i int) bool { return i >= 0 && i <= 2 })
+	_, err = validateIntegerEntry(
+		xRefTable, sd.Dict, dictName, "SMaskInData", OPTIONAL, model.V10, func(i int) bool { return i >= 0 && i <= 2 },
+	)
 	if err != nil {
 		return err
 	}
@@ -586,9 +630,13 @@ func validateImageStreamDict(xRefTable *model.XRefTable, sd *types.StreamDict, i
 func validateFormStreamDictPart1(xRefTable *model.XRefTable, sd *types.StreamDict, dictName string) error {
 	var err error
 	if xRefTable.ValidationMode == model.ValidationRelaxed {
-		_, err = validateNumberEntry(xRefTable, sd.Dict, dictName, "FormType", OPTIONAL, model.V10, func(f float64) bool { return f == 1. })
+		_, err = validateNumberEntry(
+			xRefTable, sd.Dict, dictName, "FormType", OPTIONAL, model.V10, func(f float64) bool { return f == 1. },
+		)
 	} else {
-		_, err = validateIntegerEntry(xRefTable, sd.Dict, dictName, "FormType", OPTIONAL, model.V10, func(i int) bool { return i == 1 })
+		_, err = validateIntegerEntry(
+			xRefTable, sd.Dict, dictName, "FormType", OPTIONAL, model.V10, func(i int) bool { return i == 1 },
+		)
 	}
 	if err != nil {
 		return err
@@ -599,7 +647,9 @@ func validateFormStreamDictPart1(xRefTable *model.XRefTable, sd *types.StreamDic
 		return err
 	}
 
-	_, err = validateNumberArrayEntry(xRefTable, sd.Dict, dictName, "Matrix", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 6 })
+	_, err = validateNumberArrayEntry(
+		xRefTable, sd.Dict, dictName, "Matrix", OPTIONAL, model.V10, func(a types.Array) bool { return len(a) == 6 },
+	)
 	if err != nil {
 		return err
 	}
@@ -634,7 +684,9 @@ func validateFormStreamDictPart1(xRefTable *model.XRefTable, sd *types.StreamDic
 	return validateMetadata(xRefTable, sd.Dict, OPTIONAL, model.V14)
 }
 
-func validateEntryOC(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateEntryOC(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 
 	d1, err := validateDictEntry(xRefTable, d, dictName, entryName, required, sinceVersion, nil)
 	if err != nil {
@@ -648,7 +700,9 @@ func validateEntryOC(xRefTable *model.XRefTable, d types.Dict, dictName, entryNa
 	return err
 }
 
-func validateEntryOPI(xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version) error {
+func validateEntryOPI(
+	xRefTable *model.XRefTable, d types.Dict, dictName, entryName string, required bool, sinceVersion model.Version,
+) error {
 
 	d1, err := validateDictEntry(xRefTable, d, dictName, entryName, required, sinceVersion, nil)
 	if err != nil {
@@ -742,7 +796,10 @@ func validateXObjectType(xRefTable *model.XRefTable, sd *types.StreamDict) error
 		ss = append(ss, "Xobject")
 	}
 
-	n, err := validateNameEntry(xRefTable, sd.Dict, "xObjectStreamDict", "Type", OPTIONAL, model.V10, func(s string) bool { return types.MemberOf(s, ss) })
+	n, err := validateNameEntry(
+		xRefTable, sd.Dict, "xObjectStreamDict", "Type", OPTIONAL, model.V10,
+		func(s string) bool { return types.MemberOf(s, ss) },
+	)
 	if err != nil {
 		return err
 	}
@@ -826,13 +883,17 @@ func validateGroupAttributesDict(xRefTable *model.XRefTable, o types.Object) err
 	dictName := "groupAttributesDict"
 
 	// Type, name, optional
-	_, err = validateNameEntry(xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "Group" })
+	_, err = validateNameEntry(
+		xRefTable, d, dictName, "Type", OPTIONAL, model.V10, func(s string) bool { return s == "Group" },
+	)
 	if err != nil {
 		return err
 	}
 
 	// S, name, required
-	_, err = validateNameEntry(xRefTable, d, dictName, "S", REQUIRED, model.V10, func(s string) bool { return s == "Transparency" })
+	_, err = validateNameEntry(
+		xRefTable, d, dictName, "S", REQUIRED, model.V10, func(s string) bool { return s == "Transparency" },
+	)
 	if err != nil {
 		return err
 	}

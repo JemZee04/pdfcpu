@@ -27,12 +27,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/form"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/api"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/form"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -113,7 +113,9 @@ func ListAnnotationsFile(inFile string, selectedPages []string, conf *model.Conf
 	return listAnnotations(f, selectedPages, conf)
 }
 
-func listBoxes(rs io.ReadSeeker, selectedPages []string, pb *model.PageBoundaries, conf *model.Configuration) ([]string, error) {
+func listBoxes(rs io.ReadSeeker, selectedPages []string, pb *model.PageBoundaries, conf *model.Configuration) (
+	[]string, error,
+) {
 	if rs == nil {
 		return nil, errors.New("pdfcpu: listBoxes: missing rs")
 	}
@@ -137,7 +139,9 @@ func listBoxes(rs io.ReadSeeker, selectedPages []string, pb *model.PageBoundarie
 }
 
 // ListBoxesFile returns a list of page boundaries for selected pages of inFile.
-func ListBoxesFile(inFile string, selectedPages []string, pb *model.PageBoundaries, conf *model.Configuration) ([]string, error) {
+func ListBoxesFile(
+	inFile string, selectedPages []string, pb *model.PageBoundaries, conf *model.Configuration,
+) ([]string, error) {
 	f, err := os.Open(inFile)
 	if err != nil {
 		return nil, err
@@ -382,8 +386,10 @@ func listInfoFilesJSON(inFiles []string, selectedPages []string, conf *model.Con
 		Header pdfcpu.Header     `json:"header"`
 		Infos  []*pdfcpu.PDFInfo `json:"infos"`
 	}{
-		Header: pdfcpu.Header{Version: "pdfcpu " + model.VersionStr, Creation: time.Now().Format("2006-01-02 15:04:05 MST")},
-		Infos:  infos,
+		Header: pdfcpu.Header{
+			Version: "pdfcpu " + model.VersionStr, Creation: time.Now().Format("2006-01-02 15:04:05 MST"),
+		},
+		Infos: infos,
 	}
 
 	bb, err := json.MarshalIndent(s, "", "\t")

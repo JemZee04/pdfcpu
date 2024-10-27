@@ -26,10 +26,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/filter"
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/filter"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -713,7 +713,10 @@ func createXRefStream(ctx *model.Context, i1, i2, i3 int, objNrs []int) ([]byte,
 
 			// unused
 			if log.WriteEnabled() {
-				log.Write.Printf("createXRefStream: unused i=%d nextFreeAt:%d gen:%d\n", j, int(*entry.Offset), int(*entry.Generation))
+				log.Write.Printf(
+					"createXRefStream: unused i=%d nextFreeAt:%d gen:%d\n", j, int(*entry.Offset),
+					int(*entry.Generation),
+				)
 			}
 
 			s1 = int64ToBuf(0, i1)
@@ -724,7 +727,10 @@ func createXRefStream(ctx *model.Context, i1, i2, i3 int, objNrs []int) ([]byte,
 
 			// in use, compressed into object stream
 			if log.WriteEnabled() {
-				log.Write.Printf("createXRefStream: compressed i=%d at objstr %d[%d]\n", j, int(*entry.ObjectStream), int(*entry.ObjectStreamInd))
+				log.Write.Printf(
+					"createXRefStream: compressed i=%d at objstr %d[%d]\n", j, int(*entry.ObjectStream),
+					int(*entry.ObjectStreamInd),
+				)
 			}
 
 			s1 = int64ToBuf(2, i1)

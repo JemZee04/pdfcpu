@@ -24,10 +24,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pdfcpu/pdfcpu/pkg/log"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/JemZee04/pdfcpu/pkg/log"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/draw"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/model"
+	"github.com/JemZee04/pdfcpu/pkg/pdfcpu/types"
 	"github.com/pkg/errors"
 )
 
@@ -196,14 +196,18 @@ func listImages(mm []map[int]model.Image, maxLen *ImageListMaxLengths) ([]string
 				fill3 = strings.Repeat(" ", 4-maxLen.Size)
 			}
 
-			ss = append(ss, fmt.Sprintf("%4s %s%s %s %s%s %s %s    %s        %s    %s %5d %s  %5d %s %10s    %d   %s    %s   %s %s%s %s %s",
-				pageNr, fill1, strconv.Itoa(img.ObjNr), draw.VBar,
-				fill2, img.Name, draw.VBar,
-				t, sm, im, draw.VBar,
-				img.Width, draw.VBar,
-				img.Height, draw.VBar,
-				img.Cs, img.Comp, bpc, interp, draw.VBar,
-				fill3, sizeStr, draw.VBar, img.Filter))
+			ss = append(
+				ss, fmt.Sprintf(
+					"%4s %s%s %s %s%s %s %s    %s        %s    %s %5d %s  %5d %s %10s    %d   %s    %s   %s %s%s %s %s",
+					pageNr, fill1, strconv.Itoa(img.ObjNr), draw.VBar,
+					fill2, img.Name, draw.VBar,
+					t, sm, im, draw.VBar,
+					img.Width, draw.VBar,
+					img.Height, draw.VBar,
+					img.Cs, img.Comp, bpc, interp, draw.VBar,
+					fill3, sizeStr, draw.VBar, img.Filter,
+				),
+			)
 
 			if !m[img.ObjNr] {
 				m[img.ObjNr] = true
